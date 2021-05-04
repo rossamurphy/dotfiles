@@ -31,7 +31,7 @@ Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'jpalardy/vim-slime'
-
+Plug 'tpope/vim-commentary'
 call plug#end()
 
 colorscheme gruvbox
@@ -132,7 +132,7 @@ let mapleader = " "
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
-nnoremap <leader>l :wincmd l<CR>
+noremap <leader>l :wincmd l<CR>
 nnoremap <leader>u :UndotreeToggle<CR>
 
 nnoremap <leader>m :NERDTreeToggle <CR>
