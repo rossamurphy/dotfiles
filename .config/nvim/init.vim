@@ -21,6 +21,16 @@ if empty(glob('~/.vim/autoload/plug.vim'))
  endif
 
 
+" ctrl-A to select all
+nnoremap <C-A> ggVG
+
+" tab to dent and de-dent like in Pycharm
+nnoremap <TAB> >>
+nnoremap <S-TAB> <<
+vnoremap <TAB> >gv
+vnoremap <S-TAB> <gv
+
+
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
