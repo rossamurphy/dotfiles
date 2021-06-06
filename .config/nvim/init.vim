@@ -11,6 +11,8 @@ set expandtab
 set smartindent
 set number relativenumber
 :imap jj <Esc>
+map J }
+map K {
 
 
 " install plug-in manager if you don't have it "
@@ -20,6 +22,8 @@ if empty(glob('~/.vim/autoload/plug.vim'))
    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
  endif
 
+
+let mapleader = " "
 
 " ctrl-A to select all
 nnoremap <C-A> ggVG
@@ -36,7 +40,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
 Plug 'davidhalter/jedi-vim'
 Plug 'morhetz/gruvbox'
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
@@ -59,6 +63,7 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 " disable autocompletion, cause we use deoplete for completion
 let g:jedi#completions_enabled = 0
 
+let g:jedi#documentation_command = "<leader>b"
 
 
 " Terminal Function
@@ -92,25 +97,25 @@ endfunction
 nmap <leader>f <Plug>SlimeSendCell
 
 " map <Leader>s to start IPython
-nnoremap <Leader>s :SlimeSend1 ipython --matplotlib<CR>
+nnoremap <leader>s :SlimeSend1 ipython --matplotlib<CR>
 
 " map <Leader>r to run script
-nnoremap <Leader>r :IPythonCellRun<CR>
+nnoremap <leader>r :IPythonCellRun<CR>
 
 " map <Leader>R to run script and time the execution
-nnoremap <Leader>R :IPythonCellRunTime<CR>
+nnoremap <leader>R :IPythonCellRunTime<CR>
 
 " map <Leader>c to execute the current cell
-nnoremap <Leader>c :IPythonCellExecuteCell<CR>
+nnoremap <leader>c :IPythonCellExecuteCell<CR>
 
 " map <Leader>C to execute the current cell and jump to the next cell
-nnoremap <Leader>C :IPythonCellExecuteCellJump<CR>
+nnoremap <leader>C :IPythonCellExecuteCellJump<CR>
 
 " map <Leader>l to clear IPython screen
 " nnoremap <Leader>l :IPythonCellClear<CR>
 
 " map <Leader>x to close all Matplotlib figure windows
-nnoremap <Leader>x :IPythonCellClose<CR>
+nnoremap <leader>x :IPythonCellClose<CR>
 
 " map [c and ]c to jump to the previous and next cell header
 nnoremap [c :IPythonCellPrevCell<CR>
@@ -121,22 +126,21 @@ nnoremap ]c :IPythoCellNextCell<CR>
 " xmap <Leader>h <Plug>SlimeRegionSend
 
 " map <Leader>p to run the previous command
-nnoremap <Leader>p :IPythonCellPrevCommand<CR>
+nnoremap <leader>p :IPythonCellPrevCommand<CR>
 
 " map <Leader>Q to restart ipython
-nnoremap <Leader>Q :IPythonCellRestart<CR>
+nnoremap <leader>Q :IPythonCellRestart<CR>
 
 " map <Leader>d to start debug mode
-nnoremap <Leader>d :SlimeSend1 %debug<CR>
+nnoremap <leader>d :SlimeSend1 %debug<CR>
 
 " map <Leader>q to exit debug mode or IPython
-nnoremap <Leader>q :SlimeSend1 exit<CR>n
+nnoremap <leader>q :SlimeSend1 exit<CR>n
 
 " open the go-to function in split, not another buffer
 let g:jedi#use_splits_not_buffers = "right"
 let g:jedi#rename =""
 
-let mapleader = " "
 
 
 nnoremap <leader>h :wincmd h<CR>
