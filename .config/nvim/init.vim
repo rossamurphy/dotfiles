@@ -77,7 +77,7 @@ let g:deoplete#enable_at_startup = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif "close preview"
 "tab completion
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-" disable autocompletion, cause we use deoplete for completion
+" disable autocompletion, because we use deoplete for completion
 let g:jedi#completions_enabled = 0
 let g:jedi#goto_definitions_command = "<leader>b"
 let g:jedi#documentation_command = "<leader>d"
@@ -220,4 +220,13 @@ let g:slime_dont_ask_default = 1
 
 let g:slime_cell_delimiter = "# %%"
 let g:ipython_cell_delimit_cells_by = 'tags'
-let g:ipython_cell_tag = "# %%"
+let g:ipython_cell_tag = ["# %%"]
+
+
+" function SlimeOverrideConfig(key,mapped)
+"   let b:slime_config[key] = input(key,mapped)
+" endfunction
+
+
+
+
