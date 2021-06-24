@@ -57,6 +57,7 @@ Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
+Plug 'christoomey/vim-tmux-navigator'
 " Plug 'jpalardy/vim-slime'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
