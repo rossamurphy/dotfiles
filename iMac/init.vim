@@ -13,6 +13,8 @@ set number relativenumber
 :imap jj <Esc>
 map J }
 map K {
+
+" Copy paste to Mac OS Clipboard
 map Y "*y
 
 " install plug-in manager if you don't have it "
