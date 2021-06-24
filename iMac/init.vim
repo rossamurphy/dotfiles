@@ -30,12 +30,30 @@ let mapleader = " "
 " ctrl-A to select all
 nnoremap <C-A> ggVG
 
-" tab to dent and de-dent like in Pycharm
-nnoremap <TAB> >>
-nnoremap <S-TAB> <<
-vnoremap <TAB> >gv
-vnoremap <S-TAB> <gv
-inoremap <S-Tab> <C-d>
+" this below can be useful when starting out
+" however, it messes up with some other stuff in vim
+" like ctrl-i to go forward to where your cursor was, 
+" after you have done ctrl-o
+" once you get used to using << and >> in normal mode
+" and ctrl-d and ctrl-t in insert mode, they are actually
+" easier and better to use
+" " tab to dent and de-dent like in Pycharm
+" nnoremap <TAB> >>
+" nnoremap <S-TAB> <<
+" vnoremap <TAB> >gv
+" vnoremap <S-TAB> <gv
+" inoremap <S-Tab> <C-d>
+
+" this, is actually a more minimalist helper for the tabbing
+" elements of vim. This will allow you to select a paragraph 
+" or block of code (vip for exmample), and then just continue tabbing it
+" using the greater than or less than signs (because usually, without this,
+" once you do one tab, it deselects the visual block, in which case you
+" usually need to resort to using . or u to cycle through indentation levels).
+" vnoremap > >gv
+" vnoremap < <gv
+
+
 
 " execute a line just like in pycharm
 " if no line is selected, it will execute one line
