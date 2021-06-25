@@ -1,10 +1,6 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 
 alias vi="nvim"
 alias viminit="nvim ~/.config/nvim/init.vim"
@@ -40,10 +36,36 @@ coin(){curl rate.sx/$1}
 weather(){curl wttr.in/$1}
 meteo(){finger $1@graph.no}
 moon(){curl wttr.in/moon}
-source ~/GitHub/powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 source ~/.iterm2_shell_integration.zsh
 
+echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
+export PYENV_SHELL=zsh
+source '/usr/local/Cellar/pyenv/2.0.1/libexec/../completions/pyenv.zsh'
+command pyenv rehash 2>/dev/null
+pyenv() {
+  local command
+  command="${1:-}"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(pyenv "sh-$command" "$@")"
+    ;;
+  *)
+    command pyenv "$command" "$@"
+    ;;
+  esac
+}
+
+eval "$(pyenv init -)"
+
+# for some reason, you need this to be able to ssh into this mac,
+#     and for the foreign client to recognise that you have a valid python3 installation
+#     it janks out because it can't do something called get_config_locale
+#     so, if you set it explicitly, it somehow works...
+#     weird.
+export LANG="en_US.UTF-8"
+source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
