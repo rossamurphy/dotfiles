@@ -77,11 +77,31 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
 Plug 'christoomey/vim-tmux-navigator'
 " Plug 'jpalardy/vim-slime'
+Plug 'nathanaelkane/vim-indent-guides'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 call plug#end()
 
 
+" lines that help you see how indented parts of your code are
+" set the lines to be on at start up. 
+" you can toggle like so:
+" :IndentGuidesEnable
+" :IndentGuidesDisable
+" :IndentGuidesToggle
+
+" leader ig will toggle it on and off easily
+
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_color_change_percent = 10
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_space_guides = 1
+let g:indent_guides_tab_guides = 0
+" change colours
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 
 " map the shortcut to comment out code
 noremap <leader>/ :Commentary<CR>
@@ -207,6 +227,7 @@ nnoremap <leader>q :SlimeSend1 exit<CR>
 
 " nmap <leader>6 :IPythonCellInsertAbove<CR>a
 nmap <leader>5 I# %% jj 
+nmap <leader>6 I'''jj2ojjI'''jjkI
 " nmap <leader>7 :IPythonCellInsertBelow<CR>a
 
 
