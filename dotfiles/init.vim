@@ -233,7 +233,7 @@ nmap <leader>5 I# %%jj
 " easy function docstring commenting
 nmap <leader>6 2o'''jjO
 " header for sections of code
-nmap <leader>7 I'''jj9a*#*#*#!jjo<jj64a-jja>jj4o>jj64a-jja<jjojj9a*#*#*#!jja>'''jj3ka
+nmap <leader>7 I'''jj11a*#*#*#!jjo<jj76a-jja>jj4o>jj76a-jja<jjojj11a*#*#*#!jja>'''jj3ka
 
 
 " nmap <leader>7 :IPythonCellInsertBelow<CR>a
