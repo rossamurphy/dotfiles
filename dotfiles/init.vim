@@ -76,6 +76,7 @@ Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
 Plug 'christoomey/vim-tmux-navigator'
 " Plug 'jpalardy/vim-slime'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -83,6 +84,13 @@ Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 call plug#end()
 
+" VIM surround helps you add, change, and remove surrounding of words and sentences
+" cs"' on a word will change " surrounds for '
+" ysiw] will wrap a word in []
+" ysip] will wrap a paragraph in []
+" yss' will wrap a sentence in '
+" ysiw' will wrap a word in []
+" ds' will delete ' around a word
 
 " lines that help you see how indented parts of your code are
 " set the lines to be on at start up. 
