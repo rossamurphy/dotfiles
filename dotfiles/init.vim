@@ -60,7 +60,7 @@ nnoremap <C-A> ggVG
 " if no line is selected, it will execute one line
 " if numerous lines are selected, say you did
 " ctrl-A for example, it will run the whole thing
-noremap <leader>e :SlimeSend<cr>
+noremap <leader>e ma :SlimeSend<CR> 'a0
 
 " easy way to reload init.vim
 nnoremap <leader>sv :source $MYVIMRC<CR>
