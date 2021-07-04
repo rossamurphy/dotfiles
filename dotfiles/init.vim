@@ -11,6 +11,7 @@ set expandtab
 set nosmartindent
 set autoindent
 set number relativenumber
+
 :imap jj <Esc>
 map J }
 map K {
@@ -24,7 +25,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
  endif
-
 
 let mapleader = " "
 
@@ -60,7 +60,8 @@ nnoremap <C-A> ggVG
 " if no line is selected, it will execute one line
 " if numerous lines are selected, say you did
 " ctrl-A for example, it will run the whole thing
-noremap <leader>e ma :SlimeSend<CR> 'a0
+noremap <leader>e :SlimeSend<CR> 
+
 
 " easy way to reload init.vim
 nnoremap <leader>sv :source $MYVIMRC<CR>
@@ -316,7 +317,6 @@ inoremap <A-j> <Esc>:m .+1<CR>==gi
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
-
 
 
 
