@@ -28,8 +28,8 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 
 let mapleader = " "
 
-" ctrl-A to select all
-nnoremap <C-A> ggVG
+" ctrl-P to select all
+map <C-p> ggVG
 
 " this below can be useful when starting out
 " however, it messes up with some other stuff in vim
