@@ -62,12 +62,10 @@ map <C-p> ggVG
 " ctrl-A for example, it will run the whole thing
 noremap <leader>e :SlimeSend<CR> 
 
-
 " easy way to reload init.vim
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
-
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin('~/.nvim/plugged')
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
 Plug 'davidhalter/jedi-vim'

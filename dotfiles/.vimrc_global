@@ -63,6 +63,8 @@ noremap <leader>e :SlimeSend<CR>
 " easy way to reload init.vim
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
+" this does not include deoplete.nvim as nvim
+" is not generally installed on every machine
 call plug#begin('~/.glob_vimplugs/plugged')
 Plug 'zchee/deoplete-jedi'
 Plug 'davidhalter/jedi-vim'
