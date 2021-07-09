@@ -2,6 +2,7 @@ syntax on
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+
 " set the runtime path to include Vundle and initialize
 set hidden
 set noerrorbells
@@ -11,6 +12,53 @@ set expandtab
 set nosmartindent
 set autoindent
 set number relativenumber
+
+" ***************************
+" ***************************
+" COC says add the below
+" ***************************
+" ***************************
+"
+" suggestion from a user
+if has('nvim')
+    autocmd User CocOpenFloat call nvim_win_set_config(g:coc_last_float_win, {'relative': 'editor', 'row': 0, 'col': 0})
+    autocmd User CocOpenFloat call nvim_win_set_width(g:coc_last_float_win, 9999)
+endif
+" coc says add this as some servers have issues
+" with backup files
+set nobackup
+set nowritebackup
+
+" Give more space for displaying messages.
+" set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+set shortmess+=c
+"
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+
+" ***************************
+" ***************************
+" end of COC section 
+" ***************************
+" ***************************
+
+
+
+
+" Set floating window to be slightly transparent
+" set winbl=10
 
 :imap jj <Esc>
 map J }
@@ -66,12 +114,15 @@ noremap <leader>e :SlimeSend<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 call plug#begin('~/.nvim/plugged')
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
-Plug 'davidhalter/jedi-vim'
+" trying out not doing the below as using coc
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-jedi'
+" Plug 'davidhalter/jedi-vim'
 Plug 'morhetz/gruvbox'
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
 "Plug 'jiangmiao/auto-pairs'
 Plug 'mbbill/undotree'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-commentary'
@@ -257,22 +308,67 @@ endif
 
 
 " ============================================================================ "
-" ===                              JEDI                        === "
+" ===                              AUTOCOMPLETION                        === "
+"                                  CHOOSE ONE!
+"                                  AND REMEMBER TO CHANGE
+"                                  PLUGINS!
 " ============================================================================ "
 
+
+" CHOOSE THIS OR THE BELOW
+"
+" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif "close preview"
+" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+"
 "Autocompletion
-let g:deoplete#enable_at_startup = 1
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif "close preview"
+" let g:deoplete#enable_at_startup = 1
 "tab completion
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 " disable autocompletion, because we use deoplete for completion
-" testing
-let g:jedi#completions_enabled = 0
-let g:jedi#goto_definitions_command = "<leader>b"
-let g:jedi#documentation_command = "<leader>d"
+"
+" let g:jedi#completions_enabled = 0
+" let g:jedi#goto_definitions_command = "<leader>b"
+" let g:jedi#documentation_command = "<leader>d"
 " if you don't want the docstring to pop up when
 " autocompleting using jedi and deoplete
 " autocmd FileType python setlocal completeopt-=preview
+
+
+" CHOOSE THIS OR THE ABOVE
+
+" === coc.nvim === "
+"   <leader>dd    - Jump to definition of current symbol
+"   <leader>dr    - Jump to references of current symbol
+"   <leader>dj    - Jump to implementation of current symbol
+"   <leader>ds    - Fuzzy search current project symbols
+nmap <silent> <leader>b <Plug>(coc-definition)
+nmap <silent> <leader>r <Plug>(coc-references)
+" nmap <silent> <leader>b <Plug>(coc-implementation)
+nnoremap <silent> <leader>ds :<C-u>CocList -I -N --top symbols<CR>
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+
+" show documentation
+nnoremap <leader>d :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
 
 
 " Terminal Function
