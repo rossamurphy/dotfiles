@@ -343,17 +343,36 @@ endif
 nmap <silent> <leader>b <Plug>(coc-definition)
 nmap <silent> <leader>r <Plug>(coc-references)
 " nmap <silent> <leader>b <Plug>(coc-implementation)
+
 nnoremap <silent> <leader>ds :<C-u>CocList -I -N --top symbols<CR>
+
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+
+" enter autocompletes on the selection
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" ******
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+" *********
 
 
 " show documentation
@@ -542,7 +561,7 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 nmap ; :Denite buffer<CR>
 nmap <leader>t :DeniteProjectDir file/rec<CR>
 nnoremap <leader>k :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
+nnoremap <leader>l :<C-u>DeniteCursorWord grep:.<CR>
 
 " Define mappings while in 'filter' mode
 "   <C-o>         - Switch to normal mode inside of search results
