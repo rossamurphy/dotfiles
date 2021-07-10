@@ -2,7 +2,6 @@ syntax on
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-
 " set the runtime path to include Vundle and initialize
 set hidden
 set noerrorbells
@@ -74,7 +73,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
  endif
 
-let mapleader = " "
+let mapleader = " " 
 
 " ctrl-P to select all
 map <C-p> ggVG
@@ -129,6 +128,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'easymotion/vim-easymotion'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'jremmen/vim-ripgrep'
@@ -224,6 +224,24 @@ catch
 endtry
 
 
+" ============================================================================ "
+" ===                           EasyMotion PLUGIN SETUP                       === "
+" ============================================================================ "
+
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" remarkably annoyingly, when you use easymotion, you basically add highlighted
+" text to a buffer, and then that buffer itself messes up the linting that coc gives
+" you. Which is demonstrably infuriating. I tried using vim-sneak, hop, vim-seek, and even
+" coc's own version, but all of them are kind of jank. So, the 'work-around' for now is
+" to just disable and then re-enable Coc every time you want to use easymotion.
+" which, isn't really a work-around at all, but hopefully it gets fixed in the near future.
+autocmd User EasyMotionPromptBegin silent! CocDisable
+autocmd User EasyMotionPromptEnd silent! CocEnable
+
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap s <Plug>(easymotion-bd-f2)
+
 
 " ============================================================================ "
 " ===                           AIRLINE PLUGIN SETUP                       === "
@@ -246,6 +264,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline_powerline_fonts = 0
 let g:airline_section_z = airline#section#create(['windowswap', '%3p%% ', 'linenr', ':%3v'])
+
 
 " ============================================================================ "
 " ===                           VIM SURROUND HELP                       === "
@@ -306,7 +325,6 @@ if executable('rg')
 endif
 
 
-
 " ============================================================================ "
 " ===                              AUTOCOMPLETION                        === "
 "                                  CHOOSE ONE!
@@ -346,12 +364,12 @@ nmap <silent> <leader>r <Plug>(coc-references)
 
 nnoremap <silent> <leader>ds :<C-u>CocList -I -N --top symbols<CR>
 
+" tab autocompletes
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 
 " enter autocompletes on the selection
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -387,7 +405,6 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-
 
 
 " Terminal Function

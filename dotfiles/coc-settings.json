@@ -1,6 +1,7 @@
 {
   "jedi.enable": true,
   "jedi.startupMessage": false,
+  "jedi.executable.command": "jedi-language-server",
   "suggest.echodocSupport": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
@@ -9,5 +10,11 @@
     "json",
     "javascriptreact",
     "typescript.tsx"
-  ]
+  ],
+  "languageserver": {
+    "python": {
+      "command": "jedi-language-server",
+      "filetypes": ["python"]
+    }
+  }
 }

@@ -40,36 +40,14 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
+# cool curl calls
 cheat(){curl cheat.sh/$1}
 coin(){curl rate.sx/$1}
 weather(){curl wttr.in/$1}
 meteo(){finger $1@graph.no}
 moon(){curl wttr.in/moon}
 
-source ~/.iterm2_shell_integration.zsh
-
-echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
-export PYENV_SHELL=zsh
-source '/usr/local/Cellar/pyenv/2.0.1/libexec/../completions/pyenv.zsh'
-command pyenv rehash 2>/dev/null
-pyenv() {
-  local command
-  command="${1:-}"
-  if [ "$#" -gt 0 ]; then
-    shift
-  fi
-
-  case "$command" in
-  rehash|shell)
-    eval "$(pyenv "sh-$command" "$@")"
-    ;;
-  *)
-    command pyenv "$command" "$@"
-    ;;
-  esac
-}
-
-eval "$(pyenv init -)"
+# source ~/.iterm2_shell_integration.zsh
 
 # for some reason, you need this to be able to ssh into this mac,
 #     and for the foreign client to recognise that you have a valid python3 installation
@@ -79,6 +57,6 @@ eval "$(pyenv init -)"
 export LANG="en_US.UTF-8"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
