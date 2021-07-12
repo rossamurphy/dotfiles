@@ -577,8 +577,8 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 "   <leader>j - Search current directory for occurences of word under cursor
 nmap ; :Denite buffer<CR>
 nmap <leader>t :DeniteProjectDir file/rec<CR>
-nnoremap <leader>k :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>l :<C-u>DeniteCursorWord grep:.<CR>
+nnoremap <leader>l :<C-u>Denite grep:. -no-empty<CR>
+" nnoremap <leader>k :<C-u>DeniteCursorWord grep:.<CR>
 
 " Define mappings while in 'filter' mode
 "   <C-o>         - Switch to normal mode inside of search results
