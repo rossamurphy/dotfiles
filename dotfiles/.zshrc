@@ -60,3 +60,5 @@ export LANG="en_US.UTF-8"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
