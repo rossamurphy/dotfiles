@@ -14,6 +14,7 @@ fi
 alias vi="nvim"
 alias viminit="nvim ~/.config/nvim/init.vim"
 
+alias tks="tmux kill-server"
 # alias python="python3"
 
 # NOTE, it may not always be the case that when you type
