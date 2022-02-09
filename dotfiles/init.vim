@@ -12,6 +12,12 @@ set nosmartindent
 set autoindent
 set number relativenumber
 
+
+" Adding this to make IPythonCell commands work
+let g:python3_host_prog = '/Users/rossmurphy/.pyenv/shims/python'
+
+
+
 " ***************************
 " ***************************
 " COC says add the below
