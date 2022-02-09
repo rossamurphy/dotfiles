@@ -32,6 +32,12 @@ alias chrome="open -a 'Google Chrome'"
 alias chat="open -a whatsapp"
 
 
+# Ross adds these while going through this tutorial:
+# https://lorisleiva.com/create-a-solana-dapp-from-scratch/getting-started-with-solana-and-anchor
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:${PATH}" 
 #export PATH="/usr/local/bin/python3.9:${PATH}" 
 

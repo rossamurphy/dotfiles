@@ -118,8 +118,14 @@ call plug#begin('~/.nvim/plugged')
 " Plug 'zchee/deoplete-jedi'
 " Plug 'davidhalter/jedi-vim'
 Plug 'morhetz/gruvbox'
-Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
+" Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 "Plug 'jiangmiao/auto-pairs'
+Plug 'tomlion/vim-solidity'
+" new ... recommended linting by the enzyme team
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
