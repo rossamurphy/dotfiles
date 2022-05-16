@@ -6,11 +6,16 @@ filetype off                  " required
 set hidden
 set noerrorbells
 set tabstop=4 softtabstop=4
-set shiftwidth=4
+" need to set this to 6, or you will have a bad time with js
+set shiftwidth=6
+filetype indent on
+set ai
+set si
 set expandtab
 set nosmartindent
 set autoindent
 set number relativenumber
+let g:loaded_matchit = 1
 
 
 " Adding this to make IPythonCell commands work
@@ -58,8 +63,6 @@ endif
 " end of COC section 
 " ***************************
 " ***************************
-
-
 
 
 " Set floating window to be slightly transparent
@@ -113,6 +116,7 @@ map <C-p> ggVG
 " if no line is selected, it will execute one line
 " if numerous lines are selected, say you did
 " ctrl-A for example, it will run the whole thing
+" noremap <C-j> :SlimeSend<CR> 
 noremap <leader>e :SlimeSend<CR> 
 
 " easy way to reload init.vim
@@ -123,18 +127,29 @@ call plug#begin('~/.nvim/plugged')
 " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'zchee/deoplete-jedi'
 " Plug 'davidhalter/jedi-vim'
+
+" Themes
+" Here we install both themes
+" if you want to change theme, just do
+" :colorscheme gruvbox, or, :colorscheme monokai
 Plug 'morhetz/gruvbox'
-" Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build' }
+" Plug 'crusoexia/vim-monokai'
+
+" JS and JSX
+Plug 'pangloss/vim-javascript'
+Plug 'yuezk/vim-js'
+Plug 'maxmellon/vim-jsx-pretty'
+" Plug 'sheerun/vim-polyglot'
+
 Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 "Plug 'jiangmiao/auto-pairs'
 Plug 'tomlion/vim-solidity'
 " new ... recommended linting by the enzyme team
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
+Plug 'andymass/vim-matchup'
+"
 " trying this out, not sure if will keep
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'airblade/vim-gitgutter'
@@ -143,6 +158,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'easymotion/vim-easymotion'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'jremmen/vim-ripgrep'
@@ -150,6 +168,7 @@ Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'rust-lang/rust.vim'
 if has('nvim')
   Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -158,6 +177,7 @@ else
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
 call plug#end()
+
 
 " ***************
 " make sure to *brew install ripgrep*
@@ -331,12 +351,30 @@ noremap <leader>/ :Commentary<CR>
 " ===                              GRUVBOX THEME                       === "
 " ============================================================================ "
 
-colorscheme gruvbox
-let g:gruvbox_contrast_dark='soft'
-set background=dark
-if executable('rg')
-    let g:rg_derive_root='true'
-endif
+ colorscheme gruvbox
+ let g:gruvbox_contrast_dark='soft'
+ set background=dark
+ if executable('rg')
+     let g:rg_derive_root='true'
+ endif
+
+
+
+
+" '''*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!
+" <---------------------------------------------------------------------------->
+" >
+" > Monokai theme https://github.com/crusoexia/vim-monokai
+" >
+" >----------------------------------------------------------------------------<
+" *#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!>'''
+
+
+" syntax on
+" colorscheme monokai
+" set termguicolors
+" let g:monokai_term_italic = 1
+" let g:monokai_gui_italic = 1
 
 
 " ============================================================================ "
@@ -467,7 +505,9 @@ nnoremap <leader>c :IPythonCellExecuteCell<CR>
 " weird... so, in my .zshrc I have mapped ipy to only load an ipython
 " that exists in the venv (as, I'd prefer to be made aware that I need to
 " pip install ipython, rather than have my venv switch unbeknownst to me)
+"
 nnoremap <leader>1 :SlimeSend1 ipy --matplotlib<CR>
+" nnoremap <leader>1 :SlimeSend1 ipy<CR>
 
 " this causes some issues because it triggers replace for me if I use r
 " so I switch to number 2. So you can do leader 1, and then leader 2. Nice.

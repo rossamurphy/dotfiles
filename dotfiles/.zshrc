@@ -13,7 +13,9 @@ fi
 
 alias vi="nvim"
 alias viminit="nvim ~/.config/nvim/init.vim"
-
+alias bodabox="ssh -i /Users/rossmurphy/bodaKey/LightsailDefaultKey-eu-west-2.cer bitnami@52.56.132.88"
+alias optymbox="ssh -i /Users/rossmurphy/Hedge/ssh/LightsailDefaultKey-eu-west-2.cer bitnami@35.177.87.88"
+alias mybox="ssh -i /Users/rossmurphy/myBoxKey/LightsailDefaultKey-us-east-1.cer ubuntu@52.71.163.144"
 alias tks="tmux kill-server"
 # alias python="python3"
 
@@ -186,3 +188,4 @@ bindkey '^R' fzf-history-widget
   eval $__fzf_key_bindings_options
   'unset' '__fzf_key_bindings_options'
 }
+eval "$(pyenv init -)"
