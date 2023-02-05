@@ -7,17 +7,24 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# export PATH="/opt/homebrew/anaconda3/bin:$PATH"  # commented out by conda initialize
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 
 alias vi="nvim"
+alias la="ls -a"
 alias viminit="nvim ~/.config/nvim/init.vim"
-alias bodabox="ssh -i /Users/rossmurphy/bodaKey/LightsailDefaultKey-eu-west-2.cer bitnami@52.56.132.88"
-alias optymbox="ssh -i /Users/rossmurphy/Hedge/ssh/LightsailDefaultKey-eu-west-2.cer bitnami@35.177.87.88"
-alias mybox="ssh -i /Users/rossmurphy/myBoxKey/LightsailDefaultKey-us-east-1.cer ubuntu@52.71.163.144"
+alias bodabox="ssh -i /Users/rossmurphy/Access/bodaKey/LightsailDefaultKey-eu-west-2.cer bitnami@52.56.132.88"
+alias azurebox="ssh 20.49.10.114"
+alias oldfdbb="ssh -i /Users/rossmurphy/Access/optymBoxKey/LightsailDefaultKey-eu-west-2.cer bitnami@35.177.87.88"
+alias fdbb="ssh -i /Users/rossmurphy/Access/federbyteKey/LightsailDefaultKey-eu-west-2.cer bitnami@52.56.50.110"
+alias mybox="ssh -i /Users/rossmurphy/Access/myBoxKey/LightsailDefaultKey-us-east-1.cer ubuntu@52.71.163.144"
 alias tks="tmux kill-server"
-# alias python="python3"
+alias julia="exec '/Applications/Julia-1.7.app/Contents/Resources/julia/bin/julia'"
+alias python="python3"
+
 
 # NOTE, it may not always be the case that when you type
 # iPython in a shell, that it will load an interactive python 
@@ -43,13 +50,7 @@ export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:${PATH}" 
 #export PATH="/usr/local/bin/python3.9:${PATH}" 
 
-#export PATH="$HOME/.local/bin:$PATH"
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
-
+#
 # cool curl calls
 cheat(){curl cheat.sh/$1}
 coin(){curl rate.sx/$1}
@@ -68,8 +69,6 @@ export LANG="en_US.UTF-8"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias f='cd $(fd --type directory | fzf)'
@@ -188,4 +187,22 @@ bindkey '^R' fzf-history-widget
   eval $__fzf_key_bindings_options
   'unset' '__fzf_key_bindings_options'
 }
-eval "$(pyenv init -)"
+# You need to manually set this on the M1, for some reason...
+source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/homebrew/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/homebrew/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/opt/homebrew/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/homebrew/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

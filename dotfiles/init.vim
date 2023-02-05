@@ -5,9 +5,17 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set hidden
 set noerrorbells
-set tabstop=4 softtabstop=4
+set tabstop=6 softtabstop=6
 " need to set this to 6, or you will have a bad time with js
 set shiftwidth=6
+" setting the shiftwidth for MD files equal to 2,
+" so that GitHub can understand nested bulleted lists.
+autocmd BufRead,BufNewFile *.md set shiftwidth=2
+autocmd BufRead,BufNewFile *.js set shiftwidth=6
+autocmd BufRead,BufNewFile *.jsx set shiftwidth=6
+autocmd BufRead,BufNewFile *.ts set shiftwidth=6
+autocmd BufRead,BufNewFile *.tsx set shiftwidth=6
+
 filetype indent on
 set ai
 set si
@@ -19,8 +27,7 @@ let g:loaded_matchit = 1
 
 
 " Adding this to make IPythonCell commands work
-let g:python3_host_prog = '/Users/rossmurphy/.pyenv/shims/python'
-
+" let g:python3_host_prog = '/Users/rossmurphy/.pyenv/shims/python'
 
 
 " ***************************
@@ -133,6 +140,8 @@ call plug#begin('~/.nvim/plugged')
 " if you want to change theme, just do
 " :colorscheme gruvbox, or, :colorscheme monokai
 Plug 'morhetz/gruvbox'
+Plug 'sainnhe/sonokai'
+Plug 'olimorris/onedarkpro.nvim'
 " Plug 'crusoexia/vim-monokai'
 
 " JS and JSX
@@ -141,7 +150,6 @@ Plug 'yuezk/vim-js'
 Plug 'maxmellon/vim-jsx-pretty'
 " Plug 'sheerun/vim-polyglot'
 
-Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 "Plug 'jiangmiao/auto-pairs'
 Plug 'tomlion/vim-solidity'
 " new ... recommended linting by the enzyme team
@@ -149,6 +157,7 @@ Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
 Plug 'andymass/vim-matchup'
+Plug 'github/copilot.vim'
 "
 " trying this out, not sure if will keep
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -158,6 +167,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'easymotion/vim-easymotion'
+Plug 'ambv/black'
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
@@ -166,96 +176,18 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'jremmen/vim-ripgrep'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
+Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python'}
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'rust-lang/rust.vim'
-if has('nvim')
-  Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/denite.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+" adding nvim telescope on 26th december 2022
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
+" if you have issues with jedi language server, always make sure to first try pip installing jedi-language-server before proceeding
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+" Plug 'nvim-treesitter/playground'
 call plug#end()
-
-
-" ***************
-" make sure to *brew install ripgrep*
-" ============================================================================ "
-" ===                           DENITE PLUGIN SETUP                        === "
-" ============================================================================ "
-
-" Wrap in try/catch to avoid errors on initial install before plugin is available
-try
-" === Denite setup ==="
-" Use ripgrep for searching current directory for files
-" By default, ripgrep will respect rules in .gitignore
-"   --files: Print each file that would be searched (but don't search)
-"   --glob:  Include or exclues files for searching that match the given glob
-"            (aka ignore .git files)
-"
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
-
-" Use ripgrep in place of "grep"
-call denite#custom#var('grep', 'command', ['rg'])
-
-" Custom options for ripgrep
-"   --vimgrep:  Show results with every match on it's own line
-"   --hidden:   Search hidden directories and files
-"   --heading:  Show the file name above clusters of matches from each file
-"   --S:        Search case insensitively if the pattern is all lowercase
-call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
-
-" Recommended defaults for ripgrep via Denite docs
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-" Remove date from buffer list
-call denite#custom#var('buffer', 'date_format', '')
-
-" Custom options for Denite
-"   split                       - Use floating window for Denite
-"   start_filter                - Start filtering on default
-"   auto_resize                 - Auto resize the Denite window height automatically.
-"   source_names                - Use short long names if multiple sources
-"   prompt                      - Customize denite prompt
-"   highlight_matched_char      - Matched characters highlight
-"   highlight_matched_range     - matched range highlight
-"   highlight_window_background - Change background group in floating window
-"   highlight_filter_background - Change background group in floating filter window
-"   winrow                      - Set Denite filter window to top
-"   vertical_preview            - Open the preview window vertically
-
-let s:denite_options = {'default' : {
-\ 'split': 'floating',
-\ 'start_filter': 1,
-\ 'auto_resize': 1,
-\ 'source_names': 'short',
-\ 'prompt': 'λ ',
-\ 'highlight_matched_char': 'QuickFixLine',
-\ 'highlight_matched_range': 'Visual',
-\ 'highlight_window_background': 'Special',
-\ 'highlight_filter_background': 'DiffAdd',
-\ 'winrow': 1,
-\ 'vertical_preview': 1
-\ }}
-
-
-" Loop through denite options and enable them
-function! s:profile(opts) abort
-  for l:fname in keys(a:opts)
-    for l:dopt in keys(a:opts[l:fname])
-      call denite#custom#option(l:fname, l:dopt, a:opts[l:fname][l:dopt])
-    endfor
-  endfor
-endfunction
-
-call s:profile(s:denite_options)
-catch
-  echo 'Denite not installed. It should work after running :PlugInstall'
-endtry
 
 
 " ============================================================================ "
@@ -277,13 +209,64 @@ map  <Leader>w <Plug>(easymotion-bd-w)
 nmap s <Plug>(easymotion-bd-f2)
 
 
+
+" ============================================================================ "
+" ===                           VIMSPECTOR PLUGIN SETUP                   === "
+" ============================================================================ "
+"
+"
+nnoremap <Leader>dd :call vimspector#Launch()<CR>
+nnoremap <Leader>de :call vimspector#Reset()<CR>
+nnoremap <Leader>dc :call vimspector#Continue()<CR>
+
+nnoremap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+
+nmap <Leader>dk <Plug>VimspectorRestart
+nmap <Leader>dh <Plug>VimspectorStepOut
+nmap <Leader>dl <Plug>VimspectorStepInto
+nmap <Leader>dj <Plug>VimspectorStepOver
+
+
+
+" ============================================================================ "
+" ===                             TELESCOPE PLUGIN SETUP                   === "
+" ============================================================================ "
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fd <cmd>Telescope find_files hidden=true<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>t <cmd>lua require('telescope.builtin').find_files()<cr>
+
+
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>l <cmd>lua require('telescope.builtin').live_grep()<cr>
+
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+
+" ============================================================================ "
+" ===                           ONEDARK PLUGIN SETUP                       === "
+" ============================================================================ "
+
+
+colorscheme onedark_vivid
+
+
 " ============================================================================ "
 " ===                           AIRLINE PLUGIN SETUP                       === "
 " ============================================================================ "
 
 
 " let g:airline_theme='dark'
-let g:airline_theme='gruvbox'
+" let g:airline_theme='gruvbox'
+" let g:airline_theme='sonokai'
+let g:airline_theme='onedark'
+
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_min_count = 2
@@ -351,12 +334,12 @@ noremap <leader>/ :Commentary<CR>
 " ===                              GRUVBOX THEME                       === "
 " ============================================================================ "
 
- colorscheme gruvbox
- let g:gruvbox_contrast_dark='soft'
- set background=dark
- if executable('rg')
-     let g:rg_derive_root='true'
- endif
+ " colorscheme gruvbox
+ " let g:gruvbox_contrast_dark='soft'
+ " set background=dark
+ " if executable('rg')
+ "     let g:rg_derive_root='true'
+ " endif
 
 
 
@@ -364,44 +347,43 @@ noremap <leader>/ :Commentary<CR>
 " '''*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!
 " <---------------------------------------------------------------------------->
 " >
-" > Monokai theme https://github.com/crusoexia/vim-monokai
+" > Sonokai theme https://github.com/sainnhe/sonokai
 " >
 " >----------------------------------------------------------------------------<
 " *#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!*#*#*#!>'''
 
+" if has('termguicolors')
+"       set termguicolors
+" endif
+"   " The configuration options should be placed before `colorscheme sonokai`.
+" let g:sonokai_style = 'andromeda'
+" " let g:sonokai_style = 'atlantis'
+" " let g:sonokai_style = 'default'
+" let g:sonokai_better_performance = 1
+" let g:sonokai_transparent_background = 0
+" let g:sonokai_dim_inactive_windows = 0
+" let g:sonokai_spell_foreground = 'colored' 
 
-" syntax on
-" colorscheme monokai
-" set termguicolors
-" let g:monokai_term_italic = 1
-" let g:monokai_gui_italic = 1
+
+" function! s:sonokai_custom() abort
+"       highlight! link groupA groupB
+"       highlight! link groupC groupD
+"       let l:palette = sonokai#get_palette('atlantis', {})
+"       call sonokai#highlight('groupA', l:palette.red, l:palette.none, 'undercurl', l:palette.red)
+" endfunction
+
+" augroup SonokaiCustom
+"       autocmd!
+"       autocmd ColorScheme sonokai call s:sonokai_custom()
+" augroup END
+
+
+" colorscheme sonokai
 
 
 " ============================================================================ "
 " ===                              AUTOCOMPLETION                        === "
-"                                  CHOOSE ONE!
-"                                  AND REMEMBER TO CHANGE
-"                                  PLUGINS!
 " ============================================================================ "
-
-
-" CHOOSE THIS OR THE BELOW
-"
-" autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif "close preview"
-" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-"
-"Autocompletion
-" let g:deoplete#enable_at_startup = 1
-"tab completion
-" disable autocompletion, because we use deoplete for completion
-"
-" let g:jedi#completions_enabled = 0
-" let g:jedi#goto_definitions_command = "<leader>b"
-" let g:jedi#documentation_command = "<leader>d"
-" if you don't want the docstring to pop up when
-" autocompleting using jedi and deoplete
-" autocmd FileType python setlocal completeopt-=preview
-
 
 " CHOOSE THIS OR THE ABOVE
 
@@ -426,6 +408,11 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " enter autocompletes on the selection
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+" navigating the autocompletion list
+inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
+inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
+
+
 " ******
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
@@ -444,7 +431,10 @@ function! s:check_back_space() abort
 endfunction
 " *********
 
-
+au ColorScheme * hi! link CocMenuSel PmenuSel
+au ColorScheme * hi! link CocPumMenu Pmenu
+au ColorScheme * hi! link CocPumVirtualText Comment
+"
 " show documentation
 nnoremap <leader>d :call <SID>show_documentation()<CR>
 
@@ -481,6 +471,13 @@ function! TermToggle(height)
         let g:term_win = win_getid()
     endif
 endfunction
+
+
+" ============================================================================ "
+" ===                              TreeSitter                        === "
+" ============================================================================ "
+"
+
 
 
 "------------------------------------------------------------------------------
@@ -534,6 +531,7 @@ nnoremap <leader>C :IPythonCellExecuteCellJump<CR>
 
 " map <Leader>x to close all Matplotlib figure windows
 nnoremap <leader>x :IPythonCellClose<CR>
+nmap <leader>h i#jja 
 
 " this is very handy even if only for purely navigation purposes!
 " map [c and ]c to jump to the previous and next cell header
@@ -622,75 +620,6 @@ vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
 
-" **************************
-" === Denite shorcuts === "
-" **************************
-"   ;         - Browser currently open buffers
-"   <leader>t - Browse list of files in current directory
-"   <leader>g - Search current directory for occurences of given term and close window if no results
-"   <leader>j - Search current directory for occurences of word under cursor
-nmap ; :Denite buffer<CR>
-nmap <leader>t :DeniteProjectDir file/rec<CR>
-nnoremap <leader>l :<C-u>Denite grep:. -no-empty<CR>
-" nnoremap <leader>k :<C-u>DeniteCursorWord grep:.<CR>
-
-" Define mappings while in 'filter' mode
-"   <C-o>         - Switch to normal mode inside of search results
-"   <Esc>         - Exit denite window in any mode
-"   <CR>          - Open currently selected file in any mode
-"   <C-t>         - Open currently selected file in a new tab
-"   <C-v>         - Open currently selected file a vertical split
-"   <C-h>         - Open currently selected file in a horizontal split
-autocmd FileType denite-filter call s:denite_filter_my_settings()
-function! s:denite_filter_my_settings() abort
-  imap <silent><buffer> <C-o>
-  \ <Plug>(denite_filter_update)
-  inoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  inoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  inoremap <silent><buffer><expr> <C-t>
-  \ denite#do_map('do_action', 'tabopen')
-  inoremap <silent><buffer><expr> <C-v>
-  \ denite#do_map('do_action', 'vsplit')
-  inoremap <silent><buffer><expr> <C-h>
-  \ denite#do_map('do_action', 'split')
-endfunction
-
-" Define mappings while in denite window
-"   <CR>        - Opens currently selected file
-"   q or <Esc>  - Quit Denite window
-"   d           - Delete currenly selected file
-"   p           - Preview currently selected file
-"   <C-o> or i  - Switch to insert mode inside of filter prompt
-"   <C-t>       - Open currently selected file in a new tab
-"   <C-v>       - Open currently selected file a vertical split
-"   <C-h>       - Open currently selected file in a horizontal split
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  " nnoremap <silent><buffer><expr> d
-  " \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <C-o>
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <C-t>
-  \ denite#do_map('do_action', 'tabopen')
-  nnoremap <silent><buffer><expr> <C-v>
-  \ denite#do_map('do_action', 'vsplit')
-  nnoremap <silent><buffer><expr> <C-h>
-  \ denite#do_map('do_action', 'split')
-endfunction
 
 
 
