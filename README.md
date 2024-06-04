@@ -55,6 +55,7 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
+
 ### Init the config dir
 
 ```bash
@@ -63,6 +64,22 @@ mkdir ~/.config
 cp -a dotfiles/.config/. ~/.config
 ```
 
+### Set up Packer
+```bash
+cd ./.config/nvim/lua
+sudo nvim
+```
+
+```vim
+:Ex
+# Go the packer.lua file and source it
+:so
+:PackerInstall
+:PackerSync
+```
+
+
+## Optional
 
 ### Install pip for python 3 (to install and update pynvim)
 ```bash
