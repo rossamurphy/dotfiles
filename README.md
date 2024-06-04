@@ -1,12 +1,7 @@
-here are my dotfiles.
+here are a watered down version of dotfiles for tmux and nvim.
 
-they configure (not exhaustive):
-slime
-tmux
-vim
-p10k
-coc
-iterm
+mainly here so I can grab them when I remote into other machines.
 
-here in case they are useful to others.
-unfortunately this is as descriptive as this readme will get, but if you need help with anything related to the contents of this, please just shout: rossmurphy@me.com
+also here in case they are useful to others.
+
+unfortunately this is as descriptive as this readme will get, but if you need help with anything related to the contents of this, please just reach out.
