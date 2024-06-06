@@ -85,10 +85,9 @@ sudo apt-get install git
 ```
 
 ######  get packer
-```bash
-sudo git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.config/nvim/pack/packer/start/packer.nvim
-```
+YOU NO LONGER NEED TO, it gets it automatically
+
+however ...
 
 In order to open vim and have it auto install the plugins, it needs to be able to run packer in the background.
 However, packer is installed to loca/share by default, and that's owned by the root, not the user.
@@ -125,8 +124,13 @@ sudo nvim
 
 ```vim
 :Ex
-# Go the packer.lua file and source it
+Go to the init.lua file (same directory as packer.lua) and source it
+also do the same for the packer.lua file
+i.e. run
 :so
+
+then, once that's done correctly. install and sync the packages
+```vim
 :PackerInstall
 :PackerSync
 ```
