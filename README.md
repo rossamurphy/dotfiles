@@ -40,6 +40,7 @@ npm and unzip from here
 ```bash
 sudo apt install -y nodejs npm unzip 
 ```
+
 and now for go
 // (source from here https://stackoverflow.com/questions/17480044/how-to-install-the-current-version-of-go-in-ubuntu-precise)
 ```bash
@@ -48,8 +49,13 @@ sudo apt update
 sudo apt install golang-go
 ```
 
+###### install ripgrep (for fuzzy finding and telescope)
+```bash
+sudo apt update
+sudo apt install ripgrep
+```
 
-###### now the real thing
+###### now the real thing (nvim)
 ```bash
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
 sudo rm -rf /opt/nvim
@@ -84,13 +90,19 @@ source ~/.bashrc
 sudo apt-get install git
 ```
 
-######  get packer
-YOU NO LONGER NEED TO, it gets it automatically
 
-however ...
+### Init the config dir
+
+```bash
+sudo git clone https://github.com/rossamurphy/dotfiles 
+sudo mkdir ~/.config
+sudo cp -a ~/dotfiles/.config/. ~/.config
+```
+
+###### change permissions 
 
 In order to open vim and have it auto install the plugins, it needs to be able to run packer in the background.
-However, packer is installed to loca/share by default, and that's owned by the root, not the user.
+However, packer is installed to local/share by default, and that's owned by the root, not the user.
 so, in order for it to be allowed to do what it needs to do, you need to change the ownership of the folder where packer is.
 You can verify that it's not owned by you by doing:
 
@@ -105,29 +117,24 @@ sudo chown -R $USER:$USER ~/.local/share/nvim
 sudo chown -R $USER:$USER ~/.config/nvim
 ```
 
-Now open vim
+(You also needed to change the directory permissions to USER for the .config directory because you sudo copied it)
+TODO - I can probably make this smoother 
 
-
-### Init the config dir
-
-```bash
-sudo git clone https://github.com/rossamurphy/dotfiles 
-sudo mkdir ~/.config
-sudo cp -a ~/dotfiles/.config/. ~/.config
-```
-
-### Set up Packer
+### Set up plugins
 ```bash
 cd ./.config/nvim/lua
-sudo nvim
+vi
 ```
 
 ```vim
 :Ex
+```
 Go to the init.lua file (same directory as packer.lua) and source it
-also do the same for the packer.lua file
-i.e. run
+i.e. open it and run
+```vim
 :so
+```
+also do the same for the packer.lua file
 
 then, once that's done correctly. install and sync the packages
 ```vim
@@ -150,7 +157,6 @@ For python 3
 sudo pip3 install pynvim
 sudo pip3 install --update pynvim
 ```
-
 
 
 ### Install ruby (neovim likes it)
