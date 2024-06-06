@@ -171,5 +171,20 @@ Then add neovim support
 sudo gem install neovim
 ```
 
+### Change the default terminal colours
+```bash
+sudo apt-get install coreutils
+dircolors --print-database > ~/.dir_colors
+```
+now open the dircolors file you've just created
+```bash
+vi .dir_colors
+```
 
+and make edits to the FILE and DIR codes. there are instructions provided in the file
+
+to reload the file and apply your changes
+```bash
+eval $(dircolors ~/.dir_colors)
+```
 
