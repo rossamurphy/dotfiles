@@ -34,6 +34,21 @@ sudo apt update
 sudo apt install build-essential
 ```
 
+and, for the ones STILL not included, go, npm, and unzip:
+
+npm and unzip from here
+```bash
+sudo apt install -y nodejs npm unzip 
+```
+and now for go
+// (source from here https://stackoverflow.com/questions/17480044/how-to-install-the-current-version-of-go-in-ubuntu-precise)
+```bash
+sudo add-apt-repository ppa:longsleep/golang-backports
+sudo apt update
+sudo apt install golang-go
+```
+
+
 ###### now the real thing
 ```bash
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
