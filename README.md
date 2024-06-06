@@ -22,26 +22,39 @@ More [here](https://github.com/neovim/neovim/blob/master/INSTALL.md)
 wget http://mirrors.edge.kernel.org/ubuntu/pool/main/g/gcc-10/gcc-10-base_10-20200411-0ubuntu1_amd64.deb
 ```
 
-###### libgcc-s1
-```bash
-wget http://mirrors.xmission.com/ubuntu/pool/main/g/gcc-10/libgcc-s1_10-20200411-0ubuntu1_amd64.deb
-```
-
 Install those
 ###### gcc-10-base
 ```bash
 sudo dpkg -i ./gcc-10-base_10-20200411-0ubuntu1_amd64.deb
 ```
 
-###### libgcc-s1
-```bash
-sudo dpkg -i ./libgcc-s1_10-20200411-0ubuntu1_amd64.deb
-```
-
 ###### now the real thing
 ```bash
-wget https://github.com/neovim/neovim/releases/download/v0.7.2/nvim-linux64.deb
-sudo apt install ./nvim-linux64.deb
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+sudo rm -rf /opt/nvim
+sudo tar -C /opt -xzf nvim-linux64.tar.gz
+```
+
+```bash
+export PATH="$PATH:/opt/nvim-linux64/bin"
+```
+
+Now make it possible to sudo open nvim
+
+```bash
+vi .bashrc
+```
+
+and add this line
+```bash
+alias vi='sudo env "PATH=$PATH" nvim'
+```
+Write and close it.
+
+Now source it
+
+```bash
+source .bashrc
 ```
 
 ###### get git 
@@ -51,8 +64,8 @@ sudo apt-get install git
 
 ######  get packer
 ```bash
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+sudo git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.config/nvim/pack/packer/start/packer.nvim
 ```
 
 
