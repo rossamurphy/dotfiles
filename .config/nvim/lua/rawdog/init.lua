@@ -13,7 +13,7 @@ end
 
 local packer_bootstrap = ensure_packer()
 
-return require('rawdog.packer').startup(function(use)
+return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   -- My plugins here
   -- use 'foo1/bar1.nvim'
@@ -22,6 +22,6 @@ return require('rawdog.packer').startup(function(use)
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
-    require('rawdog.packer').sync()
+    require('packer').sync()
   end
 end)
