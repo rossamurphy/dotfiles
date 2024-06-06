@@ -28,6 +28,12 @@ Install those
 sudo dpkg -i ./gcc-10-base_10-20200411-0ubuntu1_amd64.deb
 ```
 
+and for the rest
+```bash
+sudo apt update
+sudo apt install build-essential
+```
+
 ###### now the real thing
 ```bash
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
@@ -39,23 +45,24 @@ sudo tar -C /opt -xzf nvim-linux64.tar.gz
 export PATH="$PATH:/opt/nvim-linux64/bin"
 ```
 
-Now make it possible to sudo open nvim
-
+and, for ease, set an alias in your .bashrc
 ```bash
-vi .bashrc
+vi ~/.bashrc
 ```
 
-and add this line
 ```bash
-alias vi='sudo env "PATH=$PATH" nvim'
+alias vi='nvim'
 ```
-Write and close it.
 
-Now source it
+write and close and source your .bashrc
+```vim
+:wq
+```
 
 ```bash
-source .bashrc
+source ~/.bashrc
 ```
+
 
 ###### get git 
 ```bash
@@ -68,13 +75,31 @@ sudo git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.config/nvim/pack/packer/start/packer.nvim
 ```
 
+In order to open vim and have it auto install the plugins, it needs to be able to run packer in the background.
+However, packer is installed to loca/share by default, and that's owned by the root, not the user.
+so, in order for it to be allowed to do what it needs to do, you need to change the ownership of the folder where packer is.
+You can verify that it's not owned by you by doing:
+
+```bash
+ls -ld ~/.local/share/nvim/site
+ls -ld ~/.config/nvim
+```
+
+So, go fix that by doing this
+```bash
+sudo chown -R $USER:$USER ~/.local/share/nvim
+sudo chown -R $USER:$USER ~/.config/nvim
+```
+
+Now open vim
+
 
 ### Init the config dir
 
 ```bash
-git clone https://github.com/rossamurphy/dotfiles 
-mkdir ~/.config
-cp -a dotfiles/.config/. ~/.config
+sudo git clone https://github.com/rossamurphy/dotfiles 
+sudo mkdir ~/.config
+sudo cp -a ~/dotfiles/.config/. ~/.config
 ```
 
 ### Set up Packer

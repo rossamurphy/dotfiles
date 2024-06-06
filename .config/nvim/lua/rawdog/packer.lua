@@ -47,48 +47,12 @@ return require('packer').startup(function(use)
 
 	use 'nvim-tree/nvim-web-devicons'
 
-	-- for node debugging
-	use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
-	-- https://github.com/mxsdev/nvim-dap-vscode-js
-	use {
-		"microsoft/vscode-js-debug",
-		opt = true,
-		run = "npm install -g --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out"
-	}
-
 	use {
 		'nvim-telescope/telescope.nvim', tag = '0.1.2',
 		-- or                            , branch = '0.1.x',
 		requires = { { 'nvim-lua/plenary.nvim' } }
 	}
 	use 'folke/neodev.nvim'
-	-- for persistent breakpoints
-	-- https://github.com/Weissle/persistent-breakpoints.nvim
-	-- https://github.com/mfussenegger/nvim-dap/issues/198
-	use { 'Weissle/persistent-breakpoints.nvim' }
-	use {
-		"nvim-neotest/neotest",
-		requires = {
-			"nvim-lua/plenary.nvim",
-			"antoinemadec/FixCursorHold.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-neotest/neotest-python",
-			"markemmons/neotest-deno",
-			"lawrence-laz/neotest-zig",
-		}
-	}
-
-	use({
-		"jackMort/ChatGPT.nvim",
-		requires = {
-			"MunifTanjim/nui.nvim",
-			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope.nvim"
-		}
-	})
-
-	use { "mfussenegger/nvim-dap",
-		requires = { "rcarriga/nvim-dap-ui", 'mfussenegger/nvim-dap-python', 'theHamsta/nvim-dap-virtual-text' } }
 
 	-- TODO - move to specific file
 	use {
