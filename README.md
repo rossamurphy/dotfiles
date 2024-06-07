@@ -10,8 +10,7 @@ Here are a watered down version of dotfiles for tmux and nvim.
 
 ## Quickstart 
 
-### Install nvim 
-More [here](https://github.com/neovim/neovim/blob/master/INSTALL.md)
+
 
 #### For debian (most GCP machines)
 
@@ -61,6 +60,8 @@ curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.
 sudo rm -rf /opt/nvim
 sudo tar -C /opt -xzf nvim-linux64.tar.gz
 ```
+
+This may change in future, for more check out the main source [here](https://github.com/neovim/neovim/blob/master/INSTALL.md)
 
 ```bash
 export PATH="$PATH:/opt/nvim-linux64/bin"
