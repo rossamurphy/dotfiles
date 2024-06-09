@@ -51,7 +51,7 @@ sudo apt install golang-go
 ###### install ripgrep (for fuzzy finding and telescope)
 ```bash
 sudo apt update
-sudo apt install ripgrep
+sudo apt-get install ripgrep
 ```
 
 ###### now the real thing (nvim)
@@ -100,6 +100,7 @@ sudo mkdir ~/.config
 sudo cp -a ~/dotfiles/.config/. ~/.config
 ```
 
+
 ###### change permissions 
 
 In order to open vim and have it auto install the plugins, it needs to be able to run packer in the background.
@@ -145,6 +146,7 @@ then, once that's done correctly. install and sync the packages
 
 
 ## Optional
+
 
 ### Install pip for python 3 (to install and update pynvim)
 ```bash
