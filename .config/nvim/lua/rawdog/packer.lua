@@ -91,6 +91,7 @@ return require('packer').startup(function(use)
 			"lawrence-laz/neotest-zig",
 		}
 	}
+	use { "nvim-neotest/nvim-nio" }
 
 	use { "mfussenegger/nvim-dap",
 		requires = { "rcarriga/nvim-dap-ui", 'mfussenegger/nvim-dap-python', 'theHamsta/nvim-dap-virtual-text' } }
