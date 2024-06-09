@@ -144,6 +144,46 @@ then, once that's done correctly. install and sync the packages
 :PackerSync
 ```
 
+give yourself control over the directories so you can do stuff like PackerInstall and telecsope fuzzy find
+(if you're getting the "ermahgerd writing to a nil value" error when you are doing PackerSync, you are probably going to want to run the below).
+```
+sudo chown -R "${USER}" ~/.local
+sudo chown $USER ~/.config/nvim/plugin
+sudo chown -R "${USER}" ~/
+```
+
+For moshing:
+https://mosh.org/
+```
+sudo apt-get install mosh
+```
+
+For mosh if you need
+```
+sudo apt-get install ufw
+sudo ufw enable
+sudo ufw allow ssh
+sudo ufw allow 60000:61000/udp
+sudo ufw reload
+sudo ufw status
+```
+
+if all else fails you may have to update the firewall on your VM provider, e.g. for GCP:
+
+Configure the Firewall Rule:
+
+Name: Give your firewall rule a name, e.g., allow-mosh-udp.
+Description: Optionally, add a description, e.g., Allow Mosh UDP ports 60000-61000.
+Network: Select the VPC network where your VM resides.
+Priority: Leave it as default (1000) unless you have specific priority needs.
+Direction of traffic: Choose "Ingress".
+Action on match: Select "Allow".
+Targets: Choose "All instances in the network" or specify the target instances.
+Source IP ranges: Enter 0.0.0.0/0 to allow from any IP (or restrict to your IP range for better security).
+Protocols and ports:
+Check "Specified protocols and ports".
+Select "udp" and enter 60000-61000.
+
 
 ## Optional
 
