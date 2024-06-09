@@ -59,6 +59,16 @@ return require('packer').startup(function(use)
 	use "sindrets/diffview.nvim"
 
 	use 'nvim-tree/nvim-web-devicons'
+		-- for node debugging
+	use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
+	-- https://github.com/mxsdev/nvim-dap-vscode-js
+	use {
+		"microsoft/vscode-js-debug",
+		opt = true,
+		run = "npm install -g --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out"
+	}
+
+
 
 	use {
 		'nvim-telescope/telescope.nvim', tag = '0.1.2',
@@ -66,6 +76,24 @@ return require('packer').startup(function(use)
 		requires = { { 'nvim-lua/plenary.nvim' } }
 	}
 	use 'folke/neodev.nvim'
+		-- for persistent breakpoints
+	-- https://github.com/Weissle/persistent-breakpoints.nvim
+	-- https://github.com/mfussenegger/nvim-dap/issues/198
+	use { 'Weissle/persistent-breakpoints.nvim' }
+	use {
+		"nvim-neotest/neotest",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"antoinemadec/FixCursorHold.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-neotest/neotest-python",
+			"markemmons/neotest-deno",
+			"lawrence-laz/neotest-zig",
+		}
+	}
+
+	use { "mfussenegger/nvim-dap",
+		requires = { "rcarriga/nvim-dap-ui", 'mfussenegger/nvim-dap-python', 'theHamsta/nvim-dap-virtual-text' } }
 
 	-- TODO - move to specific file
 	use {
@@ -381,6 +409,7 @@ return require('packer').startup(function(use)
 		end
 	}
 
+
 	use {
 		"FotiadisM/tabset.nvim",
 	}
@@ -401,6 +430,10 @@ return require('packer').startup(function(use)
 	use('mbbill/undotree')
 	use("eandrju/cellular-automaton.nvim")
 	use("github/copilot.vim")
+
+	use {
+		"linux-cultist/venv-selector.nvim",
+	}
 
 
 	use {
@@ -441,6 +474,9 @@ return require('packer').startup(function(use)
 			{ 'hrsh7th/nvim-cmp' },  -- Required
 			{ 'hrsh7th/cmp-nvim-lsp' }, -- Required
 			{ 'L3MON4D3/LuaSnip' },  -- Required
+			-- autocomplete in the dap repl using your cmp provider
+			{ 'rcarriga/cmp-dap' },  -- Optional
+
 		}
 	}
 
