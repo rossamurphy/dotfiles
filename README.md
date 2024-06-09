@@ -64,21 +64,13 @@ sudo tar -C /opt -xzf nvim-linux64.tar.gz
 This may change in future, for more check out the main source [here](https://github.com/neovim/neovim/blob/master/INSTALL.md)
 
 ```bash
-export PATH="$PATH:/opt/nvim-linux64/bin"
+echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc
 ```
 
 and, for ease, set an alias in your .bashrc
-```bash
-vi ~/.bashrc
-```
 
 ```bash
-alias vi='nvim'
-```
-
-write and close and source your .bashrc
-```vim
-:wq
+echo 'alias vi="nvim"' >> ~/.bashrc
 ```
 
 ```bash
