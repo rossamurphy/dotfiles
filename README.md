@@ -64,7 +64,7 @@ sudo tar -C /opt -xzf nvim-linux64.tar.gz
 This may change in future, for more check out the main source [here](https://github.com/neovim/neovim/blob/master/INSTALL.md)
 
 ```bash
-echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc
+echo 'export PATH="/opt/nvim-linux64/bin:$PATH"' >> ~/.bashrc
 ```
 
 and, for ease, set an alias in your .bashrc
@@ -144,6 +144,54 @@ sudo chown $USER ~/.config/nvim/plugin
 sudo chown -R "${USER}" ~/
 ```
 
+Install python via pyenv
+```bash
+cd ~/.pyenv/
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+```
+
+```bash
+cd ~/.pyenv && src/configure && make -C src
+```
+
+```bash
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+```
+
+### Install pip for python 3 (to install and update pynvim)
+```bash
+sudo apt-get install python3-pip
+sudo apt-get install python3-venv
+sudo apt-get install python3-virtualenv
+sudo apt-get install pipx 
+
+ptipython set up
+```bash
+sudo pipx install ptipython --include-deps
+<!-- the below should be functionally equivalent -->
+sudo pipx ensurepath
+echo 'export PATH="/root/.local/bin":$PATH' >> ~/.bashrc
+echo 'export PATH="/home/rossmurphy/.local/bin:$PATH"' >> ~/.bashrc
+```
+
+
+
+
+```bash
+echo 'alias python="python3"' >> .bashrc
+echo 'alias venvcreate="python -m venv venv"' >> .bashrc
+echo 'alias venvactivate="source venv/bin/activate"' >> .bashrc
+echo 'alias tks="tmux kill-server"' >> .bashrc
+echo 'alias reload="source ~/.bashrc"' >> .bashrc
+echo 'alias la="ls -a"' >> .bashrc
+echo 'alias filesizes="du -h"' >> .bashrc
+echo 'alias pfreqs="pip freeze > requirements.txt"' >> .bashrc
+echo 'alias pireqs="pip install -r requirements.txt"' >> .bashrc
+```
+
+
 For moshing:
 https://mosh.org/
 ```
@@ -179,11 +227,6 @@ Select "udp" and enter 60000-61000.
 
 ## Optional
 
-
-### Install pip for python 3 (to install and update pynvim)
-```bash
-sudo apt-get install python3-pip
-```
 
 ### Install / update pynvim
 
