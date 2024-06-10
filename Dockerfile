@@ -58,6 +58,9 @@ ENV XDG_CONFIG_HOME=/root/.config/nvim/
 ENV TMUX_CONF=/root/.config/tmux/tmux.conf
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
+ENV LUA_PATH="/root/.config/nvim/lua/?.lua;;"
+ENV LUA_CPATH="/root/.config/nvim/lua/?.so;;"
+
 
 RUN nvim --headless -u /root/.config/nvim/init.lua +qall && \
     sleep 15 && \
