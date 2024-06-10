@@ -9,7 +9,7 @@ services:
     tty: true
     volumes:
       # this persists a volume so that your vim config can go here. so even if you delete the container it still has a vim config with plugins etc.
-      - rmvmcontainer_volume:/volum_data
+      - rmvmcontainer_volume:/volume_data
       # this makes the root file on the gcpvm available under /host in the container
       - /:/host
     command: /bin/bash
