@@ -11,6 +11,7 @@ RUN apt-get update && apt-get upgrade -y && \
 RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
     tar -C /opt -xzf nvim-linux64.tar.gz && \
     rm nvim-linux64.tar.gz && \
+    ln -s /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim && \
     echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc
 
 # Set environment variables and aliases
@@ -28,6 +29,7 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc && \
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && \
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && \
     echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
 
 # Install pyenv and pynvim
 RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.pyenv && \
@@ -55,15 +57,15 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
 ENV XDG_CONFIG_HOME=/root/.config/nvim/
 ENV TMUX_CONF=/root/.config/tmux/tmux.conf
 
-RUN nvim --headless +"so /root/.config/nvim/lua/rawdog/init.lua" +qall && \
+RUN /usr/local/bin/nvim nvim --headless +"so /root/.config/nvim/lua/rawdog/init.lua" +qall && \
+    sleep 15 && \
+    /usr/local/bin/nvim nvim --headless +"so /root/.config/nvim/lua/rawdog/packer.lua" +qall && \
+    sleep 15 && \
+    /usr/local/bin/nvim nvim --headless +PackerInstall +qall && \
+    sleep 15 && \
+    /usr/local/bin/nvim nvim --headless +PackerSync +qall && \
     sleep 10 && \
-    nvim --headless +"so /root/.config/nvim/lua/rawdog/packer.lua" +qall && \
-    sleep 10 && \
-    nvim --headless +PackerInstall +qall && \
-    sleep 10 && \
-    nvim --headless +PackerSync +qall && \
-    sleep 10 && \
-    nvim --headless +PackerCompile +qall
+    /usr/local/bin/nvim nvim --headless +PackerCompile +qall
 
 
 # Command to run when the container starts
