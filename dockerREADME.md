@@ -11,6 +11,11 @@ to run the image in interactive mode (on an m1)
 docker run --platform linux/amd64 -it rossamurphy/dotfilesimage:latest /bin/bash
 ```
 
+or, just clone the repo on a linux box, and use vanilla docker build to build it 
+```bash
+docker build -t rossamurphy/dotfilesimage:latest .
+```
+
 N.B. the FIRST time you set up nvim on the new host, navigate to the init.lua file (via :Ex) FIRST, and source THAT (by :so), BEFORE sourcing the packer file packer.lua (:so).
 Then do :PackerInstall , :PackerSync, and :PackerCompile
 

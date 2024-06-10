@@ -12,23 +12,23 @@ RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linu
     tar -C /opt -xzf nvim-linux64.tar.gz && \
     rm nvim-linux64.tar.gz && \
     ln -s /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim && \
-    echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc
+    echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc
 
 # Set environment variables and aliases
-RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> ~/.bashrc && \
-    echo 'alias vi="nvim"' >> ~/.bashrc && \
-    echo 'alias python="python3"' >> ~/.bashrc && \
-    echo 'alias venvcreate="python -m venv venv"' >> ~/.bashrc && \
-    echo 'alias venvactivate="source venv/bin/activate"' >> ~/.bashrc && \
-    echo 'alias tks="tmux kill-server"' >> ~/.bashrc && \
-    echo 'alias reload="source ~/.bashrc"' >> ~/.bashrc && \
-    echo 'alias la="ls -a"' >> ~/.bashrc && \
-    echo 'alias filesizes="du -h"' >> ~/.bashrc && \
-    echo 'alias pfreqs="pip freeze > requirements.txt"' >> ~/.bashrc && \
-    echo 'alias pireqs="pip install -r requirements.txt"' >> ~/.bashrc && \
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc && \
-    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc && \
-    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
+    echo 'alias vi="nvim"' >> /root/.bashrc && \
+    echo 'alias python="python3"' >> /root/.bashrc && \
+    echo 'alias venvcreate="python -m venv venv"' >> /root/.bashrc && \
+    echo 'alias venvactivate="source venv/bin/activate"' >> /root/.bashrc && \
+    echo 'alias tks="tmux kill-server"' >> /root/.bashrc && \
+    echo 'alias reload="source ~/.bashrc"' >> /root/.bashrc && \
+    echo 'alias la="ls -a"' >> /root/.bashrc && \
+    echo 'alias filesizes="du -h"' >> /root/.bashrc && \
+    echo 'alias pfreqs="pip freeze > requirements.txt"' >> /root/.bashrc && \
+    echo 'alias pireqs="pip install -r requirements.txt"' >> /root/.bashrc && \
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.bashrc && \
+    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc && \
+    echo 'eval "$(pyenv init -)"' >> /root/.bashrc
 
 
 # Install pyenv and pynvim
@@ -56,16 +56,18 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
 # Set environment variable for Neovim
 ENV XDG_CONFIG_HOME=/root/.config/nvim/
 ENV TMUX_CONF=/root/.config/tmux/tmux.conf
+ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
-RUN /usr/local/bin/nvim nvim --headless +"so /root/.config/nvim/lua/rawdog/init.lua" +qall && \
+
+RUN nvim --headless +"so /root/.config/nvim/lua/rawdog/init.lua" +qall && \
     sleep 15 && \
-    /usr/local/bin/nvim nvim --headless +"so /root/.config/nvim/lua/rawdog/packer.lua" +qall && \
+    nvim --headless +"so /root/.config/nvim/lua/rawdog/packer.lua" +qall && \
     sleep 15 && \
-    /usr/local/bin/nvim nvim --headless +PackerInstall +qall && \
+    nvim --headless +PackerInstall +qall && \
     sleep 15 && \
-    /usr/local/bin/nvim nvim --headless +PackerSync +qall && \
+    nvim --headless +PackerSync +qall && \
     sleep 10 && \
-    /usr/local/bin/nvim nvim --headless +PackerCompile +qall
+    nvim --headless +PackerCompile +qall
 
 
 # Command to run when the container starts
