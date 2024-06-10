@@ -40,13 +40,12 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
     pyenv global 3.11.0
 
 # Clone and set up dotfiles
-RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles && \
-    mkdir -p /data && \
-    cp -a /root/dotfiles/.config/nvim /data && \
+RUN git clone https://github.com/rossamurphy/dotfiles /root/data/ && \
+    cp -a /root/dotfiles/.config/ /root/data/.config/ && \
     chown -R root:root /data
 
 # Set environment variable for Neovim
-ENV XDG_CONFIG_HOME=/data
+ENV XDG_CONFIG_HOME=/data/.config/nvim/
 
 # Command to run when the container starts
 CMD ["bash"]
