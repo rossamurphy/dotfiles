@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  rmvmcontainer:
+    image: rossamurphy/dotfilesimage
+    container_name: rmvmcontainer
+    privileged: true
+    stdin_open: true
+    tty: true
+    volumes:
+      # this persists a volume so that your vim config can go here. so even if you delete the container it still has a vim config with plugins etc.
+      - rmvmcontainer_volume:/data
+      # this makes the root file on the gcpvm available under /host in the container
+      - /:/host
+    command: /bin/bash
+    restart: 'no'
+
+volumes:
+  my_volume:
+    driver: local
+
+
+# Yes, you COULD just straight up make the .config and vim stuff in the /host, and ignore the faff with volumes. but then your docker set up is just functioning as a Make file really. It's quite nice that everything is a container and everything can be torn down at the end of the day, leaving basically no trace on the host.
