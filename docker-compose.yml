@@ -16,7 +16,7 @@ services:
     restart: 'no'
 
 volumes:
-  my_volume:
+  rmvmcontainer_volume:
     driver: local
 
 
