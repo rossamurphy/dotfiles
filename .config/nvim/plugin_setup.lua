@@ -1,0 +1,5 @@
+vim.cmd('source /root/.config/nvim/lua/rawdog/init.lua')
+vim.cmd('source /root/.config/nvim/lua/rawdog/packer.lua')
+vim.cmd('PackerInstall')
+vim.cmd('PackerSync')
+vim.cmd('PackerCompile')

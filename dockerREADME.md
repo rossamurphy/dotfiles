@@ -16,8 +16,6 @@ or, just clone the repo on a linux box, and use vanilla docker build to build it
 docker build -t rossamurphy/dotfilesimage:latest .
 ```
 
-N.B. the FIRST time you set up nvim on the new host, navigate to the init.lua file (via :Ex) FIRST, and source THAT (by :so), BEFORE sourcing the packer file packer.lua (:so).
-Then do :PackerInstall , :PackerSync, and :PackerCompile
 
 to pull and run on a server
 ```bash
@@ -26,6 +24,7 @@ sudo apt-get install -y containerd runc docker.io
 sudo systemctl enable docker
 sudo systemctl start docker
 docker pull rossamurphy/dotfilesimage:latest
+
 # run the container in a privileged fashion with the host volume as the root
 
 # if you run with --rm , then when you stop the container (ctrl-d out of it) it will auto-delete
@@ -40,13 +39,14 @@ docker pull rossamurphy/dotfilesimage:latest
 
 docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
 
-# another way of dealing with this would be to create a volume and use that volume to persist the config data and even re-use it across multiple containers
-# for example create a volume called rmvmcontainer_volume
+
+create a volume to persist data even if the container gets torn down
 ```bash
-docker volume create rmvm_volume
+docker volume create rm_volume
 ```
 
-and now use docker-compose to start a docker container in detached mode with the volume
+you can also use docker-compose to start your docker container in detached mode (with a volume attached)
+do this instead of just running it
 ```bash
 docker-compose up -d
 ```
@@ -73,13 +73,14 @@ docker-compose up -d
 docker container attach rmvm
 ```
 
-and then open neovim
+N.B. the FIRST time you create a NEW container, install your plugins 
+do:
+```bash
+nvim --noplugins -c "luafile /root/.config/nvim/plugin_setup.lua"
+```
+
+and then open neovim as normal
 ```bash
 vi
 ```
 
-notice that you no longer have to run all of your packer set up, because that's persisted in /data (which is a docker volume which has been persisted for longer than the containers).
-
-
-
-```
