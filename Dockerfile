@@ -8,8 +8,8 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y wget sudo gnupg btop curl build-essential nodejs npm unzip software-properties-common python3-pip python3-venv python3-virtualenv pipx git ruby-full coreutils mosh ufw tmux golang-go ripgrep
 
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-    (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/rossmurphy/.bashrc && \
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+     (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc && \
+     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 
 # Install Neovim
