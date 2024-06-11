@@ -1,7 +1,7 @@
 version: '3.0'
 
 services:
-  rmvmcontainer:
+  rmvm:
     image: rossamurphy/dotfilesimage
     container_name: rmvm
     privileged: true
