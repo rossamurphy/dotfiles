@@ -120,21 +120,7 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
 
 
 
-
 RUN dircolors --print-database > /root/.dir_colors
-```
-now open the dircolors file you've just created
-```bash
-vi .dir_colors
-```
-
-and make edits to the FILE and DIR codes. there are instructions provided in the file
-
-to reload the file and apply your changes
-```bash
-eval $(dircolors ~/.dir_colors)
-```
-
 
 
 # Set environment variable for Neovim
