@@ -14,6 +14,29 @@ RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linu
     ln -s /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim && \
     echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc
 
+RUN pipx install poetry && \
+    pipx ensurepath && \
+    poetry completions bash >> ~/.bash_completion
+
+RUN echo 'vi() { \
+  local file="$1"; \
+  if grep -q "tool.poetry" pyproject.toml; then \
+    if [[ -n "$file" ]]; then \
+      poetry run nvim "$file"; \
+    else \
+      poetry run nvim; \
+    fi; \
+  else \
+    if [[ -n "$file" ]]; then \
+      nvim "$file"; \
+    else \
+      nvim; \
+    fi; \
+  fi; \
+}' >> /root/.bashrc
+
+
+
 # Set environment variables and aliases
 RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias vi="nvim"' >> /root/.bashrc && \
@@ -58,6 +81,8 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
 ENV XDG_CONFIG_HOME="/root/.config/"
 ENV TMUX_CONF="/root/.config/tmux/tmux.conf"
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
+
+
 
 # set up neovim for this image and install plugins
 
