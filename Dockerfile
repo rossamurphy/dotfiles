@@ -17,6 +17,8 @@ RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linu
 RUN pipx install poetry && \
     pipx ensurepath
 
+RUN echo 'export PATH="$PATH:/root/.local/bin"' >> /root/.bashrc
+
 RUN echo 'vi() { \
   local file="$1"; \
   if grep -q "tool.poetry" pyproject.toml; then \
