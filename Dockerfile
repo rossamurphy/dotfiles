@@ -62,8 +62,8 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 # sleep between each aynchronous step to allow the step to complete
 # name this step the nvim init step
 
-RUN nvim /root/.config/nvim/lua/rawdog/init.lua --headless -c "so" +q 
-RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless -c "so" -c "PackerComplete" -c "PackerSync" +q
+RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/init.lua" +q 
+RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/packer.lua | PackerInstall | PackerSync | PackerCompile" +q 
 #
 # RUN sleep 10
 #
