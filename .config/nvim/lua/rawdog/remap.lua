@@ -5,7 +5,8 @@ vim.keymap.set("n","J",'}',{})
 vim.keymap.set("n","K",'{',{})
 vim.keymap.set("v","J",'}',{})
 vim.keymap.set("v","K",'{',{})
-vim.keymap.set("n","<C-p>",'ggVG',{})
+-- changing from p to the character beside p because ctrl-p ctrl-q is used as an escape sequence in docker 
+vim.keymap.set("n","<C-[>",'ggVG',{})
 
 -- when page downing and page upping, keep cursor in the middle
 vim.keymap.set("n","<C-d>",'<C-d>zz',{})
