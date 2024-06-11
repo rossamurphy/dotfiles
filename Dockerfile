@@ -86,6 +86,7 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias filesizes="du -h"' >> /root/.bashrc && \
     echo 'alias pfreqs="pip freeze > requirements.txt"' >> /root/.bashrc && \
     echo 'alias vip="nvim --noplugins"' >> /root/.bashrc && \
+    echo 'alias ppp="poetry run ptipython"' >> /root/.bashrc && \
     echo 'alias pireqs="pip install -r requirements.txt"' >> /root/.bashrc && \
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.bashrc && \
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc && \
