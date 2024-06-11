@@ -49,9 +49,9 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
 # this is because this volume_data directory is a volume which is persisted even after the containers are destroyed
 # note that there exists a ./volume_data directory in the same directory as this Dockerfile purely for the purposes of enabling the build of the docker image. the ./volume_data directory is not synced with git. there's no real need to pay attention to it.
 
-RUN git clone https://github.com/rossamurphy/dotfiles ./dotfiles/ && \
-    cp -a dotfiles/.config/ .config/ && \
-    chown -R root:root /root/.config/
+RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
+    cp -a /root/dotfiles/.config/ /root/.config/ && \
+    chown -R root:root /root/.config
 
 # Set environment variable for Neovim
 ENV XDG_CONFIG_HOME=/.config/nvim/init.lua
