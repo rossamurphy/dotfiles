@@ -38,12 +38,12 @@ docker pull rossamurphy/dotfilesimage:latest
 # this is preferable because when you auto-delete (remove) a container, you also delete all the data
 # that was inside it. however, when you just stop and start, the data persists
 
-docker run --name rmvmcontainer -it --rm --privileged -v /:/host rossamurphy/dotfilesimage /bin/bash
+docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
 
 # another way of dealing with this would be to create a volume and use that volume to persist the config data and even re-use it across multiple containers
 # for example create a volume called rmvmcontainer_volume
 ```bash
-docker volume create rmvmcontainer_volume
+docker volume create rmvm_volume
 ```
 
 and now use docker-compose to start a docker container in detached mode with the volume
@@ -58,7 +58,7 @@ docker container ls
 
 and attach to it by
 ```bash
-docker container attach rmvmcontainer
+docker container attach rmvm
 ```
 
 and tear it down (and remove it) by
@@ -70,7 +70,7 @@ now you can see that you've completely torn down and removed the container, howe
 if you start it again
 ```bash
 docker-compose up -d
-docker container attach rmvmcontainer
+docker container attach rmvm
 ```
 
 and then open neovim
