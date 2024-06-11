@@ -51,7 +51,7 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
 
 RUN git clone https://github.com/rossamurphy/dotfiles ./dotfiles/ && \
     cp -a dotfiles/.config/ .config/ && \
-    chown -R root:root .config/
+    chown -R root:root /root/.config/
 
 # Set environment variable for Neovim
 ENV XDG_CONFIG_HOME=/.config/nvim/init.lua
