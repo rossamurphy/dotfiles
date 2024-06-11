@@ -79,8 +79,8 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
     pipx ensurepath && \
     export PATH="/root/.pyenv/bin:$PATH" && \
     export PATH="/root/.local/bin:$PATH" && \
-    pyenv install 3.11.0 && \
-    pyenv global 3.11.0
+    pyenv install 3.10.11 && \
+    pyenv global 3.10.11
 
 
 ## Clone and set up dotfiles
