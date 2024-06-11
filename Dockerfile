@@ -59,6 +59,8 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias venvcreate="python -m venv venv"' >> /root/.bashrc && \
     echo 'alias venvactivate="source venv/bin/activate"' >> /root/.bashrc && \
     echo 'alias tks="tmux kill-server"' >> /root/.bashrc && \
+    # tell tmux to assume utf-8 encoding on font
+    echo 'alias tmux="tmux -u"' >> /root/.bashrc && \
     echo 'alias reload="source ~/.bashrc"' >> /root/.bashrc && \
     echo 'alias la="ls -a"' >> /root/.bashrc && \
     echo 'alias filesizes="du -h"' >> /root/.bashrc && \
