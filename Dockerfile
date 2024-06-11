@@ -62,7 +62,8 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 # sleep between each aynchronous step to allow the step to complete
 # name this step the nvim init step
 
-RUN nvim /root/.config/nvim/lua/rawdog/init.lua --headless -c "so" +q 
+RUN nvim --headless -u NONE --cmd "set runtimepath^=/root/.config/nvim" -c "luafile /root/.config/nvim/lua/rawdog/init.lua" +q
+
 #
 # RUN sleep 10
 #
