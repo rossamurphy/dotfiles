@@ -96,3 +96,28 @@ and then open neovim as normal
 vi
 ```
 
+if you keep getting asked for git creds
+```bash
+brew install gh
+```
+then
+```bash
+gh auth login
+```
+and paste in a token
+
+
+
+### because PyCharm / another IDE won't do it for you..
+to activate the poetry venv
+```bash
+poetry shell
+```
+to activate another vanilla venv
+(shortcut mapped in Dockerfile)
+```bash
+venvactivate
+```
+
+
+<!-- TODO: add auto install of aws cli -->
