@@ -63,9 +63,9 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 # name this step the nvim init step
 
 RUN nvim --headless /root/.config/nvim/lua/rawdog/init/lua +"so" +qall
-RUN sleep 15
+RUN sleep 20
 RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua + "so" +qall
-RUN sleep 15
+RUN sleep 20
 RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua +"PackerInstall" +qall
 RUN sleep 15
 RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua +"PackerSync" +qall
