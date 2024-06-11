@@ -25,6 +25,7 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias la="ls -a"' >> /root/.bashrc && \
     echo 'alias filesizes="du -h"' >> /root/.bashrc && \
     echo 'alias pfreqs="pip freeze > requirements.txt"' >> /root/.bashrc && \
+    echo 'alias vip="nvim --noplugins"' >> /root/.bashrc && \
     echo 'alias pireqs="pip install -r requirements.txt"' >> /root/.bashrc && \
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.bashrc && \
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc && \
@@ -60,8 +61,8 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
 # set up neovim for this image and install plugins
 
-RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/init.lua" +q 
-RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c ' autocmd User PackerComplete quitall' -c 'PackerSync'
+# RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/init.lua" +q 
+# RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c ' autocmd User PackerComplete quitall' -c 'PackerSync'
 # RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c 'PackerCompile'
 
 CMD ["bash"]
