@@ -58,15 +58,15 @@ ENV XDG_CONFIG_HOME=/root/.config/nvim/
 ENV TMUX_CONF=/root/.config/tmux/tmux.conf
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
-RUN nvim --headless -u /root/.config/nvim/init.lua +qall && \
-    sleep 15 && \
-    nvim --headless -u /root/.config/nvim/init.lua +"so /root/.config/nvim/lua/rawdog/packer.lua" +qall && \
-    sleep 15 && \
-    nvim --headless -u /root/.config/nvim/init.lua +PackerInstall +qall && \
-    sleep 15 && \
-    nvim --headless -u /root/.config/nvim/init.lua +PackerSync +qall && \
-    sleep 10 && \
-    nvim --headless -u /root/.config/nvim/init.lua +PackerCompile +qall
+RUN nvim --headless -u /root/.config/nvim/init.lua +qall
+RUN sleep 15
+RUN nvim --headless -u /root/.config/nvim/init.lua +"so /root/.config/nvim/lua/rawdog/packer.lua" +qall
+RUN sleep 15
+RUN nvim --headless -u /root/.config/nvim/init.lua +PackerInstall +qall
+RUN sleep 15
+RUN nvim --headless -u /root/.config/nvim/init.lua +PackerSync +qall
+RUN sleep 10
+RUN nvim --headless -u /root/.config/nvim/init.lua +PackerCompile +qall
 
 
 # Command to run when the container starts
