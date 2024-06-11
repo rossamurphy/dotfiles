@@ -5,7 +5,28 @@ WORKDIR /root
 
 # Install dependencies
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y wget sudo gnupg btop curl build-essential nodejs npm unzip software-properties-common python3-pip python3-venv python3-virtualenv pipx git ruby-full coreutils mosh ufw tmux golang-go ripgrep
+    apt-get install -y wget sudo gnupg btop curl build-essential nodejs npm unzip software-properties-common python3-pip python3-venv python3-virtualenv pipx git ruby-full coreutils mosh ufw tmux golang-go ripgrep \
+    libffi-dev \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    llvm \
+    libncurses5-dev \
+    libncursesw5-dev \
+    xz-utils \
+    tk-dev \
+    liblzma-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    libgdbm-compat-dev \
+    ca-certificates \
+    libssl1.1
+
+ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
+ENV CFLAGS="-I$(brew --prefix openssl)/include"
+ENV LDFLAGS="-L$(brew --prefix openssl)/lib"
 
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
      (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc && \
@@ -83,6 +104,9 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
     pyenv global 3.10.11
 
 
+
+
+
 ## Clone and set up dotfiles
 
 # note that it clones the dotfiles repo into the volume_data directory
@@ -93,6 +117,25 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
 RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
     cp -a /root/dotfiles/.config/ /root/.config/ && \
     chown -R root:root /root/.config
+
+
+
+
+RUN dircolors --print-database > /root/.dir_colors
+```
+now open the dircolors file you've just created
+```bash
+vi .dir_colors
+```
+
+and make edits to the FILE and DIR codes. there are instructions provided in the file
+
+to reload the file and apply your changes
+```bash
+eval $(dircolors ~/.dir_colors)
+```
+
+
 
 # Set environment variable for Neovim
 ENV XDG_CONFIG_HOME="/root/.config/"
