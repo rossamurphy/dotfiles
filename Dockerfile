@@ -45,24 +45,6 @@ RUN pipx install poetry && \
 
 RUN echo 'export PATH="$PATH:/root/.local/bin"' >> /root/.bashrc
 
-RUN echo 'vi() { \
-  local file="$1"; \
-  if grep -q "tool.poetry" pyproject.toml; then \
-    if [[ -n "$file" ]]; then \
-      poetry run nvim "$file"; \
-    else \
-      poetry run nvim; \
-    fi; \
-  else \
-    if [[ -n "$file" ]]; then \
-      nvim "$file"; \
-    else \
-      nvim; \
-    fi; \
-  fi; \
-}' >> /root/.bashrc
-
-
 # Get some fonts for icons in nvim
 RUN mkdir temp_fonts/ && \
     cd temp_fonts/ && \
@@ -79,6 +61,7 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias venvcreate="python -m venv venv"' >> /root/.bashrc && \
     echo 'alias venvactivate="source venv/bin/activate"' >> /root/.bashrc && \
     echo 'alias tks="tmux kill-server"' >> /root/.bashrc && \
+    echo 'alias vi="nvim"' >> /root/.bashrc && \
     # tell tmux to assume utf-8 encoding on font
     echo 'alias tmux="tmux -u"' >> /root/.bashrc && \
     echo 'alias reload="source ~/.bashrc"' >> /root/.bashrc && \

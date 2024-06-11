@@ -120,15 +120,34 @@ and paste in a token
 
 
 ### because PyCharm / another IDE won't do it for you..
+
 to activate the poetry venv
+note this will make the current process a "poetry" one.
 ```bash
 poetry shell
 ```
+
 to activate another vanilla venv
 (shortcut mapped in Dockerfile)
+this will leave the current process unchanged
 ```bash
 venvactivate
 ```
+
+to activate the venv in a way that does not fuck with tmux navigator
+this will leave the current process unchanged
+```bash
+source .venv/bin/activate
+```
+
+#### Why does it matter what the process is?
+because if you use ```poetry shell``` to activate the environment it messes up
+the pane switching via tmux navigator because it fails to notice the process as
+a vim process, and rather, sees it as a "poetry" process
+
+therefore, it's better to just source the venv (so you don't get linter badness
+where it can't find certain libraries), and leave the process as vim and not
+let it be comandeered by poetry
 
 
 <!-- TODO: add auto install of aws cli -->
