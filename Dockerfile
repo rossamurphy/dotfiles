@@ -54,7 +54,7 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
     chown -R root:root /root/.config/
 
 # Set environment variable for Neovim
-ENV XDG_CONFIG_HOME=/.config/
+ENV XDG_CONFIG_HOME=/.config/nvim/init.lua
 ENV TMUX_CONF=/.config/tmux/tmux.conf
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
