@@ -59,18 +59,10 @@ ENV TMUX_CONF="/root/.config/tmux/tmux.conf"
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
 # set up neovim for this image and install plugins
-# sleep between each aynchronous step to allow the step to complete
-# name this step the nvim init step
 
 RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/init.lua" +q 
-RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/packer.lua | PackerInstall | PackerSync | PackerCompile" +q 
-#
-# RUN sleep 10
-#
-# RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-#
-# RUN sleep 10
+RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c ' autocmd User PackerComplete quitall' -c 'PackerSync'
+# RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c 'PackerCompile'
 
-# Command to run when the container starts
 CMD ["bash"]
 
