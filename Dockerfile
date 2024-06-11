@@ -42,6 +42,15 @@ RUN echo 'vi() { \
 }' >> /root/.bashrc
 
 
+# Get some fonts for icons in nvim
+RUN mkdir temp_fonts/ && \
+    cd temp_fonts/ && \
+    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz && \
+    tar -xf JetBrainsMono.tar.xz -d /root/../usr/local/share/fonts/ && \
+    rm -rf JetBrainsMono.tar.xz && \
+    cd .. && \
+    rm -rf temp_fonts/
+
 
 # Set environment variables and aliases
 RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
