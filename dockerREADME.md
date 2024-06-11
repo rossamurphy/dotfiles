@@ -11,42 +11,50 @@ to run the image in interactive mode (on an m1)
 docker run --platform linux/amd64 -it rossamurphy/dotfilesimage:latest /bin/bash
 ```
 
+### RECOMMENDED
 or, just clone the repo on a linux box, and use vanilla docker build to build it 
 ```bash
 docker build -t rossamurphy/dotfilesimage:latest .
 ```
+if you're happy with the result, push it
+```bash
+docker push rossamurphy/dotfilesimage:latest
+```
+note before you do the above you'll need to have logged in
+```bash
+docker login
+```
 
-
-to pull and run on a server
+now if you want to pull your image and run it anywhere
 ```bash
 sudo apt-get update
 sudo apt-get install -y containerd runc docker.io
 sudo systemctl enable docker
 sudo systemctl start docker
 docker pull rossamurphy/dotfilesimage:latest
+```
 
-# run the container in a privileged fashion with the host volume as the root
-
-# if you run with --rm , then when you stop the container (ctrl-d out of it) it will auto-delete
-# docker run --name rmvmcontainer -it --rm --privileged -v /:/host rossamurphy/dotfilesimage /bin/bash
-
-# if you run without --rm , when you stop the container (ctrl-d out of it) it will remain
-# if you run docker container ls, you will not see it, because it's stopped
-# if you want to start it again, run `docker container start rmvmcontainer`
-# and then `docker container attach rmvmcontainer`
-# this is preferable because when you auto-delete (remove) a container, you also delete all the data
-# that was inside it. however, when you just stop and start, the data persists
-
-docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
-
-
-create a volume to persist data even if the container gets torn down
+it's also useful to create a volume to attach to the container to persist data
 ```bash
 docker volume create rm_volume
 ```
 
-you can also use docker-compose to start your docker container in detached mode (with a volume attached)
-do this instead of just running it
+Now to use the image to run the container, you have a few options
+
+### Run using normal docker run command
+
+#### note here below are reunning the container in a privileged fashion with the host volume as the root
+
+##### if you run with --rm , then when you stop the container (ctrl-d out of it) it will auto-delete
+docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
+
+##### if you run without --rm , when you stop the container (ctrl-d out of it) it will remain
+docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
+
+### Run using docker-compose
+
+you can also use docker-compose to start your docker container in detached mode (here we are doing so with a volume attached)
+so, do this instead of just running it (the docker-compose.yml is in this repo)
 ```bash
 docker-compose up -d
 ```
@@ -67,17 +75,21 @@ docker-compose down
 ```
 
 now you can see that you've completely torn down and removed the container, however,
-if you start it again
+you can easily use the image to start the container again
 ```bash
 docker-compose up -d
 docker container attach rmvm
 ```
 
-N.B. the FIRST time you create a NEW container, install your plugins 
-do:
+### Setting up neovim plugins
+N.B. the FIRST time you create a NEW container, you'll need to install your plugins 
+there is a way this can happen automatically in the image but it seems to be more hassle than it's worth
+so, run the below in the container:
 ```bash
 nvim --noplugins -c "luafile /root/.config/nvim/plugin_setup.lua"
 ```
+
+this will do the thing. and now you can open neovim as per normal
 
 and then open neovim as normal
 ```bash
