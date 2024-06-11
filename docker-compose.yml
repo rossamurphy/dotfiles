@@ -3,20 +3,20 @@ version: '3.0'
 services:
   rmvmcontainer:
     image: rossamurphy/dotfilesimage
-    container_name: rmvmcontainer
+    container_name: rmvm
     privileged: true
     stdin_open: true
     tty: true
     volumes:
       # this persists a volume so that your vim config can go here. so even if you delete the container it still has a vim config with plugins etc.
-      - rmvmcontainer_volume:/volume_data
+      - rmvm_volume:/volume_data
       # this makes the root file on the gcpvm available under /host in the container
       - /:/host
     command: /bin/bash
     restart: 'no'
 
 volumes:
-  rmvmcontainer_volume:
+  rmvm_volume:
     driver: local
 
 

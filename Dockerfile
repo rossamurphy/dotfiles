@@ -58,6 +58,10 @@ ENV XDG_CONFIG_HOME=/root/.config/nvim/
 ENV TMUX_CONF=/root/.config/tmux/tmux.conf
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
+# set up neovim for this image and install plugins
+# sleep between each aynchronous step to allow the step to complete
+# name this step the nvim init step
+
 RUN nvim --headless "so /root/.config/nvim/lua/rawdog/init.lua" +qall
 RUN sleep 15
 RUN nvim --headless "so /root/.config/nvim/lua/rawdog/packer.lua" +qall
