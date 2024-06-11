@@ -149,5 +149,14 @@ therefore, it's better to just source the venv (so you don't get linter badness
 where it can't find certain libraries), and leave the process as vim and not
 let it be comandeered by poetry
 
-
-<!-- TODO: add auto install of aws cli -->
+### An example workflow
+open up a tmux session
+pop up windows top left, top right, and bottom
+open the backend repo
+then do source .venv/bin/activate
+then do vi and open it up. this is now your editor.
+jump to the right
+do `poetry shell` and `ppp`
+now you have a python console open to the right. you can slime send to this if you like
+then on the bottom do what you need in the terminal
+like ```source .venv/bin/activate``` and ```make raydebug``` for example 
