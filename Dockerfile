@@ -15,9 +15,7 @@ RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linu
     echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc
 
 RUN pipx install poetry && \
-    pipx ensurepath && \
-    source ~/.bashrc && \
-    poetry completions bash >> ~/.bash_completion
+    pipx ensurepath
 
 RUN echo 'vi() { \
   local file="$1"; \
