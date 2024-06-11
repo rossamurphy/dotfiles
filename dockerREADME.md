@@ -81,6 +81,17 @@ docker-compose up -d
 docker container attach rmvm
 ```
 
+### to exit a container without killing it
+
+```bash
+ctrl-p ctrl-q
+```
+this will execute the "docker escape sequence" and will detach you from the container without tearing it down
+this is great for if you want to leave your tmux sessions up and your processes running
+you can always just re-attach later
+
+
+
 ### Setting up neovim plugins
 N.B. the FIRST time you create a NEW container, you'll need to install your plugins 
 there is a way this can happen automatically in the image but it seems to be more hassle than it's worth
