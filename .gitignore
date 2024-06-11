@@ -1,2 +1,4 @@
 .DS_Store
 volume_data/
+.config/plugin/packer/packer_compiled.lua
+
