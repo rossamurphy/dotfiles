@@ -46,9 +46,9 @@ RUN echo 'vi() { \
 RUN mkdir temp_fonts/ && \
     cd temp_fonts/ && \
     curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz && \
-    tar -xf JetBrainsMono.tar.xz -d /root/../usr/local/share/fonts/ && \
+    tar -xf JetBrainsMono.tar.xz -C /root/../usr/local/share/fonts/ && \
     rm -rf JetBrainsMono.tar.xz && \
-    cd .. && \
+    cd ~ && \
     rm -rf temp_fonts/
 
 
