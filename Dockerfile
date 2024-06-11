@@ -62,11 +62,11 @@ RUN nvim --headless "so /root/.config/nvim/lua/rawdog/init.lua" +qall
 RUN sleep 15
 RUN nvim --headless "so /root/.config/nvim/lua/rawdog/packer.lua" +qall
 RUN sleep 15
-RUN nvim --headless -u /root/.config/nvim/init.lua +PackerInstall +qall
+RUN nvim --headless "PackerInstall /root/.config/nvim/lua/rawdog/packer.lua" +qall
 RUN sleep 15
-RUN nvim --headless -u /root/.config/nvim/init.lua +PackerSync +qall
+RUN nvim --headless "PackerSync /root/.config/nvim/lua/rawdog/packer.lua" +qall
 RUN sleep 10
-RUN nvim --headless -u /root/.config/nvim/init.lua +PackerCompile +qall
+RUN nvim --headless "PackerCompile /root/.config/nvim/lua/rawdog/packer.lua" +qall
 
 
 # Command to run when the container starts
