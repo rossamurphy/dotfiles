@@ -62,15 +62,15 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 # sleep between each aynchronous step to allow the step to complete
 # name this step the nvim init step
 
-RUN nvim --headless /root/.config/nvim/lua/rawdog/init.lua +"so" +qall
+RUN nvim --headless -u /root/.config/nvim/lua/rawdog/init.lua +so +qall
 RUN sleep 20
-RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua + "so" +qall
+RUN nvim --headless -u /root/.config/nvim/lua/rawdog/init.lua +so +qall
 RUN sleep 20
-RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua +"PackerInstall" +qall
+RUN nvim --headless /root/.config/nvim/lua/rawdog/init.lua +PackerInstall +qall
 RUN sleep 15
-RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua +"PackerSync" +qall
+RUN nvim --headless /root/.config/nvim/lua/rawdog/init.lua +PackerSync +qall
 RUN sleep 10
-RUN nvim --headless /root/.config/nvim/lua/rawdog/packer.lua +"PackerCompile" +qall
+RUN nvim --headless /root/.config/nvim/lua/rawdog/init.lua +PackerCompile +qall
 
 # Command to run when the container starts
 CMD ["bash"]
