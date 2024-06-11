@@ -80,7 +80,7 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
 
 # Set environment variable for Neovim
 ENV XDG_CONFIG_HOME="/root/.config/"
-ENV TMUX_CONF="/root/.config/tmux/tmux.conf"
+ENV TMUX_CONF="/root/.config/tmux/.tmux.conf"
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
 
