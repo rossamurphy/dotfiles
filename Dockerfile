@@ -74,7 +74,6 @@ RUN mkdir temp_fonts/ && \
 
 # Set environment variables and aliases
 RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
-    echo 'alias vi="nvim"' >> /root/.bashrc && \
     echo 'alias python="python3"' >> /root/.bashrc && \
     echo 'alias venvcreate="python -m venv venv"' >> /root/.bashrc && \
     echo 'alias venvactivate="source venv/bin/activate"' >> /root/.bashrc && \
