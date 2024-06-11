@@ -16,6 +16,7 @@ RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linu
 
 RUN pipx install poetry && \
     pipx ensurepath && \
+    source /root/.bashrc && \
     poetry completions bash >> ~/.bash_completion
 
 RUN echo 'vi() { \
