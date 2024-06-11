@@ -54,7 +54,7 @@ RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
     chown -R root:root /root/.config
 
 # Set environment variable for Neovim
-ENV XDG_CONFIG_HOME=/root/.config/nvim/init.lua
+ENV XDG_CONFIG_HOME=/root/.config/
 ENV TMUX_CONF=/root/.config/tmux/tmux.conf
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
@@ -62,15 +62,15 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 # sleep between each aynchronous step to allow the step to complete
 # name this step the nvim init step
 
-RUN nvim .config/nvim/lua/rawdog/init.lua --headless +so +qall
+RUN nvim /root/.config/nvim/lua/rawdog/init.lua --headless +so +qall
 RUN sleep 10
-RUN nvim .config/nvim/lua/rawdog/packer.lua --headless +so +qall
+RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +so +qall
 RUN sleep 10
-RUN nvim .config/nvim/lua/rawdog/packer.lua --headless +PackerInstall +qall
+RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +PackerInstall +qall
 RUN sleep 10
-RUN nvim .config/nvim/lua/rawdog/packer.lua --headless +PackerSync +qall
+RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +PackerSync +qall
 RUN sleep 10
-RUN nvim .config/nvim/lua/rawdog/packer.lua --headless +PackerCompile +qall
+RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +PackerCompile +qall
 RUN sleep 10
 
 # Command to run when the container starts
