@@ -24,9 +24,6 @@ RUN apt-get update && apt-get upgrade -y && \
     libgdbm-compat-dev \
     ca-certificates
 
-ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
-ENV CFLAGS="-I$(brew --prefix openssl)/include"
-ENV LDFLAGS="-L$(brew --prefix openssl)/lib"
 
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
      (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc && \
@@ -39,6 +36,12 @@ RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linu
     rm nvim-linux64.tar.gz && \
     ln -s /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim && \
     echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc
+
+ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
+ENV CFLAGS="-I$(brew --prefix openssl)/include"
+ENV LDFLAGS="-L$(brew --prefix openssl)/lib"
+
+RUN brew install gh
 
 RUN pipx install poetry && \
     pipx ensurepath
