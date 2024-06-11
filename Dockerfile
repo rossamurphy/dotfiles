@@ -21,8 +21,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libgdbm-dev \
     libnss3-dev \
     libgdbm-compat-dev \
-    ca-certificates \
-    libssl1.1
+    ca-certificates
 
 ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
 ENV CFLAGS="-I$(brew --prefix openssl)/include"
