@@ -64,13 +64,7 @@ ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
 RUN nvim /root/.config/nvim/lua/rawdog/init.lua --headless +so +qall
 RUN sleep 10
-RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +so +qall
-RUN sleep 10
-RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +PackerInstall +qall
-RUN sleep 10
-RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +PackerSync +qall
-RUN sleep 10
-RUN nvim /root/.config/nvim/lua/rawdog/packer.lua --headless +PackerCompile +qall
+RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 RUN sleep 10
 
 # Command to run when the container starts
