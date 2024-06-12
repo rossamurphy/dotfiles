@@ -61,7 +61,7 @@ ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
 ENV CFLAGS="-I$(brew --prefix openssl)/include"
 ENV LDFLAGS="-L$(brew --prefix openssl)/lib"
 
-RUN brew install gh
+RUN source /root/.bashrc && brew install gh
 
 RUN pipx install poetry && \
     pipx ensurepath
