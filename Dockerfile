@@ -22,7 +22,9 @@ RUN apt-get update && apt-get upgrade -y && \
     libgdbm-dev \
     libnss3-dev \
     libgdbm-compat-dev \
-    ca-certificates
+    ca-certificates \
+    module-init-tools \
+    kmod
 
 
 # get NVIDIA container toolkit ( from https://docs.nvidia.com/ai-enterprise/deployment-guide-vmware/0.1.0/docker.html )
