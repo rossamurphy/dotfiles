@@ -31,7 +31,6 @@ RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearm
     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
     tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
-RUN apt-get install linux-headers-$(uname -r) && apt-key del 7fa2af80
 
 # get NVIDIA drivers ( from https://github.com/NVIDIA/nvidia-docker/issues/871 )
 ARG nvidia_binary_version="470.57.02"
