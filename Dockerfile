@@ -25,9 +25,8 @@ RUN apt-get update && apt-get upgrade -y && \
     ca-certificates \
     kmod \
     pkg-config \
-    libxext-dev \ libx11-dev \
+    libxext-dev \ 
     x11proto-gl-dev \
-    libglvnd \
     poppler-utils \
     libreoffice \
     pandoc \
@@ -40,13 +39,13 @@ RUN wget --no-check-certificate https://dl.xpdfreader.com/xpdf-tools-linux-4.05.
 
 ENV TESSDATA_PREFIX=/usr/local/share/tessdata
 
-
 # get NVIDIA container toolkit ( from https://docs.nvidia.com/ai-enterprise/deployment-guide-vmware/0.1.0/docker.html )
 RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
     tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
+RUN apt-get install -y libglvnd libx11-dev
 
 # get NVIDIA drivers ( from https://github.com/NVIDIA/nvidia-docker/issues/871 )
 ARG nvidia_binary_version="470.57.02"
