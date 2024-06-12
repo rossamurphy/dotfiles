@@ -175,6 +175,15 @@ cp -a rmvm_volume/creds/aws/ .aws/
 nvim --noplugins -c "luafile /root/.config/nvim/plugin_setup.lua"
 ```
 
+#### Docker config
+and add this to the `config.json` in the ~/.docker/ directory on the box
+"detachKeys": "ctrl-^"
+
+this means that you can still do ctrl-p to select all (in vim), as you've
+remapped the above as the escape sequence from the container rather than
+ctrl-p,q which is the default.
+
+
 ### An example workflow
 open up a tmux session
 pop up windows top left, top right, and bottom
