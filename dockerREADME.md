@@ -160,3 +160,8 @@ do `poetry shell` and `ppp`
 now you have a python console open to the right. you can slime send to this if you like
 then on the bottom do what you need in the terminal
 like ```source .venv/bin/activate``` and ```make raydebug``` for example 
+
+if you get kms badness
+```bash 
+ gcloud auth application-default login
+ ```
