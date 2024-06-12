@@ -24,19 +24,23 @@ RUN apt-get update && apt-get upgrade -y && \
     libgdbm-compat-dev \
     ca-certificates
 
-# get NVIDIA drivers ( from https://github.com/NVIDIA/nvidia-docker/issues/871 )
-# ARG nvidia_binary_version="470.57.02"
-# ARG nvidia_binary="NVIDIA-Linux-x86_64-${nvidia_binary_version}.run"
-# RUN wget -q https://us.download.nvidia.com/XFree86/Linux-x86_64/${nvidia_binary_version}/${nvidia_binary} && \
-#     chmod +x ${nvidia_binary} && \
-#     ./${nvidia_binary} --accept-license --ui=none --no-kernel-module --no-questions && \
-#     rm -rf ${nvidia_binary}
 
-# get NVIDIA drivers ( from https://docs.nvidia.com/ai-enterprise/deployment-guide-vmware/0.1.0/docker.html )
+# get NVIDIA container toolkit ( from https://docs.nvidia.com/ai-enterprise/deployment-guide-vmware/0.1.0/docker.html )
 RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
     tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+RUN apt-get install linux-headers-$(uname -r) && apt-key del 7fa2af80
+
+# get NVIDIA drivers ( from https://github.com/NVIDIA/nvidia-docker/issues/871 )
+ARG nvidia_binary_version="470.57.02"
+ARG nvidia_binary="NVIDIA-Linux-x86_64-${nvidia_binary_version}.run"
+RUN wget -q https://us.download.nvidia.com/XFree86/Linux-x86_64/${nvidia_binary_version}/${nvidia_binary} && \
+    chmod +x ${nvidia_binary} && \
+    ./${nvidia_binary} --accept-license --ui=none --no-kernel-module --no-questions && \
+    rm -rf ${nvidia_binary}
+
 
 RUN sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
