@@ -4,10 +4,13 @@ services:
   rmvm:
     image: rossamurphy/dotfilesimage:latest
     container_name: rmvm
+    # shared memory size is needed for ray
+    shm_size: '10gb'
     privileged: true
     stdin_open: true
     tty: true
     platform: linux/amd64
+    # this is key to get the sweet sweet nvidia driver action
     runtime: nvidia
     deploy:
       resources:

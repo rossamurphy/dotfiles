@@ -25,7 +25,20 @@ RUN apt-get update && apt-get upgrade -y && \
     ca-certificates \
     kmod \
     pkg-config \
-    lbglvnd
+    libxext-dev \ libx11-dev \
+    x11proto-gl-dev \
+    libglvnd \
+    poppler-utils \
+    libreoffice \
+    pandoc \
+    libmagic-dev \
+    libgl1 \
+    tesseract-ocr \
+    libpq-dev
+
+RUN wget --no-check-certificate https://dl.xpdfreader.com/xpdf-tools-linux-4.05.tar.gz && tar -xvf xpdf-tools-linux-4.05.tar.gz && cp xpdf-tools-linux-4.05/bin64/pdftotext /usr/local/bin
+
+ENV TESSDATA_PREFIX=/usr/local/share/tessdata
 
 
 # get NVIDIA container toolkit ( from https://docs.nvidia.com/ai-enterprise/deployment-guide-vmware/0.1.0/docker.html )
