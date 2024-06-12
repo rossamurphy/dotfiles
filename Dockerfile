@@ -23,7 +23,6 @@ RUN apt-get update && apt-get upgrade -y && \
     libnss3-dev \
     libgdbm-compat-dev \
     ca-certificates \
-    module-init-tools \
     kmod
 
 
