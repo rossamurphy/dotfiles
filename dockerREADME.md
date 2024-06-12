@@ -149,6 +149,19 @@ therefore, it's better to just source the venv (so you don't get linter badness
 where it can't find certain libraries), and leave the process as vim and not
 let it be comandeered by poetry
 
+### initial set up
+```bash
+# get the github client and authenticate it
+brew install gh
+# authorise the gcloud cli
+gcloud auth login
+gcloud auth application-default login
+# authorise the aws cli
+cp -a rmvm_volume/creds/aws/ .aws/
+# install vim plugins
+nvim --noplugins -c "luafile /root/.config/nvim/plugin_setup.lua"
+```
+
 ### An example workflow
 open up a tmux session
 pop up windows top left, top right, and bottom
@@ -165,3 +178,4 @@ if you get kms badness
 ```bash 
  gcloud auth application-default login
  ```
+
