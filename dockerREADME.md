@@ -9,6 +9,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t rossamurphy/dotfilesim
 to run the image in interactive mode (on an m1)
 ```bash
 docker run --platform linux/amd64 -it rossamurphy/dotfilesimage:latest /bin/bash
+
 ```
 
 ### RECOMMENDED
@@ -32,6 +33,7 @@ sudo apt-get install -y containerd runc docker.io
 sudo systemctl enable docker
 sudo systemctl start docker
 docker pull rossamurphy/dotfilesimage:latest
+docker run --platform linux/amd64 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
 ```
 
 it's also useful to create a volume to attach to the container to persist data
@@ -47,11 +49,15 @@ Now to use the image to run the container, you have a few options
 
 ##### if you run with --rm , then when you stop the container (ctrl-d out of it) it will auto-delete
 docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
+docker run --platform linux/amd64 -it --rm --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
 
-##### if you run without --rm , when you stop the container (ctrl-d out of it) it will remain
-docker run --name rmvm -it --rm --privileged -v /:/host rossamurphy/dotfilesimage:latest /bin/bash
+##### if you run without --rm , when you stop the container (ctrl-d out of it) it will remain (but you'll need to start it again)
+docker run --platform linux/amd64 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
+
+note you can also ctrl-p and ctrl-q out of it to leave it running
 
 ### Run using docker-compose
+N.B. running use docker-compose currently does not attach the GPUs
 
 you can also use docker-compose to start your docker container in detached mode (here we are doing so with a volume attached)
 so, do this instead of just running it (the docker-compose.yml is in this repo)
@@ -80,6 +86,9 @@ you can easily use the image to start the container again
 docker-compose up -d
 docker container attach rmvm
 ```
+
+### RECOMMENDED (to run with NVIDIA drivers)
+docker run --platform linux/amd64 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
 
 ### to exit a container without killing it
 
