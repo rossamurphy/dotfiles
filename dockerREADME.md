@@ -162,6 +162,10 @@ let it be comandeered by poetry
 ```bash
 # get the github client and authenticate it
 brew install gh
+# remember that you need to press 5 on load
+# also remember the nvidia-smi and nvml are already installed by virtue of the docker image
+# to check this you can do `nvidia-smi` and `ldconfig -p | grep libnvidia-ml`
+brew install btop
 # authorise the gcloud cli
 gcloud auth login
 gcloud auth application-default login
@@ -187,4 +191,13 @@ if you get kms badness
 ```bash 
  gcloud auth application-default login
  ```
+
+#### for skipping ci cd 
+[skip actions]
+
+#### after switching into a new directory, if you've already previous sourced a venv and it's still active
+```bash
+deactivate
+```
+now, you can ```poetry install``` as you were.
 
