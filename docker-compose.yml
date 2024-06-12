@@ -7,6 +7,15 @@ services:
     privileged: true
     stdin_open: true
     tty: true
+    platform: linux/amd64
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     volumes:
       # this persists a volume so that your vim config can go here. so even if you delete the container it still has a vim config with plugins etc.
       - rmvm_volume:/root/rmvm_volume
