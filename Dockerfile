@@ -35,7 +35,10 @@ RUN apt-get update && apt-get upgrade -y && \
     tesseract-ocr \
     libpq-dev
 
-RUN wget --no-check-certificate https://dl.xpdfreader.com/xpdf-tools-linux-4.05.tar.gz && tar -xvf xpdf-tools-linux-4.05.tar.gz && cp xpdf-tools-linux-4.05/bin64/pdftotext /usr/local/bin
+RUN wget --no-check-certificate https://dl.xpdfreader.com/xpdf-tools-linux-4.05.tar.gz && \
+    tar -xvf xpdf-tools-linux-4.05.tar.gz && \
+    cp xpdf-tools-linux-4.05/bin64/pdftotext /usr/local/bin && \
+    rm -rf xpdf-tools-linux-4.05.tar.gz
 
 ENV TESSDATA_PREFIX=/usr/local/share/tessdata
 
