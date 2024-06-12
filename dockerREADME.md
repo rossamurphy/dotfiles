@@ -127,7 +127,6 @@ gh auth login
 and paste in a token
 
 
-
 ### because PyCharm / another IDE won't do it for you..
 
 to activate the poetry venv
@@ -162,6 +161,7 @@ let it be comandeered by poetry
 ```bash
 # get the github client and authenticate it
 brew install gh
+gh auth login
 # remember that you need to press 5 on load
 # also remember the nvidia-smi and nvml are already installed by virtue of the docker image
 # to check this you can do `nvidia-smi` and `ldconfig -p | grep libnvidia-ml`
