@@ -115,7 +115,9 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias pireqs="pip install -r requirements.txt"' >> /root/.bashrc && \
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.bashrc && \
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc && \
-    echo 'eval "$(pyenv init -)"' >> /root/.bashrc
+    echo 'eval "$(pyenv init -)"' >> /root/.bashrc && \
+    echo 'export PYTHONBREAKPOINT="pudb.set_trace"' >> /root/.bashrc && \
+
 
 
 
