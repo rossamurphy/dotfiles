@@ -33,7 +33,7 @@ sudo apt-get install -y containerd runc docker.io
 sudo systemctl enable docker
 sudo systemctl start docker
 docker pull rossamurphy/dotfilesimage:latest
-docker run --platform linux/amd64 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
+docker run --platform linux/amd64 -p 3000-9000:3000-9000 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
 ```
 
 it's also useful to create a volume to attach to the container to persist data

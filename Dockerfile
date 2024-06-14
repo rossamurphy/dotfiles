@@ -104,7 +104,6 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'alias venvactivate="source venv/bin/activate"' >> /root/.bashrc && \
     echo 'alias tks="tmux kill-server"' >> /root/.bashrc && \
     echo 'alias vi="nvim"' >> /root/.bashrc && \
-    # tell tmux to assume utf-8 encoding on font
     echo 'alias tmux="tmux -u"' >> /root/.bashrc && \
     echo 'alias reload="source ~/.bashrc"' >> /root/.bashrc && \
     echo 'alias la="ls -a"' >> /root/.bashrc && \
@@ -117,6 +116,8 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc && \
     echo 'eval "$(pyenv init -)"' >> /root/.bashrc && \
     echo 'export PYTHONBREAKPOINT="pudb.set_trace"' >> /root/.bashrc && \
+    echo 'alias ls="ls --color=auto"' >> /root/.bashrc
+
 
 
 
