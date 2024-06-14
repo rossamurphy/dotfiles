@@ -214,4 +214,14 @@ now, you can ```poetry install``` as you were.
 #### To run npm run dev on port x on the container, on the box, and still be able to access it from localhost on the machine you're running it on 
 ssh -i <keypath> -L ${port}:localhost:${port} <user>@<host>
 
+then, to kill this again, you can just ctrl-d out of the ssh session.
+if you've lost it, you can find it by running:
+
+```bash
+ps aux | grep ssh
+```
+then just kill the relevant PID
+```bash
+kill <PID>
+```
 
