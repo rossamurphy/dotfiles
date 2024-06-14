@@ -144,8 +144,8 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
     pyenv global 3.10.11
 
 
-
-
+# https://github.com/TheR1D/shell_gpt
+RUN pip install shell-gpt
 
 ## Clone and set up dotfiles
 
