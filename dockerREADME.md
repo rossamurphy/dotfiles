@@ -33,7 +33,7 @@ sudo apt-get install -y containerd runc docker.io
 sudo systemctl enable docker
 sudo systemctl start docker
 docker pull rossamurphy/dotfilesimage:latest
-docker run --platform linux/amd64 -p 3000-9000:3000-9000 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
+docker run --platform linux/amd64 -p 3000-3100:3000-3100 -it --runtime=nvidia --gpus all --privileged --shm-size=10gb --name rmvm -v rmvm_volume:/root/rmvm_volume -v /:/root/host rossamurphy/dotfilesimage:latest /bin/bash
 ```
 
 it's also useful to create a volume to attach to the container to persist data
@@ -209,4 +209,9 @@ if you get kms badness
 deactivate
 ```
 now, you can ```poetry install``` as you were.
+
+
+#### To run npm run dev on port x on the container, on the box, and still be able to access it from localhost on the machine you're running it on 
+ssh -i <keypath> -L ${port}:localhost:${port} <user>@<host>
+
 
