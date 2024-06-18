@@ -1,0 +1,77 @@
+import = [
+    # "~/.config/alacritty/themes/themes/doom_one.toml"
+    "~/.config/alacritty/themes/themes/enfocado_dark.toml"
+    # "~/.config/alacritty/themes/themes/everforest_light.toml"
+    # "~/.config/alacritty/themes/themes/github_dark.toml"
+    # "~/.config/alacritty/themes/themes/github_dark_high_contrast.toml"
+    # "~/.config/alacritty/themes/themes/google.toml"
+    # "~/.config/alacritty/themes/themes/gruvbox_dark.toml"
+    # "~/.config/alacritty/themes/themes/monokai_pro.toml"
+    # "~/.config/alacritty/themes/themes/night_fly.toml"
+    # "~/.config/alacritty/themes/themes/nord.toml"
+    # "~/.config/alacritty/themes/themes/one_dark.toml"
+    # "~/.config/alacritty/themes/themes/pastel_dark.toml"
+    # "~/.config/alacritty/themes/themes/rose_pine.toml"
+    # "~/.config/alacritty/themes/themes/rose_pine_dawn.toml"
+    # "~/.config/alacritty/themes/themes/taerminal.toml"
+    # "~/.config/alacritty/themes/themes/tokyo_night.toml"
+    # "~/.config/alacritty/themes/themes/zenburn.toml"
+]
+
+[window]
+opacity=0.95
+title="Wagwan"
+option_as_alt="OnlyLeft"
+
+[font]
+normal = { family = "Hack Nerd Font", style = "Regular"}
+size = 16
+
+[colors]
+cursor={ text = "#34d9eb", cursor = "#e834eb" }
+vi_mode_cursor={ text = "#e834eb", cursor = "#34d9eb" }
+line_indicator={ foreground = "#e834eb", background = "None" }
+
+[colors.primary]
+background = '#282c34'
+foreground = '#bbc2cf'
+
+# Normal colors
+[colors.normal]
+black   = '#282c34'
+red     = '#ff6c6b'
+green   = '#98be65'
+yellow  = '#ecbe7b'
+blue    = '#51afef'
+magenta = '#c678dd'
+cyan    = '#46d9ff'
+white   = '#bbc2cf'
+
+
+[cursor]
+style={shape="Underline", blinking="On"}
+vi_mode_style = { shape = "Block", blinking = "Off" }
+
+
+[keyboard]
+bindings=[
+{ key="Space", mods="Control|Shift", mode="~Vi",action="ToggleViMode"},
+{ key="Space", mods="Control|Shift", mode="Vi",action="ToggleViMode"},
+{ key="Right", mods="Alt", chars="\u001BF" },
+{ key="Left",  mods="Alt", chars="\u001BB" },
+{ key="l", mods="Alt", chars="\u001BF" },
+{ key="h",  mods="Alt", chars="\u001BB" },
+{ key="f", mods="Alt", mode="Vi",action="ToggleFullScreen"},
+{ key="k", mods="Control|Alt", chars="\u001b[A"},
+{ key="j", mods="Control|Alt", chars="\u001b[B"},
+{ key="v", mods="Shift", mode="Vi",action="ToggleLineSelection"},
+{ key="h", mods="None", mode="Vi",action="Left"},
+{ key="l", mods="None", mode="Vi",action="Right"},
+{ key="b", mods="None", mode="Vi",action="SemanticLeft"},
+{ key="%", mods="None", mode="Vi",action="Bracket"},
+{ key="i", mods="Shift", mode="Vi",action="First"},
+{ key="a", mods="Shift", mode="Vi",action="Last"},
+{ key="e", mods="None", mode="Vi",action="WordRightEnd"},
+{ key="w", mods="None", mode="Vi",action="SemanticRight"},
+{ key="o", mods="Alt", mode="Vi",action="Open"},
+]
