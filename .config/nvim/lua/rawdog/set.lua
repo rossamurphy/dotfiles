@@ -29,4 +29,7 @@ vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", {silent=true})
 vim.keymap.set('n', '<A-k>', ":m .-2<CR>==", {silent=true})
 vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", {silent=true})
 
-vim.opt.clipboard = "unnamedplus"
+-- for vimwiki
+vim.cmd("filetype plugin on")
+vim.cmd("syntax on")
+vim.g.vimwiki_map_prefix = '<Leader>e'

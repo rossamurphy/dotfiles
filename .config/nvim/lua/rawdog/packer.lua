@@ -1,16 +1,3 @@
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
-end
-
-local packer_bootstrap = ensure_packer()
-
 return require('packer').startup(function(use)
 	-- Packer can manage itself
 	use 'wbthomason/packer.nvim'
@@ -22,13 +9,40 @@ return require('packer').startup(function(use)
 		requires = { 'nvim-tree/nvim-web-devicons', opt = true }
 	}
 
+  use({
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup()
+    end,
+  })
+
+	use {
+		'pwntester/octo.nvim',
+		requires = {
+			'nvim-lua/plenary.nvim',
+			'nvim-telescope/telescope.nvim',
+			-- OR 'ibhagwan/fzf-lua',
+			'nvim-tree/nvim-web-devicons',
+		},
+		config = function ()
+			require"octo".setup(
+				{
+					suppress_missing_scope = {
+						projects_v2 = true,
+					}
+				}
+			)
+		end
+	}
+
+	use 'vimwiki/vimwiki'
 	-- for managing connection secrets
 	use { 'tpope/vim-dotenv' }
 	-- for interacting with dbs
 	use { 'tpope/vim-dadbod' }
 	-- for completion in vim for db interaction
 	use { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' } }
-
+	use { "nvim-neotest/nvim-nio" }
 	-- dbui for dadbod
 	use {
 		'kristijanhusak/vim-dadbod-ui',
@@ -59,7 +73,8 @@ return require('packer').startup(function(use)
 	use "sindrets/diffview.nvim"
 
 	use 'nvim-tree/nvim-web-devicons'
-		-- for node debugging
+
+	-- for node debugging
 	use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
 	-- https://github.com/mxsdev/nvim-dap-vscode-js
 	use {
@@ -68,15 +83,13 @@ return require('packer').startup(function(use)
 		run = "npm install -g --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out"
 	}
 
-
-
 	use {
-		'nvim-telescope/telescope.nvim', tag = '0.1.6',
+		'nvim-telescope/telescope.nvim', tag = '0.1.2',
 		-- or                            , branch = '0.1.x',
 		requires = { { 'nvim-lua/plenary.nvim' } }
 	}
 	use 'folke/neodev.nvim'
-		-- for persistent breakpoints
+	-- for persistent breakpoints
 	-- https://github.com/Weissle/persistent-breakpoints.nvim
 	-- https://github.com/mfussenegger/nvim-dap/issues/198
 	use { 'Weissle/persistent-breakpoints.nvim' }
@@ -91,7 +104,15 @@ return require('packer').startup(function(use)
 			"lawrence-laz/neotest-zig",
 		}
 	}
-	use { "nvim-neotest/nvim-nio" }
+
+	use({
+		"jackMort/ChatGPT.nvim",
+		requires = {
+			"MunifTanjim/nui.nvim",
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim"
+		}
+	})
 
 	use { "mfussenegger/nvim-dap",
 		requires = { "rcarriga/nvim-dap-ui", 'mfussenegger/nvim-dap-python', 'theHamsta/nvim-dap-virtual-text' } }
@@ -410,7 +431,6 @@ return require('packer').startup(function(use)
 		end
 	}
 
-
 	use {
 		"FotiadisM/tabset.nvim",
 	}
@@ -451,7 +471,7 @@ return require('packer').startup(function(use)
 		'numToStr/Comment.nvim',
 		config = function()
 			require('Comment').setup(
-			-- for commenting in jsx and tsx
+				-- for commenting in jsx and tsx
 				{
 					pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
 				}
@@ -473,12 +493,6 @@ return require('packer').startup(function(use)
 			{ 'L3MON4D3/LuaSnip' },  -- Required
 			-- autocomplete in the dap repl using your cmp provider
 			{ 'rcarriga/cmp-dap' },  -- Optional
-
 		}
 	}
-
-	if packer_bootstrap then
-    require('packer').sync()
-  end
-
 end)

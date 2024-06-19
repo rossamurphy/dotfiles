@@ -72,12 +72,9 @@ dap.listeners.after.event_initialized['dapui_config'] = function()
   -- vim.cmd('tabfirst|tabnext')
   dapui.open()
 end
--- dap.listeners.before.event_terminated['dapui_config'] = function()
---   dapui.close()
--- end
--- dap.listeners.before.event_exited['dapui_config'] = function()
---   dapui.close()
--- end
+dap.listeners.before.event_terminated['dapui_config'] = function()
+  dapui.close()
+end
 
 -- # Keymap
 --
@@ -89,14 +86,6 @@ end
 
 require'dap'.set_log_level('TRACE')
 --
---
--- exit it yourself
--- dap.listeners.before.event_terminated["dapui_config"] = function()
---   dapui.close()
--- end
--- dap.listeners.before.event_exited["dapui_config"] = function()
---   dapui.close()
--- end
 
 -- PYTHON
 -- https://github.com/mfussenegger/nvim-dap-python/tree/d4400d075c21ed8fb8e8ac6a5ff56f58f6e93531
@@ -112,9 +101,6 @@ require'dap'.set_log_level('TRACE')
 -- }
 --
 require('dap-python').test_runner = 'pytest'
-
-
-
 
 -- example of how to select which path you want, using the vim selector ui
 -- local selector = function()
@@ -386,4 +372,3 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 -- :tab split
 -- then, you can just gt back and forth.
 -- and when you're done, just :q
-

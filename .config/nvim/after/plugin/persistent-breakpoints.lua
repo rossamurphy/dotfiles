@@ -17,4 +17,3 @@ local keymap = vim.api.nvim_set_keymap
 keymap("n", "<F3>", "<cmd>lua require('persistent-breakpoints.api').toggle_breakpoint()<cr>", opts)
 -- keymap("n", "<F2>", "<cmd>lua require('persistent-breakpoints.api').set_conditional_breakpoint()<cr>", opts)
 keymap("n", "<F4>", "<cmd>lua require('persistent-breakpoints.api').clear_all_breakpoints()<cr>", opts)
-

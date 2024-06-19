@@ -3,32 +3,64 @@ local lsp_zero = require('lsp-zero')
 lsp_zero.preset({name='recommended', set_lsp_keymaps = false})
 
 lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr})
+	-- see :help lsp-zero-keybindings
+	-- to learn the available actions
+	lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
 	-- Replace the language servers listed here
 	-- with the ones you want to install
-	ensure_installed = { 'tsserver', 'rust_analyzer', 'lua_ls', 'eslint', 'gopls', 'jsonls', 'marksman', 'pyright', 'taplo', 'terraformls', 'yamlls' },
+	ensure_installed = { 'tsserver', 'rust_analyzer', 'ruff', 'lua_ls', 'eslint', 'gopls', 'jsonls', 'marksman', 'pyright', 'taplo', 'terraformls', 'yamlls' },
 	handlers = {
 		lsp_zero.default_setup,
+
+		function(server_name)
+			require('lspconfig')[server_name].setup({})
+		end,
+
+		pyright = function()
+			require('lspconfig').pyright.setup({
+				settings = {
+					pyright = {
+						-- Using Ruff's import organizer
+						disableOrganizeImports = true,
+					},
+					python = {
+						pythonPath = vim.fn.exepath("python"),
+						analysis = {
+							-- Ignore all files for analysis to exclusively use Ruff for linting
+							ignore = { '*' },
+						},
+					}
+				},
+			})
+		end,
+
+		ruff = function()
+			require('lspconfig').ruff.setup({
+				settings = {
+					ruff = {
+						configurationPreference = "filesystemFirst"
+					},
+				},
+			})
+		end,
 	},
 })
 
 local function get_poetry_venv_info()
-    local handle = io.popen("poetry env info --executable")
-    local venv_path = nil
-    if handle then
-			venv_path = handle:read("*a")
+	local handle = io.popen("poetry env info --executable")
+	local venv_path = nil
+	if handle then
+		venv_path = handle:read("*a")
 		handle:close()
-    end
-    if venv_path then
-			return venv_path
-    end
-    return nil
+	end
+	if venv_path then
+		return venv_path
+	end
+	return nil
 end
 
 -- I was getting Import could not be resolved errors and I thought
@@ -71,11 +103,20 @@ local cmp_mappings = lsp_zero.defaults.cmp_mappings({
 
 
 cmp.setup({
-  mapping = {
-    ['<space>'] = cmp.mapping.confirm({select = false}),
-  },
+	mapping = {
+		['<space>'] = cmp.mapping.confirm({select = false}),
+	},
+	enabled = function()
+		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+			or require("cmp_dap").is_dap_buffer()
+	end
 })
 
+cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+	sources = {
+		{ name = "dap" },
+	},
+})
 
 lsp_zero.on_attach(function(client, bufnr)
 	local opts = {buffer = bufnr, remap = false}
@@ -93,10 +134,10 @@ end)
 
 
 lsp_zero.set_sign_icons({
-  error = '✘',
-  warn = '▲',
-  hint = '⚑',
-  info = '»'
+	error = '✘',
+	warn = '▲',
+	hint = '⚑',
+	info = '»'
 })
 
 require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
