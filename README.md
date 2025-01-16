@@ -8,9 +8,14 @@ Here are a watered down version of dotfiles for tmux and nvim.
 ## Why is this README terse?
 - unfortunately this is probably as verbose as this readme will get, but if you need help with anything related to the contents of this, please just reach out.
 
-## Quickstart 
+## What are some nice things about this set up?
+
+- It installs the right CUDA drivers to be able to access your VM's GPU (if you attach one) despite running inside a Docker container. (Usually that's quite difficult because your container doesn't naturally have access to all of the host's system resources).
+- It installs lots of nice helper things, like, git, btop, grep, gcc, go, etc.
+- It sets up my neovim from scratch just how I like it. (this is probably/definitely less useful to the casual user).
 
 
+## Get started 
 
 #### For debian (most GCP machines)
 
