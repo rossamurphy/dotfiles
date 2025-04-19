@@ -8,9 +8,44 @@ Here are a watered down version of dotfiles for tmux and nvim.
 ## Why is this README terse?
 - unfortunately this is probably as verbose as this readme will get, but if you need help with anything related to the contents of this, please just reach out.
 
-## Quickstart 
+## Quickstart
+
+### rm edit
+
+#### create the vm
+./create-vm.sh (specify the vm name and specs in this script)
+
+#### transfer what you need
+scp -i /Users/rossmurphy/.ssh/<VM_NAME> Dockerfile setup.sh rossmurphy@<VM_IP>:~/
+##### e.g.
+scp -i /Users/rossmurphy/.ssh/dev_machine dev-setup.mk Dockerfile setup.sh rossmurphy@34.147.204.25:~/
+
+#### ssh in
+ssh -i /Users/rossmurphy/.ssh/<VM_NAME> rossmurphy@<VM_IP>
+
+##### give it make...
+sudo apt-get update
+sudo apt-get install -y make
 
 
+#### run the setup script
+<!-- make -f dev-setup.mk all -->
+chmod +x ./setup.sh
+./setup.sh
+
+#### or, just for specific steps
+# Just install Docker
+make -f dev-setup.mk install-docker
+
+# Just build the image
+make -f dev-setup.mk build-image
+
+# Just run the container
+make -f dev-setup.mk run-container
+
+
+#### now, you can connect with
+mosh --ssh="ssh -p 2222" root@34.45.214.18
 
 #### For debian (most GCP machines)
 
@@ -37,7 +72,7 @@ and, for the ones STILL not included, go, npm, and unzip:
 
 npm and unzip from here
 ```bash
-sudo apt install -y nodejs npm unzip 
+sudo apt install -y nodejs npm unzip
 ```
 
 and now for go
@@ -78,7 +113,7 @@ source ~/.bashrc
 ```
 
 
-###### get git 
+###### get git
 ```bash
 sudo apt-get install git
 ```
@@ -87,13 +122,13 @@ sudo apt-get install git
 ### Init the config dir
 
 ```bash
-sudo git clone https://github.com/rossamurphy/dotfiles 
+sudo git clone https://github.com/rossamurphy/dotfiles
 sudo mkdir ~/.config
 sudo cp -a ~/dotfiles/.config/. ~/.config
 ```
 
 
-###### change permissions 
+###### change permissions
 
 In order to open vim and have it auto install the plugins, it needs to be able to run packer in the background.
 However, packer is installed to local/share by default, and that's owned by the root, not the user.
@@ -112,7 +147,7 @@ sudo chown -R $USER:$USER ~/.config/nvim
 ```
 
 (You also needed to change the directory permissions to USER for the .config directory because you sudo copied it)
-TODO - I can probably make this smoother 
+TODO - I can probably make this smoother
 
 ### Set up plugins
 ```bash
@@ -165,7 +200,7 @@ echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 sudo apt-get install python3-pip
 sudo apt-get install python3-venv
 sudo apt-get install python3-virtualenv
-sudo apt-get install pipx 
+sudo apt-get install pipx
 
 ptipython set up
 ```bash

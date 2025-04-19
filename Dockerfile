@@ -1,11 +1,19 @@
-FROM debian:latest 
+FROM debian:latest
 
 # Set the working directory in the container
 WORKDIR /root
 
+# Install wget first
+RUN apt-get update && apt-get install -y wget
+
+# Download and install gcc-10-base
+RUN wget http://mirrors.edge.kernel.org/ubuntu/pool/main/g/gcc-10/gcc-10-base_10-20200411-0ubuntu1_amd64.deb && \
+    dpkg -i ./gcc-10-base_10-20200411-0ubuntu1_amd64.deb && \
+    rm ./gcc-10-base_10-20200411-0ubuntu1_amd64.deb
+
 # Install dependencies
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y wget sudo gnupg curl build-essential nodejs npm unzip software-properties-common python3-pip python3-venv python3-virtualenv pipx git ruby-full coreutils mosh ufw tmux golang-go ripgrep \
+    apt-get install -y sudo gnupg curl build-essential nodejs npm unzip software-properties-common python3-pip python3-venv python3-virtualenv pipx git ruby-full coreutils mosh ufw tmux golang-go ripgrep \
     apt-utils \
     libffi-dev \
     libssl-dev \
@@ -25,22 +33,20 @@ RUN apt-get update && apt-get upgrade -y && \
     ca-certificates \
     kmod \
     pkg-config \
-    libxext-dev \ 
+    libxext-dev \
     x11proto-gl-dev \
-    poppler-utils \
-    libreoffice \
     pandoc \
     libmagic-dev \
     libgl1 \
-    tesseract-ocr \
     libpq-dev
 
-RUN wget --no-check-certificate https://dl.xpdfreader.com/xpdf-tools-linux-4.05.tar.gz && \
-    tar -xvf xpdf-tools-linux-4.05.tar.gz && \
-    cp xpdf-tools-linux-4.05/bin64/pdftotext /usr/local/bin && \
-    rm -rf xpdf-tools-linux-4.05.tar.gz
-
-ENV TESSDATA_PREFIX=/usr/local/share/tessdata
+# Install locales and set up en_GB.UTF-8 (for mosh)
+RUN apt-get update && apt-get install -y locales
+RUN sed -i '/en_GB.UTF-8/s/^# //' /etc/locale.gen && \
+    locale-gen en_GB.UTF-8 && \
+    update-locale LANG=en_GB.UTF-8 LC_ALL=en_GB.UTF-8
+ENV LANG=en_GB.UTF-8
+ENV LC_ALL=en_GB.UTF-8
 
 # get NVIDIA container toolkit ( from https://docs.nvidia.com/ai-enterprise/deployment-guide-vmware/0.1.0/docker.html )
 RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
@@ -64,23 +70,43 @@ RUN apt-get update
 
 RUN apt-get install -y nvidia-container-toolkit
 
-# get brew
+# Create a non-root user for Homebrew
+RUN useradd -m -s /bin/bash brewuser && \
+    echo 'brewuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Install Homebrew as non-root user
+USER brewuser
+WORKDIR /home/brewuser
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-     (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /root/.bashrc && \
-     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    echo 'eval "$(/home/brewuser/.linuxbrew/bin/brew shellenv)"' >> /home/brewuser/.bashrc && \
+    eval "$(/home/brewuser/.linuxbrew/bin/brew shellenv)"
 
+# Switch back to root
+USER root
+WORKDIR /root
 
-# Install Neovim
-RUN curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz && \
-    tar -C /opt -xzf nvim-linux64.tar.gz && \
-    rm nvim-linux64.tar.gz && \
-    ln -s /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim && \
-    echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc
+# Make Homebrew available to root
+RUN echo 'export PATH="/home/brewuser/.linuxbrew/bin:$PATH"' >> /root/.bashrc && \
+    ln -s /home/brewuser/.linuxbrew/bin/brew /usr/local/bin/brew
 
-ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
+# Set environment variables for openssl
+ENV PATH="/home/brewuser/.linuxbrew/bin:${PATH}"
 ENV CFLAGS="-I$(brew --prefix openssl)/include"
 ENV LDFLAGS="-L$(brew --prefix openssl)/lib"
 
+# Install Neovim with specific version instead of latest
+RUN curl -L -o nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz && \
+    mkdir -p /opt/nvim && \
+    tar -xzf nvim.tar.gz -C /opt && \
+    rm nvim.tar.gz && \
+    ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim && \
+    echo 'export PATH="$PATH:/opt/nvim-linux-x86_64/bin"' >> /root/.bashrc
+
+# Clone Packer to the correct location
+RUN git clone --depth 1 https://github.com/wbthomason/packer.nvim \
+  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+
+ENV PATH="/root/.pyenv/bin:/root/.pyenv/shims:${PATH}"
 
 RUN pipx install poetry && \
     pipx ensurepath
@@ -118,10 +144,6 @@ RUN echo 'export PATH="$PATH:/opt/nvim-linux64/bin"' >> /root/.bashrc && \
     echo 'export PYTHONBREAKPOINT="pudb.set_trace"' >> /root/.bashrc && \
     echo 'alias ls="ls --color=auto"' >> /root/.bashrc
 
-
-
-
-
 # google sdk
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt-get update -y && apt-get install google-cloud-sdk -y
 
@@ -143,38 +165,74 @@ RUN mkdir /root/.pyenv && git clone https://github.com/pyenv/pyenv.git /root/.py
     pyenv install 3.10.11 && \
     pyenv global 3.10.11
 
+# After your pipx install commands
+RUN echo 'export PATH="$PATH:/root/.local/bin"' >> /root/.bashrc && \
+    export PATH="$PATH:/root/.local/bin" && \
+    pipx ensurepath
+
 
 # https://github.com/TheR1D/shell_gpt
 RUN pip install shell-gpt
 
 ## Clone and set up dotfiles
-
-# note that it clones the dotfiles repo into the volume_data directory
-# and then, tells both neovim and tmux to look IN the volume_data directory for their respective config files
-# this is because this volume_data directory is a volume which is persisted even after the containers are destroyed
-# note that there exists a ./volume_data directory in the same directory as this Dockerfile purely for the purposes of enabling the build of the docker image. the ./volume_data directory is not synced with git. there's no real need to pay attention to it.
-
 RUN git clone https://github.com/rossamurphy/dotfiles /root/dotfiles/ && \
     cp -a /root/dotfiles/.config/ /root/.config/ && \
     chown -R root:root /root/.config
 
+# Install GitHub CLI
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && apt-get update \
+    && apt-get install gh -y
 
+# Install tree-sitter CLI
+RUN npm install -g tree-sitter-cli
+
+# Install NVM and Node.js 22.14.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && \
+    export NVM_DIR="$HOME/.nvm" && \
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+    nvm install 22.14.0 && \
+    nvm use 22.14.0 && \
+    nvm alias default 22.14.0
+
+# Add NVM to .bashrc for future sessions
+RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /root/.bashrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /root/.bashrc && \
+    echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /root/.bashrc
 
 RUN dircolors --print-database > /root/.dir_colors
-
 
 # Set environment variable for Neovim
 ENV XDG_CONFIG_HOME="/root/.config/"
 ENV TMUX_CONF="/root/.config/tmux/tmux.conf"
 ENV PATH="/opt/nvim-linux64/bin:$PATH"
 
+# Add this line to your Dockerfile
+# set the password for the ssh service
+RUN echo "root:password" | chpasswd
 
+# Install SSH server
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server && \
+    mkdir -p /run/sshd
 
-# set up neovim for this image and install plugins
+# Generate SSH host keys and ensure SSH is running properly
+RUN mkdir -p /etc/ssh && \
+    ssh-keygen -A && \
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
+    echo "Port 22" >> /etc/ssh/sshd_config && \
+    echo "AllowTcpForwarding yes" >> /etc/ssh/sshd_config && \
+    echo "X11Forwarding yes" >> /etc/ssh/sshd_config && \
+    echo "ListenAddress 0.0.0.0" >> /etc/ssh/sshd_config
 
-# RUN nvim --noplugin --headless -c "source /root/.config/nvim/lua/rawdog/init.lua" +q 
-# RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c ' autocmd User PackerComplete quitall' -c 'PackerSync'
-# RUN nvim --noplugins --headless -c 'source /root/.config/nvim/lua/rawdog/packer.lua' -c 'PackerCompile'
+# Create a proper start script that keeps the container running
+RUN echo '#!/bin/bash' > /start.sh && \
+    echo 'echo "Starting SSH daemon..."' >> /start.sh && \
+    echo '/usr/sbin/sshd -D &' >> /start.sh && \
+    echo 'echo "SSH daemon started with PID $!"' >> /start.sh && \
+    echo 'tail -f /dev/null' >> /start.sh && \
+    chmod +x /start.sh
 
-CMD ["bash"]
-
+ENTRYPOINT ["/start.sh"]

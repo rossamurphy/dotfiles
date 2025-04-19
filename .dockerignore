@@ -1,0 +1,11 @@
+# flyctl launch added from .config/nvim/.gitignore
+.config/nvim/**/plugin/packer_compiled.lua
+
+# flyctl launch added from .gitignore
+**/.DS_Store
+**/volume_data
+**/.config/plugin/packer/packer_compiled.lua
+**/internal.md
+
+
+fly.toml
