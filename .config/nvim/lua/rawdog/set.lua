@@ -13,7 +13,9 @@ vim.opt.undofile = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
-vim.opt.termguicolors = true
+vim.opt.termguicolors = false
+-- https://github.com/mobile-shell/mosh/issues/928
+
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
@@ -22,12 +24,12 @@ vim.opt.colorcolumn = "80"
 vim.g.mapleader = " "
 
 -- Move a line or a selection of lines down with Alt+j
-vim.keymap.set('n', '<A-j>', ":m .+1<CR>==", {silent=true})
-vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", {silent=true})
+vim.keymap.set('n', '<A-j>', ":m .+1<CR>==", { silent = true })
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { silent = true })
 
 -- Move a line or a selection of lines up with Alt+k
-vim.keymap.set('n', '<A-k>', ":m .-2<CR>==", {silent=true})
-vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", {silent=true})
+vim.keymap.set('n', '<A-k>', ":m .-2<CR>==", { silent = true })
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { silent = true })
 
 -- for vimwiki
 vim.cmd("filetype plugin on")
