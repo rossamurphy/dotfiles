@@ -72,12 +72,6 @@ return {
 	},
 
 	{
-		"microsoft/vscode-js-debug",
-		lazy = true,
-		build = "npm install -g --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out"
-	},
-
-	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.2",
 		dependencies = { "nvim-lua/plenary.nvim" }
