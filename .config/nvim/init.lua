@@ -17,3 +17,4 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Load plugins from rawdog/plugins.lua
 require("lazy").setup("rawdog.plugins")
+require("oil").setup()
