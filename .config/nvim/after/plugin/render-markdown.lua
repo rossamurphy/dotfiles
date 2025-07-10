@@ -25,7 +25,7 @@ require('render-markdown').setup({
 	-- Only intended to be used for plugin development / debugging.
 	log_runtime = false,
 	-- Filetypes this plugin will run on.
-	file_types = { 'markdown', 'vimwiki' },
+	file_types = { 'markdown', 'vimwiki', 'mdx' },
 	-- Takes buffer as input, if it returns true this plugin will not attach to the buffer
 	ignore = function()
 		return false
