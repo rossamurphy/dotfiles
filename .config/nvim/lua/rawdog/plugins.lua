@@ -80,7 +80,6 @@ return {
 		end
 	},
 
-	"vimwiki/vimwiki",
 	"tpope/vim-dotenv",
 	"tpope/vim-dadbod",
 
