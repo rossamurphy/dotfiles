@@ -10,9 +10,9 @@ require("obsidian").setup({
 			name = "research",
 			path = "~/obslib",
 			-- Optional, override certain settings.
-			overrides = {
-				notes_subdir = "Excluded/notes",
-			},
+			-- overrides = {
+			-- 	notes_subdir = "Excluded/notes",
+			-- },
 		},
 	},
 
