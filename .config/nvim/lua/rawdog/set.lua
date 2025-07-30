@@ -16,7 +16,10 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = false
 -- https://github.com/mobile-shell/mosh/issues/928
 
-vim.opt.scrolloff = 8
+-- having this ON, means that when do line up (say using k),
+-- the screen also moves such to always keep the top 8 lines visible
+-- prime recommended this. I'm not sure I like it
+-- vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
