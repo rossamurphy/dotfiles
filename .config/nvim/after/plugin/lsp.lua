@@ -12,7 +12,7 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
 	-- Replace the language servers listed here
 	-- with the ones you want to install
-	ensure_installed = { 'rust_analyzer', 'ruff', 'lua_ls', 'eslint', 'gopls', 'jsonls', 'marksman', 'pyright', 'taplo', 'terraformls', 'yamlls' },
+	ensure_installed = { 'rust_analyzer', 'lua_ls', 'eslint', 'gopls', 'jsonls', 'marksman', 'pyright', 'taplo', 'terraformls', 'yamlls' },
 	handlers = {
 		lsp_zero.default_setup,
 
@@ -31,7 +31,8 @@ require('mason-lspconfig').setup({
 						pythonPath = vim.fn.exepath("python"),
 						analysis = {
 							-- Ignore all files for analysis to exclusively use Ruff for linting
-							ignore = { '*' },
+							-- ignore = { '*' },
+							extraPaths = { "." },
 						},
 					}
 				},
