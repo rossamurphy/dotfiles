@@ -5,7 +5,7 @@ require("conform").setup({
 		-- Conform will run multiple formatters sequentially
 		go = { "goimports", "gofmt" },
 		-- Use a sub-list to run only the first available formatter
-		javascript = { { "prettierd", "prettier" } },
+		javascript = { "prettierd", "prettier", stop_after_first = true },
 		-- You can use a function here to determine the formatters dynamically
 		python = function(bufnr)
 			if require("conform").get_formatter_info("ruff_format", bufnr).available then
@@ -62,7 +62,8 @@ require("conform").setup({
 			-- file is assumed to be modified in-place by the format command.
 			stdin = true,
 			-- A function that calculates the directory to run the command in
-			cwd = require("conform.util").root_file({ "pyproject.toml","ruff.toml",".ruff.toml",".editorconfig", "package.json" }),
+			cwd = require("conform.util").root_file({ "pyproject.toml", "ruff.toml", ".ruff.toml", ".editorconfig",
+				"package.json" }),
 			-- When cwd is not found, don't run the formatter (default false)
 			require_cwd = true,
 			-- When stdin=false, use this template to generate the temporary file that gets formatted
@@ -96,7 +97,8 @@ require("conform").setup({
 			-- file is assumed to be modified in-place by the format command.
 			stdin = true,
 			-- A function that calculates the directory to run the command in
-			cwd = require("conform.util").root_file({ "pyproject.toml","ruff.toml",".ruff.toml",".editorconfig", "package.json" }),
+			cwd = require("conform.util").root_file({ "pyproject.toml", "ruff.toml", ".ruff.toml", ".editorconfig",
+				"package.json" }),
 			-- When cwd is not found, don't run the formatter (default false)
 			require_cwd = true,
 			-- When stdin=false, use this template to generate the temporary file that gets formatted
