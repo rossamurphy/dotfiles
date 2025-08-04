@@ -123,7 +123,30 @@ local modulename = function()
 	return modulename
 end
 
-require('dap-python').setup(os.getenv('VIRTUAL_ENV') .. '/bin/python')
+local function get_python_path()
+	local venv_path = os.getenv('VIRTUAL_ENV')
+	if venv_path then
+		return venv_path .. '/bin/python'
+	end
+
+	-- Try common python locations
+	local python_paths = {
+		vim.fn.exepath('python3'),
+		vim.fn.exepath('python'),
+		'/usr/bin/python3',
+		'/usr/local/bin/python3'
+	}
+
+	for _, path in ipairs(python_paths) do
+		if vim.fn.executable(path) == 1 then
+			return path
+		end
+	end
+
+	return 'python3' -- fallback
+end
+
+require('dap-python').setup(get_python_path())
 table.insert(dap.configurations.python, {
 	type = 'python',
 	request = 'attach',
@@ -145,6 +168,7 @@ table.insert(dap.configurations.python, {
 	host = 'localhost',
 	port = 5678,
 })
+
 table.insert(dap.configurations.python, {
 	type = 'python',
 	request = 'launch',
