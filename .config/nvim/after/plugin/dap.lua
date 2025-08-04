@@ -123,7 +123,28 @@ local modulename = function()
 	return modulename
 end
 
-require('dap-python').setup('~/.config/debugpy/venv/bin/python')
+require('dap-python').setup(os.getenv('VIRTUAL_ENV') .. '/bin/python')
+table.insert(dap.configurations.python, {
+	type = 'python',
+	request = 'attach',
+	name = 'Attach to debugpy',
+	host = 'localhost',
+	port = 5678,
+	pathMappings = {
+		{
+			localRoot = vim.fn.getcwd(),
+			remoteRoot = '/opt/shared', -- For your Docker setup later
+		},
+	},
+})
+-- For local testing, simpler version:
+table.insert(dap.configurations.python, {
+	type = 'python',
+	request = 'attach',
+	name = 'Attach Local',
+	host = 'localhost',
+	port = 5678,
+})
 table.insert(dap.configurations.python, {
 	type = 'python',
 	request = 'launch',
@@ -131,68 +152,7 @@ table.insert(dap.configurations.python, {
 	module = modulename,
 	cwd = "${workspaceFolder}",
 })
-table.insert(dap.configurations.python,
-	{
-		type = 'python',
-		request = 'launch',
-		name = "Poetry - As Module",
-		module = modulename,
-		cwd = "${workspaceFolder}",
-	})
-table.insert(dap.configurations.python,
-	{
-		type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
-		request = 'launch',
-		name = "Global Python - As File",
-		-- args = { "-m" };
 
-		-- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
-		-- program = "${fileBasenameNoExtension}"; -- This configuration will launch the current file if used.
-		program = "${file}", -- This configuration will launch the current file if used.
-		-- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
-		-- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
-		cwd = "${workspaceFolder}"
-	})
-
-
-
--- dap.configurations.python = {
--- 	{
--- 		type = 'python',
--- 		request = 'launch',
--- 		name = "Vanilla Venv - As Module",
--- 		module = modulename,
--- 		cwd = "${workspaceFolder}";
--- 		pythonPath = function()
--- 			return "./venv/bin/python";
--- 		end,
--- 	},
--- 	{
--- 		type = 'python',
--- 		request = 'launch',
--- 		name = "Poetry - As Module",
--- 		module = modulename,
--- 		cwd = "${workspaceFolder}",
--- 		pythonPath = function()
--- 			return "./.venv/bin/python";
--- 		end,
--- 		-- console = "externalTerminal",
--- 	},
--- 	{
--- 		-- The first three options are required by nvim-dap
--- 		type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
--- 		request = 'launch',
--- 		name = "Global Python - As File",
--- 		-- args = { "-m" };
---
---     -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
---     -- program = "${fileBasenameNoExtension}"; -- This configuration will launch the current file if used.
---     program = "${file}"; -- This configuration will launch the current file if used.
---       -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
---       -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
---     cwd = "${workspaceFolder}"
---   },
--- }
 
 require('dap-vscode-js').setup({
 	node_path = 'node',

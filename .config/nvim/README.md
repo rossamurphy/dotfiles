@@ -3,9 +3,9 @@
 git operations
 
 # leader g t --> neotree git status
-once there you can g a to add 
+once there you can g a to add
 g r to revert
-g c to commit 
+g c to commit
 g g to push changes
 
 # leader g s --> opens vim fugitive
@@ -18,7 +18,7 @@ https://github.com/nvim-telescope/telescope.nvim/issues/1932
 # leader f g c --> opens git commit browser for this branch
 use ctrl U and ctrl D to scroll in the window
 
-# leader g d 
+# leader g d
 to open git diff vs remote
 
 # if there is a merge conflict you can sort it out in a 3 way diff using leader g d
@@ -30,7 +30,7 @@ if you messed up during the merge and some changes are staged, just do git stash
 https://github.com/sindrets/diffview.nvim?tab=readme-ov-file
 skip through individual hunks doing [c and ]c. you choose from left or right just do 2do or 3do.
 
-more in the CONFIG here 
+more in the CONFIG here
 https://github.com/sindrets/diffview.nvim?tab=readme-ov-file
 
 # to look at all the changes through previous commits do leader g h d
