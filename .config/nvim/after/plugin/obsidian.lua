@@ -8,7 +8,7 @@ require("obsidian").setup({
 	workspaces = {
 		{
 			name = "research",
-			path = "~/obslib",
+			path = "~/obslib/research/",
 			-- Optional, override certain settings.
 			-- overrides = {
 			-- 	notes_subdir = "Excluded/notes",
@@ -29,7 +29,7 @@ require("obsidian").setup({
 
 	daily_notes = {
 		-- Optional, if you keep daily notes in a separate directory.
-		folder = "research/notes/dailies",
+		folder = "notes/dailies",
 		-- Optional, if you want to change the date format for the ID of daily notes.
 		date_format = "%Y-%m-%d",
 		-- Optional, if you want to change the date format of the default alias of daily notes.
