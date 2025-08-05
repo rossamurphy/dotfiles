@@ -1,3 +1,10 @@
+-- Check if obsidian vault directory exists before setting up
+local obsidian_path = vim.fn.expand("~/obslib/research/")
+if vim.fn.isdirectory(obsidian_path) == 0 then
+	-- Directory doesn't exist, skip obsidian setup
+	return
+end
+
 require("obsidian").setup({
 	-- A list of workspace names, paths, and configuration overrides.
 	-- If you use the Obsidian app, the 'path' of a workspace should generally be
