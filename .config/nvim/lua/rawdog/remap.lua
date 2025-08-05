@@ -45,6 +45,8 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader>so", "<cmd>so ~/.config/nvim/init.lua <CR>")
 
+-- because some terminal emulators send ctrl-h as backspace (read Blink on iPad)
+vim.keymap.set("n", "<BS>", ":wincmd h<CR>")
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
 vim.keymap.set("n", "<C-j>", ":wincmd j<CR>")
 vim.keymap.set("n", "<C-k>", ":wincmd k<CR>")
