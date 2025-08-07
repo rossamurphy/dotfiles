@@ -14,16 +14,16 @@ disabled = false
 
 [directory]
 style = "blue bold"
-read_only = " RO"
+read_only = " 🔒"
 truncation_length = 4
 truncate_to_repo = false
 
 [character]
-success_symbol = "[>](purple)"
-error_symbol = "[>](red)"
+success_symbol = "[❯](purple)"
+error_symbol = "[❯](red)"
 
 [git_branch]
-symbol = "* "
+symbol = "🌱 "
 format = "[$symbol$branch]($style) "
 style = "bright-green"
 
@@ -40,6 +40,5 @@ format = "[$duration]($style) "
 style = "yellow"
 
 [python]
-symbol = "py "
+symbol = "🐍 "
 format = "[${symbol}${pyenv_prefix}(${version} )(${virtualenv} )]($style)"
-
