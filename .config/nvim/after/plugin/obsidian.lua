@@ -36,15 +36,15 @@ require("obsidian").setup({
 
 	daily_notes = {
 		-- Optional, if you keep daily notes in a separate directory.
-		folder = "notes/dailies",
+		folder = "notes",
 		-- Optional, if you want to change the date format for the ID of daily notes.
 		date_format = "%Y-%m-%d",
 		-- Optional, if you want to change the date format of the default alias of daily notes.
-		alias_format = "%B %-d, %Y",
+		alias_format = "daily %B %-d, %Y",
 		-- Optional, default tags to add to each new daily note created.
-		default_tags = { "daily-notes" },
+		default_tags = { "daily" },
 		-- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-		template = nil
+		template = nil,
 	},
 
 	-- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
@@ -78,7 +78,7 @@ require("obsidian").setup({
 				return require("obsidian").util.smart_action()
 			end,
 			opts = { buffer = true, expr = true },
-		}
+		},
 	},
 
 	-- Where to put new notes. Valid options are
@@ -182,7 +182,7 @@ require("obsidian").setup({
 	-- file it will be ignored but you can customize this behavior here.
 	---@param img string
 	follow_img_func = function(img)
-		vim.fn.jobstart { "qlmanage", "-p", img } -- Mac OS quick look preview
+		vim.fn.jobstart({ "qlmanage", "-p", img }) -- Mac OS quick look preview
 		-- vim.fn.jobstart({"xdg-open", url})  -- linux
 		-- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
 	end,
@@ -259,7 +259,7 @@ require("obsidian").setup({
 	-- Optional, configure additional syntax highlighting / extmarks.
 	-- This requires you have `conceallevel` set to 1 or 2. See `:help conceallevel` for more details.
 	ui = {
-		enable = false,       -- set to false to disable all additional syntax features
+		enable = false, -- set to false to disable all additional syntax features
 		update_debounce = 200, -- update delay after a text change (in milliseconds)
 		max_file_length = 5000, -- disable UI features for files with more than this many lines
 		-- Define how various check-boxes are displayed
