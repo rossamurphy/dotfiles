@@ -1,6 +1,7 @@
 return {
 	-- Core plugins
 	"jpalardy/vim-slime",
+	'ryanoasis/vim-devicons',
 	"williamboman/mason.nvim",
 	"christoomey/vim-tmux-navigator",
 	{
