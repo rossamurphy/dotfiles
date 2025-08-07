@@ -13,7 +13,6 @@ local ensure_installed = {
 	"prettierd", -- Faster prettier daemon
 	"goimports", -- Go imports formatter
 	"gofumpt", -- Go formatter
-	"goimports", -- Go imports
 	"gopls", -- Go language server
 	"golangci-lint", -- Go linter
 	"codespell", -- Spell checker for code
