@@ -1,6 +1,6 @@
-local lsp_zero = require('lsp-zero')
+local lsp_zero = require("lsp-zero")
 
-lsp_zero.preset({ name = 'recommended', set_lsp_keymaps = false })
+lsp_zero.preset({ name = "recommended", set_lsp_keymaps = false })
 
 lsp_zero.on_attach(function(client, bufnr)
 	-- see :help lsp-zero-keybindings
@@ -8,20 +8,32 @@ lsp_zero.on_attach(function(client, bufnr)
 	lsp_zero.default_keymaps({ buffer = bufnr })
 end)
 
-require('mason').setup({})
-require('mason-lspconfig').setup({
+require("mason").setup({})
+require("mason-lspconfig").setup({
 	-- Replace the language servers listed here
 	-- with the ones you want to install
-	ensure_installed = { 'rust_analyzer', 'lua_ls', 'eslint', 'gopls', 'jsonls', 'marksman', 'pyright', 'ruff_lsp', 'taplo', 'terraformls', 'yamlls' },
+	ensure_installed = {
+		"rust_analyzer",
+		"lua_ls",
+		"eslint",
+		"gopls",
+		"jsonls",
+		"marksman",
+		"pyright",
+		"ruff",
+		"taplo",
+		"terraformls",
+		"yamlls",
+	},
 	handlers = {
 		lsp_zero.default_setup,
 
 		function(server_name)
-			require('lspconfig')[server_name].setup({})
+			require("lspconfig")[server_name].setup({})
 		end,
 
 		pyright = function()
-			require('lspconfig').pyright.setup({
+			require("lspconfig").pyright.setup({
 				settings = {
 					pyright = {
 						-- Using Ruff's import organizer
@@ -34,16 +46,16 @@ require('mason-lspconfig').setup({
 							-- ignore = { '*' },
 							extraPaths = { "." },
 						},
-					}
+					},
 				},
 			})
 		end,
 
 		ruff = function()
-			require('lspconfig').ruff.setup({
+			require("lspconfig").ruff.setup({
 				settings = {
 					ruff = {
-						configurationPreference = "filesystemFirst"
+						configurationPreference = "filesystemFirst",
 					},
 				},
 			})
@@ -90,27 +102,21 @@ end
 --     print("Poetry virtual environment not found.")
 -- end
 
-
-
-
-
-local cmp = require('cmp')
+local cmp = require("cmp")
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
 local cmp_mappings = lsp_zero.defaults.cmp_mappings({
-	['<C-b>'] = cmp.mapping.select_prev_item(cmp_select),
-	['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+	["<C-b>"] = cmp.mapping.select_prev_item(cmp_select),
+	["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
 })
-
 
 cmp.setup({
 	mapping = {
-		['<space>'] = cmp.mapping.confirm({ select = false }),
+		["<space>"] = cmp.mapping.confirm({ select = false }),
 	},
 	enabled = function()
-		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
-				or require("cmp_dap").is_dap_buffer()
-	end
+		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
+	end,
 })
 
 cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
@@ -121,26 +127,45 @@ cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 
 lsp_zero.on_attach(function(client, bufnr)
 	local opts = { buffer = bufnr, remap = false }
-	vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-	vim.keymap.set("n", "<F2>", function() vim.lsp.buf.rename() end, opts)
-	vim.keymap.set("n", "<leader>b", function() vim.lsp.buf.definition() end, opts)
-	vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
-	vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-	vim.keymap.set("n", "]d", function() vim.diagnostic.goto_next() end, opts)
-	vim.keymap.set("n", "[d", function() vim.diagnostic.goto_prev() end, opts)
-	vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
-	vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
-	vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
+	vim.keymap.set("n", "gd", function()
+		vim.lsp.buf.definition()
+	end, opts)
+	vim.keymap.set("n", "<F2>", function()
+		vim.lsp.buf.rename()
+	end, opts)
+	vim.keymap.set("n", "<leader>b", function()
+		vim.lsp.buf.definition()
+	end, opts)
+	vim.keymap.set("n", "<leader>vws", function()
+		vim.lsp.buf.workspace_symbol()
+	end, opts)
+	vim.keymap.set("n", "<leader>vd", function()
+		vim.diagnostic.open_float()
+	end, opts)
+	vim.keymap.set("n", "]d", function()
+		vim.diagnostic.goto_next()
+	end, opts)
+	vim.keymap.set("n", "[d", function()
+		vim.diagnostic.goto_prev()
+	end, opts)
+	vim.keymap.set("n", "<leader>vca", function()
+		vim.lsp.buf.code_action()
+	end, opts)
+	vim.keymap.set("n", "<leader>vrr", function()
+		vim.lsp.buf.references()
+	end, opts)
+	vim.keymap.set("n", "<leader>vrn", function()
+		vim.lsp.buf.rename()
+	end, opts)
 end)
 
-
 lsp_zero.set_sign_icons({
-	error = '✘',
-	warn = '▲',
-	hint = '⚑',
-	info = '»'
+	error = "✘",
+	warn = "▲",
+	hint = "⚑",
+	info = "»",
 })
 
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+require("lspconfig").lua_ls.setup(lsp_zero.nvim_lua_ls())
 
 lsp_zero.setup()
