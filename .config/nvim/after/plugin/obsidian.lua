@@ -366,3 +366,8 @@ end)
 vim.keymap.set("n", "<Leader>ot", function()
 	vim.cmd("ObsidianTags")
 end)
+
+vim.keymap.set("n", "<Leader>fo", function()
+	-- to search by alias / tag
+	vim.cmd("ObsidianSearch")
+end)
