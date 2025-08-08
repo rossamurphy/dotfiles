@@ -23,6 +23,27 @@ require("obsidian").setup({
 		},
 	},
 
+	note_id_func = function(title)
+		-- Generate a YYYY-MM-DD-TIME formatted timestamp
+		local timestamp = os.date("%Y-%m-%d-%H%M%S")
+
+		-- Generate 6-digit random alphanumeric string
+		local chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+		local random_suffix = ""
+		math.randomseed(os.time() + os.clock() * 1000000) -- Better seed
+		for i = 1, 6 do
+			local rand_index = math.random(1, #chars)
+			random_suffix = random_suffix .. chars:sub(rand_index, rand_index)
+		end
+
+		if title ~= nil then
+			-- If title is provided (like from a template), put it first
+			return title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower() .. "-" .. timestamp .. "-" .. random_suffix
+		else
+			-- Default behavior for notes without templates
+			return timestamp .. "-" .. random_suffix
+		end
+	end,
 	-- Alternatively - and for backwards compatibility - you can set 'dir' to a single path instead of
 	-- 'workspaces'. For example:
 	-- dir = "~/vaults/work",
@@ -87,8 +108,6 @@ require("obsidian").setup({
 	new_notes_location = "notes_subdir",
 
 	-- Optional, customize how note IDs are generated given an optional title.
-	---@param title string|?
-	---@return string
 	note_id_func = function(title)
 		-- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
 		-- In this case a note with the title 'My new note' will be given an ID that looks
@@ -327,3 +346,23 @@ require("obsidian").setup({
 		end,
 	},
 })
+
+vim.keymap.set("n", "<Leader>ont", function()
+	vim.cmd("ObsidianNewFromTemplate")
+end)
+
+vim.keymap.set("n", "<Leader>onb", function()
+	vim.cmd("ObsidianNew")
+end)
+
+vim.keymap.set("n", "<Leader>od", function()
+	vim.cmd("ObsidianDailies")
+end)
+
+vim.keymap.set("n", "<Leader>op", function()
+	vim.cmd("ObsidianPasteImg")
+end)
+
+vim.keymap.set("n", "<Leader>ot", function()
+	vim.cmd("ObsidianTags")
+end)
