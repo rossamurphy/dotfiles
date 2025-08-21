@@ -61,11 +61,11 @@ require("oil").setup({
 		["g?"] = { "actions.show_help", mode = "n" },
 		["<CR>"] = "actions.select",
 		["<C-s>"] = { "actions.select", opts = { vertical = true } },
-		-- ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+		["<C-h>"] = false,
 		["<C-t>"] = { "actions.select", opts = { tab = true } },
 		["<C-p>"] = "actions.preview",
 		["<C-c>"] = { "actions.close", mode = "n" },
-		["<C-l>"] = "actions.refresh",
+		["<C-l>"] = false,
 		["-"] = { "actions.parent", mode = "n" },
 		["_"] = { "actions.open_cwd", mode = "n" },
 		["`"] = { "actions.cd", mode = "n" },
@@ -76,10 +76,10 @@ require("oil").setup({
 		["g\\"] = { "actions.toggle_trash", mode = "n" },
 	},
 	-- Set to false to disable all of the above keymaps
-	use_default_keymaps = true,
+	use_default_keymaps = false,
 	view_options = {
 		-- Show files and directories that start with "."
-		show_hidden = false,
+		show_hidden = true,
 		-- This function defines what is considered a "hidden" file
 		is_hidden_file = function(name, bufnr)
 			local m = name:match("^%.")
@@ -200,3 +200,33 @@ require("oil").setup({
 		border = "rounded",
 	},
 })
+
+-- FORCE REMOVE THE UNWANTED KEYMAPS
+-- This runs after setup to ensure the keymaps are definitely gone
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "oil",
+	callback = function(args)
+		local buf = args.buf
+		-- Force delete the keymaps we don't want
+		pcall(vim.keymap.del, "n", "<C-h>", { buffer = buf })
+		pcall(vim.keymap.del, "n", "<C-l>", { buffer = buf })
+
+		-- Debug: print what keymaps exist (remove this after testing)
+		-- local keymaps = vim.api.nvim_buf_get_keymap(buf, "n")
+		-- for _, keymap in ipairs(keymaps) do
+		--     if keymap.lhs == "<C-h>" or keymap.lhs == "<C-l>" then
+		--         print("Found keymap:", vim.inspect(keymap))
+		--     end
+		-- end
+	end,
+})
+
+-- Also remove from any existing oil buffers
+vim.schedule(function()
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].filetype == "oil" then
+			pcall(vim.keymap.del, "n", "<C-h>", { buffer = buf })
+			pcall(vim.keymap.del, "n", "<C-l>", { buffer = buf })
+		end
+	end
+end)
