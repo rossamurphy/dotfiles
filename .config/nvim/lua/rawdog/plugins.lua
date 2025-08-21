@@ -1,7 +1,6 @@
 return {
 	-- Core plugins
 	"jpalardy/vim-slime",
-	"williamboman/mason.nvim",
 	"christoomey/vim-tmux-navigator",
 	{
 		"davidmh/mdx.nvim",
@@ -206,21 +205,18 @@ return {
 		end
 	},
 
-	-- LSP Configuration
 	{
-		"VonHeikemen/lsp-zero.nvim",
-		branch = "v2.x",
+		"neovim/nvim-lspconfig",
 		dependencies = {
-			-- LSP Support
-			"neovim/nvim-lspconfig",
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
-
-			-- Autocompletion
-			"hrsh7th/nvim-cmp",
 			"hrsh7th/cmp-nvim-lsp",
-			"L3MON4D3/LuaSnip",
-			"rcarriga/cmp-dap",
+			'hrsh7th/cmp-nvim-lsp',
+			'hrsh7th/cmp-buffer',
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-cmdline',
+			'hrsh7th/cmp-dap',
+			'hrsh7th/nvim-cmp'
 		}
 	},
 }
