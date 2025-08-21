@@ -5,11 +5,11 @@ return {
 	{
 		"davidmh/mdx.nvim",
 		config = true,
-		dependencies = { "nvim-treesitter/nvim-treesitter" }
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
 	},
 	{
-		'MeanderingProgrammer/render-markdown.nvim',
-		dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
+		"MeanderingProgrammer/render-markdown.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
 		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
 		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
 		---@module 'render-markdown'
@@ -39,16 +39,8 @@ return {
 	},
 	"renerocksai/calendar-vim",
 	{
-		"iamcco/markdown-preview.nvim",
-		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		ft = { "markdown" },
-		build = function() vim.fn["mkdp#util#install"]() end,
-	},
-	{
-		'stevearc/oil.nvim',
+		"stevearc/oil.nvim",
 		---@module 'oil'
-		---@type oil.SetupOpts
-		opts = {},
 		-- Optional dependencies
 		dependencies = { { "echasnovski/mini.icons", opts = {} } },
 		-- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
@@ -58,7 +50,7 @@ return {
 
 	{
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" }
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 
 	{
@@ -79,9 +71,9 @@ return {
 			require("octo").setup({
 				suppress_missing_scope = {
 					projects_v2 = true,
-				}
+				},
 			})
-		end
+		end,
 	},
 
 	"tpope/vim-dotenv",
@@ -89,7 +81,7 @@ return {
 
 	{
 		"kristijanhusak/vim-dadbod-completion",
-		ft = { "sql", "mysql", "plsql" }
+		ft = { "sql", "mysql", "plsql" },
 	},
 
 	"nvim-neotest/nvim-nio",
@@ -110,7 +102,7 @@ return {
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = {}
+		opts = {},
 	},
 
 	"sindrets/diffview.nvim",
@@ -119,13 +111,13 @@ return {
 	-- Debug plugins
 	{
 		"mxsdev/nvim-dap-vscode-js",
-		dependencies = { "mfussenegger/nvim-dap" }
+		dependencies = { "mfussenegger/nvim-dap" },
 	},
 
 	{
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.2",
-		dependencies = { "nvim-lua/plenary.nvim" }
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 
 	"folke/neodev.nvim",
@@ -135,8 +127,8 @@ return {
 		dependencies = {
 			"MunifTanjim/nui.nvim",
 			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope.nvim"
-		}
+			"nvim-telescope/telescope.nvim",
+		},
 	},
 
 	{
@@ -144,8 +136,8 @@ return {
 		dependencies = {
 			"rcarriga/nvim-dap-ui",
 			"mfussenegger/nvim-dap-python",
-			"theHamsta/nvim-dap-virtual-text"
-		}
+			"theHamsta/nvim-dap-virtual-text",
+		},
 	},
 
 	-- Neo-tree with minimal configuration
@@ -170,12 +162,12 @@ return {
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
-		priority = 1000
+		priority = 1000,
 	},
 
 	{
 		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate"
+		build = ":TSUpdate",
 	},
 
 	"nvim-treesitter/playground",
@@ -188,8 +180,8 @@ return {
 		"phaazon/hop.nvim",
 		branch = "v2",
 		config = function()
-			require("hop").setup { keys = "etovxqpdygfblzhckisuran" }
-		end
+			require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
+		end,
 	},
 
 	"tpope/vim-fugitive",
@@ -202,7 +194,7 @@ return {
 			require("Comment").setup({
 				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 			})
-		end
+		end,
 	},
 
 	{
