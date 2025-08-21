@@ -3,78 +3,62 @@
 -- First, make sure the necessary plugins are available
 local status_ok, lspconfig = pcall(require, "lspconfig")
 if not status_ok then
-  return
+	return
 end
 
 local cmp_status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not cmp_status_ok then
-  return
+	return
 end
 
-local cmp = require("cmp")
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local function focus_hover()
+	vim.lsp.buf.hover()
+	-- This is a robust way to find and focus the hover window
+	-- that works on older Neovim versions.
+	for _, winid in ipairs(vim.api.nvim_list_wins()) do
+		local bufnr = vim.api.nvim_win_get_buf(winid)
+		-- LSP hover windows are typically 'nofile' buffers. This is how we find it.
+		if vim.bo[bufnr].buftype == "nofile" then
+			vim.api.nvim_set_current_win(winid)
+			return
+		end
+	end
+end
 
-local cmp_mappings = lsp_zero.defaults.cmp_mappings({
-	["<C-b>"] = cmp.mapping.select_prev_item(cmp_select),
-	["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-})
+-- This on_attach function defines your keymaps
+-- It will run once for each language server that starts
+local on_attach = function(client, bufnr)
+	local nmap = function(keys, func, desc)
+		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
+	end
 
-cmp.setup({
-	mapping = {
-		["<space>"] = cmp.mapping.confirm({ select = false }),
-	},
-	enabled = function()
-		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
-	end,
-})
+	-- All your requested keymaps
+	nmap("<leader>b", vim.lsp.buf.definition, "Go to Definition")
+	nmap("<leader>vd", vim.diagnostic.open_float, "View Diagnostics")
+	nmap("gI", vim.lsp.buf.implementation, "Go to Implementation")
+	nmap("gD", vim.lsp.buf.type_definition, "Go to Type Definition")
+	nmap("<leader>vk", vim.lsp.buf.hover, "Hover Docs")
+	nmap("<leader>vK", focus_hover, "Hover Docs (Focus)")
+	nmap("<leader>rn", vim.lsp.buf.rename, "Rename")
+	nmap("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+end
 
-cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-	sources = {
-		{ name = "dap" },
-	},
-})
+-- The list of servers to configure
+local servers = {
+	"lua_ls",
+	"pyright",
+	"rust_analyzer",
+	"vtsls",
+	"eslint",
+}
 
-lsp_zero.on_attach(function(client, bufnr)
-	local opts = { buffer = bufnr, remap = false }
-	vim.keymap.set("n", "gd", function()
-		vim.lsp.buf.definition()
-	end, opts)
-	vim.keymap.set("n", "<F2>", function()
-		vim.lsp.buf.rename()
-	end, opts)
-	vim.keymap.set("n", "<leader>b", function()
-		vim.lsp.buf.definition()
-	end, opts)
-	vim.keymap.set("n", "<leader>vws", function()
-		vim.lsp.buf.workspace_symbol()
-	end, opts)
-	vim.keymap.set("n", "<leader>vd", function()
-		vim.diagnostic.open_float()
-	end, opts)
-	vim.keymap.set("n", "]d", function()
-		vim.diagnostic.goto_next()
-	end, opts)
-	vim.keymap.set("n", "[d", function()
-		vim.diagnostic.goto_prev()
-	end, opts)
-	vim.keymap.set("n", "<leader>vca", function()
-		vim.lsp.buf.code_action()
-	end, opts)
-	vim.keymap.set("n", "<leader>vrr", function()
-		vim.lsp.buf.references()
-	end, opts)
-	vim.keymap.set("n", "<leader>vrn", function()
-		vim.lsp.buf.rename()
-	end, opts)
-end)
+-- Get the default capabilities for autocompletion
+local capabilities = cmp_nvim_lsp.default_capabilities()
 
-lsp_zero.set_sign_icons({
-	error = "✘",
-	warn = "▲",
-	hint = "⚑",
-	info = "»",
-})
-
-require("lspconfig").lua_ls.setup(lsp_zero.nvim_lua_ls())
-
-lsp_zero.setup()
+-- Loop through the servers and configure them with lspconfig
+for _, server_name in ipairs(servers) do
+	lspconfig[server_name].setup({
+		on_attach = on_attach,
+		capabilities = capabilities,
+	})
+end
