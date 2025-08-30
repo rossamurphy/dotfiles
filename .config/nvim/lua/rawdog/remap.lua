@@ -61,4 +61,4 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- being able to split vim windows similar to how I split tmux windows
 vim.keymap.set("n", "<C-w>|", "<C-w>v", { desc = "Split window vertically" })
-vim.keymap.set("n", "<C-w>'", "<C-w>s", { desc = "Split window horizontally" })
+vim.keymap.set("n", '<C-w>"', "<C-w>s", { desc = "Split window horizontally" })
