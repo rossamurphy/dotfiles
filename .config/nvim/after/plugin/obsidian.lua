@@ -23,6 +23,27 @@ require("obsidian").setup({
 		},
 	},
 
+	note_id_func = function(title)
+		-- Generate a YYYY-MM-DD-TIME formatted timestamp
+		local timestamp = os.date("%Y-%m-%d-%H%M%S")
+
+		-- Generate 6-digit random alphanumeric string
+		local chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+		local random_suffix = ""
+		math.randomseed(os.time() + os.clock() * 1000000) -- Better seed
+		for i = 1, 6 do
+			local rand_index = math.random(1, #chars)
+			random_suffix = random_suffix .. chars:sub(rand_index, rand_index)
+		end
+
+		if title ~= nil then
+			-- If title is provided (like from a template), put it first
+			return title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower() .. "-" .. timestamp .. "-" .. random_suffix
+		else
+			-- Default behavior for notes without templates
+			return timestamp .. "-" .. random_suffix
+		end
+	end,
 	-- Alternatively - and for backwards compatibility - you can set 'dir' to a single path instead of
 	-- 'workspaces'. For example:
 	-- dir = "~/vaults/work",
@@ -36,15 +57,15 @@ require("obsidian").setup({
 
 	daily_notes = {
 		-- Optional, if you keep daily notes in a separate directory.
-		folder = "notes/dailies",
+		folder = "notes",
 		-- Optional, if you want to change the date format for the ID of daily notes.
 		date_format = "%Y-%m-%d",
 		-- Optional, if you want to change the date format of the default alias of daily notes.
-		alias_format = "%B %-d, %Y",
+		alias_format = "daily %B %-d, %Y",
 		-- Optional, default tags to add to each new daily note created.
-		default_tags = { "daily-notes" },
+		default_tags = { "daily" },
 		-- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-		template = nil
+		template = nil,
 	},
 
 	-- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
@@ -78,7 +99,7 @@ require("obsidian").setup({
 				return require("obsidian").util.smart_action()
 			end,
 			opts = { buffer = true, expr = true },
-		}
+		},
 	},
 
 	-- Where to put new notes. Valid options are
@@ -87,8 +108,6 @@ require("obsidian").setup({
 	new_notes_location = "notes_subdir",
 
 	-- Optional, customize how note IDs are generated given an optional title.
-	---@param title string|?
-	---@return string
 	note_id_func = function(title)
 		-- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
 		-- In this case a note with the title 'My new note' will be given an ID that looks
@@ -182,7 +201,7 @@ require("obsidian").setup({
 	-- file it will be ignored but you can customize this behavior here.
 	---@param img string
 	follow_img_func = function(img)
-		vim.fn.jobstart { "qlmanage", "-p", img } -- Mac OS quick look preview
+		vim.fn.jobstart({ "qlmanage", "-p", img }) -- Mac OS quick look preview
 		-- vim.fn.jobstart({"xdg-open", url})  -- linux
 		-- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
 	end,
@@ -259,7 +278,7 @@ require("obsidian").setup({
 	-- Optional, configure additional syntax highlighting / extmarks.
 	-- This requires you have `conceallevel` set to 1 or 2. See `:help conceallevel` for more details.
 	ui = {
-		enable = false,       -- set to false to disable all additional syntax features
+		enable = false, -- set to false to disable all additional syntax features
 		update_debounce = 200, -- update delay after a text change (in milliseconds)
 		max_file_length = 5000, -- disable UI features for files with more than this many lines
 		-- Define how various check-boxes are displayed
@@ -327,3 +346,28 @@ require("obsidian").setup({
 		end,
 	},
 })
+
+vim.keymap.set("n", "<Leader>ont", function()
+	vim.cmd("ObsidianNewFromTemplate")
+end)
+
+vim.keymap.set("n", "<Leader>onb", function()
+	vim.cmd("ObsidianNew")
+end)
+
+vim.keymap.set("n", "<Leader>od", function()
+	vim.cmd("ObsidianDailies")
+end)
+
+vim.keymap.set("n", "<Leader>op", function()
+	vim.cmd("ObsidianPasteImg")
+end)
+
+vim.keymap.set("n", "<Leader>ot", function()
+	vim.cmd("ObsidianTags")
+end)
+
+vim.keymap.set("n", "<Leader>fo", function()
+	-- to search by alias / tag
+	vim.cmd("ObsidianSearch")
+end)
