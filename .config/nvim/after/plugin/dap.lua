@@ -359,17 +359,6 @@ vim.keymap.set("n", "<Leader>ds", function()
 	widgets.centered_float(widgets.scopes)
 end)
 
-require("cmp").setup({
-	enabled = function()
-		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
-	end,
-})
-
-require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-	sources = {
-		{ name = "dap" },
-	},
-})
 
 -- when you want to zoom in on a particular window in the debug ui, navigate to the window, and do:
 -- :tab split
