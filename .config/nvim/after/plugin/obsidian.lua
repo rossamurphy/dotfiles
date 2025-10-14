@@ -72,8 +72,8 @@ require("obsidian").setup({
 	completion = {
 		-- Set to false to disable completion.
 		nvim_cmp = true,
-		-- Trigger completion at 2 chars.
-		min_chars = 2,
+		-- Trigger completion at 1 char.
+		min_chars = 1,
 	},
 
 	-- Optional, configure key mappings. These are the defaults. If you don't want to set any keymappings this

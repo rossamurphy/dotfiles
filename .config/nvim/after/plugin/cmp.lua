@@ -53,3 +53,11 @@ cmp.setup.filetype("lua", {
 		{ name = "buffer" },
 	}),
 })
+
+cmp.setup.filetype("markdown", {
+	sources = cmp.config.sources({
+		{ name = "nvim_lsp" },
+		{ name = "path" },
+		-- Obsidian.nvim provides its own completion source
+	}),
+})
