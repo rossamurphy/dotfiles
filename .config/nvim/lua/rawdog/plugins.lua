@@ -1,6 +1,18 @@
 return {
 	-- Core plugins
 	"jpalardy/vim-slime",
+	"HakonHarnes/img-clip.nvim",
+	"vhyrro/luarocks.nvim",
+	"3rd/image.nvim",
+	{
+		"iamcco/markdown-preview.nvim",
+		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		build = "cd app && yarn install",
+		init = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+		end,
+		ft = { "markdown" },
+	},
 	"christoomey/vim-tmux-navigator",
 	{
 		"davidmh/mdx.nvim",
