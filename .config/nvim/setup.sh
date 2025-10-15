@@ -33,6 +33,7 @@ brew install node
 brew install yarn
 brew install imagemagick  # For img-clip.nvim image conversion
 brew install python3
+brew install pipx  # For installing Python CLI tools globally
 
 echo ""
 echo "Installing language servers and formatters..."
@@ -57,6 +58,14 @@ echo "----------------------------"
 
 # Python provider for Neovim
 python3 -m pip install --user --upgrade pynvim
+
+echo ""
+echo "Installing LaTeX rendering support..."
+echo "-------------------------------------"
+
+# Install pylatexenc for inline LaTeX rendering in markdown
+pipx install pylatexenc
+pipx ensurepath
 
 echo ""
 echo "Building Neovim plugin dependencies..."

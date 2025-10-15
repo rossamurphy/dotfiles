@@ -363,6 +363,10 @@ vim.keymap.set("n", "<Leader>op", function()
 	vim.cmd("ObsidianPasteImg")
 end)
 
+vim.keymap.set("n", "<Leader>os", function()
+	vim.cmd("ObsidianSearch")
+end)
+
 vim.keymap.set("n", "<Leader>ot", function()
 	vim.cmd("ObsidianTags")
 end)
