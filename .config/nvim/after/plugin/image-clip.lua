@@ -47,7 +47,7 @@ require("img-clip").setup({
 		-- -- If you don't specify the output format, you won't see the size decrease
 
 		extension = "avif", ---@type string
-		process_cmd = "convert - -quality 75 avif:-", ---@type string
+		process_cmd = "convert - -quality 100 avif:-", ---@type string
 
 		-- extension = "webp", ---@type string
 		-- process_cmd = "convert - -quality 75 webp:-", ---@type string
