@@ -1,3 +1,6 @@
+-- Set PATH to include TeX binaries and local bin
+vim.env.PATH = vim.fn.expand('~/.local/bin') .. ':' .. '/Library/TeX/texbin' .. ':' .. vim.env.PATH
+
 -- Bootstrap lazy.nvim
 require("rawdog.set")
 require("rawdog.remap")

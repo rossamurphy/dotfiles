@@ -60,12 +60,28 @@ echo "----------------------------"
 python3 -m pip install --user --upgrade pynvim
 
 echo ""
-echo "Installing LaTeX rendering support..."
-echo "-------------------------------------"
+echo "Installing LaTeX support..."
+echo "---------------------------"
+
+# Install BasicTeX (lightweight LaTeX distribution)
+brew install --cask basictex
 
 # Install pylatexenc for inline LaTeX rendering in markdown
 pipx install pylatexenc
 pipx ensurepath
+
+# Install latexmk for VimTeX continuous compilation
+echo "Installing latexmk..."
+mkdir -p ~/.local/bin
+curl -L https://mirrors.ctan.org/support/latexmk/latexmk.pl -o ~/.local/bin/latexmk
+chmod +x ~/.local/bin/latexmk
+echo "✓ latexmk installed to ~/.local/bin/latexmk"
+
+# Install Skim PDF viewer (better than Preview for LaTeX)
+brew install --cask skim
+
+# Install typst (modern LaTeX alternative)
+brew install typst
 
 echo ""
 echo "Building Neovim plugin dependencies..."
