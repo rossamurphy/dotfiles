@@ -255,7 +255,73 @@ Create `all.lua` for snippets that work everywhere.
 - Check that the snippet trigger is correct (case-sensitive)
 - Ensure there's no conflicting Tab mapping
 
+## LaTeX Citations
+
+### Two Ways to Insert Citations
+
+**1. Auto-completion (cmp-vimtex)**
+- Type `\cite{` in insert mode
+- Completion menu appears automatically with bibliography entries
+- Use Tab/Shift-Tab to navigate, Space to confirm
+
+**2. Telescope Picker (telescope-bibtex)**
+- Press `<leader>lb` in normal mode
+- Opens searchable telescope window with all citations
+- Type to fuzzy search by author, title, year
+- Press Enter to insert citation at cursor
+
+### Setting Up Citations
+
+**In your `.tex` file preamble:**
+```latex
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{yourfile.bib}
+```
+
+**In your document:**
+```latex
+This is supported by research \cite{knuth1984literate}.
+
+% At the end of your document:
+\printbibliography
+```
+
+**Create a `.bib` file** in the same directory as your `.tex` file:
+```bibtex
+@article{knuth1984literate,
+  author  = {Knuth, Donald E.},
+  title   = {Literate Programming},
+  journal = {The Computer Journal},
+  year    = {1984},
+  volume  = {27},
+  number  = {2},
+  pages   = {97--111}
+}
+```
+
+See `example.bib` in this directory for more entry type examples (books, conference papers, theses, etc.).
+
+### BibTeX Entry Types
+
+Common entry types for `.bib` files:
+- `@article` - Journal articles
+- `@book` - Books
+- `@inproceedings` - Conference papers
+- `@phdthesis` / `@mastersthesis` - Theses
+- `@techreport` - Technical reports
+- `@online` - Websites
+- `@incollection` - Book chapters
+- `@misc` - Everything else
+
+### Citation Key Format
+
+Use a consistent format for citation keys (the part after `@article{`):
+- Common: `author_year_keyword` (e.g., `knuth1984literate`)
+- This is what you use in `\cite{knuth1984literate}`
+
 ## Resources
 
 - [LuaSnip Documentation](https://github.com/L3MON4D3/LuaSnip)
 - [LuaSnip Snippet Syntax](https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md)
+- [BibLaTeX Documentation](https://ctan.org/pkg/biblatex)
+- [VimTeX Documentation](https://github.com/lervag/vimtex)

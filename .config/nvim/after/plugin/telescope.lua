@@ -29,4 +29,20 @@ require('telescope').setup({
       },
     },
   },
+  extensions = {
+    bibtex = {
+      -- Depth for the *.bib file search (search parent directories)
+      depth = 2,
+      -- Custom format for citation label
+      custom_formats = {},
+      -- Format to use for citation label.
+      -- Options: 'plain', 'markdown', 'latex'
+      format = 'latex',
+      -- Use global .bib file search
+      global_files = {},
+      -- Context awareness: reads \addbibresource from current .tex file
+      context = true,
+      context_fallback = true,
+    },
+  },
 })
