@@ -72,8 +72,8 @@ require("obsidian").setup({
 	completion = {
 		-- Set to false to disable completion.
 		nvim_cmp = true,
-		-- Trigger completion at 2 chars.
-		min_chars = 2,
+		-- Trigger completion at 1 char.
+		min_chars = 1,
 	},
 
 	-- Optional, configure key mappings. These are the defaults. If you don't want to set any keymappings this
@@ -222,13 +222,13 @@ require("obsidian").setup({
 			-- Create a new note from your query.
 			new = "<C-x>",
 			-- Insert a link to the selected note.
-			insert_link = "<C-m>",
+			insert_link = "<C-l>",
 		},
 		tag_mappings = {
 			-- Add tag(s) to current note.
 			tag_note = "<C-x>",
 			-- Insert a tag at the current location.
-			insert_tag = "<C-m>",
+			insert_tag = "<C-l>",
 		},
 	},
 
@@ -363,6 +363,10 @@ vim.keymap.set("n", "<Leader>op", function()
 	vim.cmd("ObsidianPasteImg")
 end)
 
+vim.keymap.set("n", "<Leader>os", function()
+	vim.cmd("ObsidianSearch")
+end)
+
 vim.keymap.set("n", "<Leader>ot", function()
 	vim.cmd("ObsidianTags")
 end)
@@ -371,3 +375,4 @@ vim.keymap.set("n", "<Leader>fo", function()
 	-- to search by alias / tag
 	vim.cmd("ObsidianSearch")
 end)
+

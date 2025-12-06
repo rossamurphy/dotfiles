@@ -1,6 +1,27 @@
 return {
 	-- Core plugins
 	"jpalardy/vim-slime",
+	"HakonHarnes/img-clip.nvim",
+	"vhyrro/luarocks.nvim",
+	"3rd/image.nvim",
+	{
+		"lervag/vimtex",
+		lazy = false, -- we don't want to lazy load VimTeX
+		-- tag = "v2.15", -- uncomment to pin to a specific release
+		init = function()
+			-- VimTeX configuration goes here, e.g.
+			vim.g.vimtex_view_method = "zathura"
+		end,
+	},
+	{
+		"iamcco/markdown-preview.nvim",
+		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		build = "cd app && yarn install",
+		init = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+		end,
+		ft = { "markdown" },
+	},
 	"christoomey/vim-tmux-navigator",
 	{
 		"davidmh/mdx.nvim",
@@ -84,6 +105,12 @@ return {
 		ft = { "sql", "mysql", "plsql" },
 	},
 
+	-- VimTeX citation completion for nvim-cmp
+	{
+		"micangl/cmp-vimtex",
+		ft = "tex",
+	},
+
 	"nvim-neotest/nvim-nio",
 
 	{
@@ -118,6 +145,13 @@ return {
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.2",
 		dependencies = { "nvim-lua/plenary.nvim" },
+	},
+
+	-- Telescope extension for BibTeX citations
+	{
+		"nvim-telescope/telescope-bibtex.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+		ft = "tex",
 	},
 
 	"folke/neodev.nvim",
@@ -198,6 +232,15 @@ return {
 	},
 
 	{
+		"L3MON4D3/LuaSnip",
+		version = "v2.*",
+		build = "make install_jsregexp",
+		dependencies = {
+			"saadparwaiz1/cmp_luasnip", -- Snippet completion source for nvim-cmp
+		},
+	},
+
+	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"williamboman/mason.nvim",
@@ -208,6 +251,7 @@ return {
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
 			"hrsh7th/nvim-cmp",
+			"hrsh7th/cmp-nvim-lua",
 			"rcarriga/cmp-dap",
 		},
 	},

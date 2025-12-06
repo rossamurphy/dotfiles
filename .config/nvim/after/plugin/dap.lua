@@ -303,16 +303,16 @@ vim.fn.sign_define("DapBreakpoint", { text = "🚨", texthl = "", linehl = "", n
 vim.fn.sign_define("DapLogPoint", { text = "🪵", texthl = "", linehl = "", numhl = "Error" })
 vim.fn.sign_define("DapStopped", { text = "🎾", texthl = "", linehl = "", numhl = "" })
 
-vim.keymap.set("n", "<F5>", function()
+vim.keymap.set("n", "<Leader>dj", function()
 	require("dap").continue()
 end)
-vim.keymap.set("n", "<F8>", function()
+vim.keymap.set("n", "<Leader>do", function()
 	require("dap").step_over()
 end)
-vim.keymap.set("n", "<F9>", function()
+vim.keymap.set("n", "<Leader>di", function()
 	require("dap").step_into()
 end)
-vim.keymap.set("n", "<F10>", function()
+vim.keymap.set("n", "<Leader>de", function()
 	require("dap").step_out()
 end)
 -- now this is implemented by f3 via the persistent breakpoints plugin
@@ -321,18 +321,18 @@ end)
 vim.keymap.set("n", "<Leader>lp", function()
 	require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
 end)
-vim.keymap.set("n", "<Leader>dr", function()
+vim.keymap.set("n", "<Leader>dy", function()
 	require("dap").repl.open()
 end)
 vim.keymap.set("n", "<Leader>dl", function()
 	require("dap").run_last()
 end)
-vim.keymap.set("n", "<Leader>dc", function()
+vim.keymap.set("n", "<Leader>dk", function()
 	require("dap").run_to_cursor()
 end)
 
 -- ooootra vez
-vim.keymap.set("n", "<Leader>do", function()
+vim.keymap.set("n", "<Leader>dr", function()
 	require("dap").restart()
 end)
 -- quit
@@ -359,17 +359,6 @@ vim.keymap.set("n", "<Leader>ds", function()
 	widgets.centered_float(widgets.scopes)
 end)
 
-require("cmp").setup({
-	enabled = function()
-		return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer()
-	end,
-})
-
-require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-	sources = {
-		{ name = "dap" },
-	},
-})
 
 -- when you want to zoom in on a particular window in the debug ui, navigate to the window, and do:
 -- :tab split
