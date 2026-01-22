@@ -105,6 +105,12 @@ return {
 		ft = { "sql", "mysql", "plsql" },
 	},
 
+	-- VimTeX citation completion for nvim-cmp
+	{
+		"micangl/cmp-vimtex",
+		ft = "tex",
+	},
+
 	"nvim-neotest/nvim-nio",
 
 	{
@@ -139,6 +145,13 @@ return {
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.2",
 		dependencies = { "nvim-lua/plenary.nvim" },
+	},
+
+	-- Telescope extension for BibTeX citations
+	{
+		"nvim-telescope/telescope-bibtex.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+		ft = "tex",
 	},
 
 	"folke/neodev.nvim",

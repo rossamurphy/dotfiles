@@ -375,3 +375,4 @@ vim.keymap.set("n", "<Leader>fo", function()
 	-- to search by alias / tag
 	vim.cmd("ObsidianSearch")
 end)
+

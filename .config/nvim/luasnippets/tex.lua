@@ -266,6 +266,36 @@ return {
 		i(0),
 	}),
 
+	-- Bold text in math mode
+	s("mathbf", {
+		t("\\mathbf{"),
+		i(1),
+		t("}"),
+		i(0),
+	}),
+
+	s("bf", {
+		t("\\mathbf{"),
+		i(1),
+		t("}"),
+		i(0),
+	}),
+
+	-- Roman text in math mode
+	s("mathrm", {
+		t("\\mathrm{"),
+		i(1),
+		t("}"),
+		i(0),
+	}),
+
+	s("rm", {
+		t("\\mathrm{"),
+		i(1),
+		t("}"),
+		i(0),
+	}),
+
 	-- Cases
 	s("cases", {
 		t({"\\begin{cases}", "\t"}),

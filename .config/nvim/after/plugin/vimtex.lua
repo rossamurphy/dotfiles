@@ -44,3 +44,42 @@ vim.keymap.set('n', '<leader>lv', '<cmd>VimtexView<cr>', { desc = 'View PDF' })
 vim.keymap.set('n', '<leader>lt', '<cmd>VimtexTocToggle<cr>', { desc = 'Toggle TOC' })
 vim.keymap.set('n', '<leader>lk', '<cmd>VimtexStop<cr>', { desc = 'Stop compilation' })
 vim.keymap.set('n', '<leader>le', '<cmd>VimtexErrors<cr>', { desc = 'Show errors' })
+
+-- ============================================================================
+-- Citations Setup (cmp-vimtex + telescope-bibtex)
+-- ============================================================================
+-- Two ways to insert citations:
+--
+-- 1. AUTO-COMPLETION (cmp-vimtex):
+--    - Type \cite{ in insert mode
+--    - Completion menu appears automatically with bibliography entries
+--    - Use Tab/Shift-Tab to navigate, Space to confirm
+--
+-- 2. TELESCOPE PICKER (telescope-bibtex):
+--    - Press <leader>lb in normal mode
+--    - Opens searchable telescope window with all citations
+--    - Type to fuzzy search by author, title, year
+--    - Press Enter to insert citation at cursor
+--
+-- REQUIREMENTS:
+--    - .bib file in same directory as your .tex file
+--    - Add to .tex preamble:
+--      \usepackage[backend=biber,style=numeric]{biblatex}
+--      \addbibresource{yourfile.bib}
+--    - Add \printbibliography where you want bibliography to appear
+--    - Cite works with \cite{citation_key} in your document
+--
+-- See example.bib in ~/.config/nvim/luasnippets/ for .bib file format examples
+-- ============================================================================
+
+-- Telescope-bibtex setup for citation picker
+local ok, telescope = pcall(require, 'telescope')
+if ok then
+	telescope.load_extension('bibtex')
+	-- <leader>lb - Browse and insert citations via telescope picker
+	vim.keymap.set('n', '<leader>lb', function()
+		require('telescope').extensions.bibtex.bibtex({
+			search_keys = { 'author', 'title', 'year' },
+		})
+	end, { desc = 'Browse citations' })
+end

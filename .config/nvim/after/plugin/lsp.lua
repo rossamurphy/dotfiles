@@ -50,6 +50,7 @@ local servers = {
 	"rust_analyzer",
 	"vtsls",
 	"eslint",
+	"gopls",
 }
 
 -- Get the default capabilities for autocompletion
