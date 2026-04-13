@@ -25,7 +25,6 @@ return {
 	"christoomey/vim-tmux-navigator",
 	{
 		"davidmh/mdx.nvim",
-		config = true,
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 	},
 	{
@@ -220,14 +219,10 @@ return {
 
 	"tpope/vim-fugitive",
 	"ellisonleao/gruvbox.nvim",
-	"JoosepAlviste/nvim-ts-context-commentstring",
-
 	{
 		"numToStr/Comment.nvim",
 		config = function()
-			require("Comment").setup({
-				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-			})
+			require("Comment").setup()
 		end,
 	},
 
