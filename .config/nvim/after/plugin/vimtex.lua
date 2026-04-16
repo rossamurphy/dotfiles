@@ -3,7 +3,13 @@
 
 -- Set the PDF viewer to use (macOS uses Skim or Preview)
 -- Options: 'skim', 'zathura', 'general' (for Preview.app)
-vim.g.vimtex_view_method = 'skim' -- Use Skim if installed, otherwise use Preview
+vim.g.vimtex_view_method = 'skim'
+
+-- Don't steal focus from nvim when Skim refreshes on recompile.
+vim.g.vimtex_view_skim_activate = 0
+-- Skim auto-reloads the PDF on disk change (enable "Check for file changes"
+-- in Skim > Preferences > Sync). No CursorHold autofollow — that caused
+-- thrashing refreshes. Forward-sync still available on demand via <leader>lv.
 
 -- If Skim is not installed, fall back to macOS Preview
 vim.g.vimtex_view_general_viewer = 'open'
