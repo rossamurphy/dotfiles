@@ -1,6 +1,7 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("i", "jj", "<Esc>", {})
+vim.keymap.set({ "i", "c" }, "<M-3>", "#", { desc = "Insert #" })
 vim.keymap.set("n", "J", "}", {})
 vim.keymap.set("n", "K", "{", {})
 vim.keymap.set("v", "J", "}", {})

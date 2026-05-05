@@ -573,6 +573,7 @@ require('render-markdown').setup({
 		-- | priority  | optional used when multiple match, uses pattern length if empty |
 		-- | highlight | optional highlight for 'icon', uses fallback highlight if empty |
 		custom = {
+			anchor = { pattern = '^#', icon = '󰉫 ' },
 			web = { pattern = '^http', icon = '󰖟 ' },
 			discord = { pattern = 'discord%.com', icon = '󰙯 ' },
 			github = { pattern = 'github%.com', icon = '󰊤 ' },

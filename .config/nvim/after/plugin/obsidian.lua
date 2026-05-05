@@ -79,7 +79,7 @@ require("obsidian").setup({
 			action = function()
 				local util = require("obsidian").util
 				if util.cursor_on_markdown_link(nil, nil, true) then
-					return "<cmd>ObsidianFollowLink<CR>"
+					return "<cmd>normal! m'<CR><cmd>ObsidianFollowLink<CR>"
 				end
 				local line = vim.api.nvim_get_current_line()
 				if line:match("^%s*[-*+]%s+%[.%]") or line:match("^%s*%d+%.%s+%[.%]") then
