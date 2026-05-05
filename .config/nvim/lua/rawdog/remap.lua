@@ -79,7 +79,25 @@ vim.keymap.set("n", "<C-l>", ":wincmd l<CR>")
 
 vim.keymap.set("n", "<leader>4", "i# !#!#!#!#!#!#!#!#!#!#!#!<Esc>")
 vim.keymap.set("n", "<leader>3", "i#<Esc>")
-vim.keymap.set("n", "<leader>2", "i``````<Esc>hhi")
+vim.keymap.set("n", "<leader>5", "i``````<Esc>hhi")
+
+vim.keymap.set("n", "<leader>2", function()
+	local day = tonumber(os.date("%d"))
+	local suffix
+	if day % 100 >= 11 and day % 100 <= 13 then
+		suffix = "th"
+	elseif day % 10 == 1 then
+		suffix = "st"
+	elseif day % 10 == 2 then
+		suffix = "nd"
+	elseif day % 10 == 3 then
+		suffix = "rd"
+	else
+		suffix = "th"
+	end
+	local date_str = string.format("%d%s %s, %s", day, suffix, os.date("%B"), os.date("%Y"))
+	vim.api.nvim_put({ date_str }, "c", true, true)
+end, { desc = "Insert today's date (e.g. 5th May, 2026)" })
 
 vim.keymap.set("n", "<leader>1", ":so ~/.config/nvim/init.lua <CR>")
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })

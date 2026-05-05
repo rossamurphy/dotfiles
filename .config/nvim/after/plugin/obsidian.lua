@@ -72,10 +72,20 @@ require("obsidian").setup({
 			end,
 			opts = { buffer = true },
 		},
-		-- Smart action depending on context, either follow link or toggle checkbox.
+		-- Follow link if on one, toggle checkbox if line already is one,
+		-- otherwise fall through to default <CR>. Does NOT promote plain
+		-- bullets/text into checkboxes (unlike obsidian's smart_action).
 		["<cr>"] = {
 			action = function()
-				return require("obsidian").util.smart_action()
+				local util = require("obsidian").util
+				if util.cursor_on_markdown_link(nil, nil, true) then
+					return "<cmd>ObsidianFollowLink<CR>"
+				end
+				local line = vim.api.nvim_get_current_line()
+				if line:match("^%s*[-*+]%s+%[.%]") or line:match("^%s*%d+%.%s+%[.%]") then
+					return "<cmd>ObsidianToggleCheckbox<CR>"
+				end
+				return "<CR>"
 			end,
 			opts = { buffer = true, expr = true },
 		},
