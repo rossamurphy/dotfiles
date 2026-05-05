@@ -16,6 +16,31 @@ vim.opt_local.formatoptions:remove("t") -- Built-in auto-wrap counts concealed m
 
 vim.opt_local.formatexpr = "v:lua.require'rawdog.markdown_visible_wrap'.formatexpr()"
 
+local auto_wrap_group = vim.api.nvim_create_augroup("RawdogMarkdownAutoWrap" .. vim.api.nvim_get_current_buf(), {
+	clear = true,
+})
+
+vim.api.nvim_create_autocmd("InsertCharPre", {
+	group = auto_wrap_group,
+	buffer = 0,
+	callback = function()
+		require("rawdog.markdown_visible_wrap").track_insert_char()
+	end,
+})
+
+vim.api.nvim_create_autocmd("TextChangedI", {
+	group = auto_wrap_group,
+	buffer = 0,
+	callback = function(args)
+		local bufnr = args.buf
+		vim.schedule(function()
+			if vim.api.nvim_buf_is_valid(bufnr) then
+				require("rawdog.markdown_visible_wrap").auto_wrap_insert({ bufnr = bufnr })
+			end
+		end)
+	end,
+})
+
 vim.keymap.set("n", "<Leader>fm", function()
 	require("rawdog.markdown_visible_wrap").format_buffer()
 end, { buffer = true, desc = "Format markdown by visible width" })

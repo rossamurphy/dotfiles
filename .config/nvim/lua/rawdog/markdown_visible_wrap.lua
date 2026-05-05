@@ -414,6 +414,28 @@ local function tokenize(text)
 	return tokens
 end
 
+local function token_spans(text)
+	local spans = {}
+	local pos = 1
+	while pos <= #text do
+		pos = skip_space(text, pos)
+		if pos > #text then
+			break
+		end
+		local start_pos = pos
+		local token
+		token, pos = read_token(text, pos)
+		if token ~= "" then
+			spans[#spans + 1] = {
+				text = token,
+				start_pos = start_pos,
+				end_pos = pos - 1,
+			}
+		end
+	end
+	return spans
+end
+
 local function split_quote_prefix(line)
 	local prefix = ""
 	local rest = line
@@ -518,6 +540,52 @@ local function is_closing_fence(line, marker)
 	local opener = marker:sub(1, 1)
 	local candidate = line:match("^%s*([" .. opener .. "]+)")
 	return candidate ~= nil and #candidate >= #marker
+end
+
+local function is_frontmatter_line(bufnr, lnum)
+	local first = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1]
+	if not first or not first:match("^%s*---%s*$") then
+		return false
+	end
+
+	if lnum == 1 then
+		return true
+	end
+
+	local lines = vim.api.nvim_buf_get_lines(bufnr, 1, lnum, false)
+	for index, line in ipairs(lines) do
+		if line:match("^%s*---%s*$") or line:match("^%s*%.%.%.%s*$") then
+			return index + 1 >= lnum
+		end
+	end
+
+	return true
+end
+
+local function is_fence_line(bufnr, lnum)
+	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, lnum, false)
+	local active_fence = nil
+
+	for index, line in ipairs(lines) do
+		if active_fence then
+			if index == lnum then
+				return true
+			end
+			if is_closing_fence(line, active_fence) then
+				active_fence = nil
+			end
+		else
+			local marker = fence_marker(line)
+			if marker then
+				if index == lnum then
+					return true
+				end
+				active_fence = marker
+			end
+		end
+	end
+
+	return active_fence ~= nil
 end
 
 local function starts_new_paragraph(current, prefix)
@@ -675,6 +743,53 @@ function M.wrap_lines(lines, width)
 	return output
 end
 
+local function insert_wrap_prefixes(line)
+	local prefix = line_prefix(line)
+	if prefix.first ~= "" and starts_with(line, 1, prefix.first) then
+		return prefix.first, prefix.rest
+	end
+	if prefix.quote ~= "" and starts_with(line, 1, prefix.quote) then
+		return prefix.quote, prefix.quote
+	end
+
+	local indent = line:match("^%s*") or ""
+	return indent, indent
+end
+
+local function split_insert_line(line, width)
+	local first_prefix, rest_prefix = insert_wrap_prefixes(line)
+	local body = line:sub(#first_prefix + 1)
+	local tokens = token_spans(body)
+	if #tokens < 2 then
+		return nil
+	end
+
+	local budget = math.max(width - display_width(first_prefix), 20)
+	local current_width = 0
+	for index, token in ipairs(tokens) do
+		local token_width = M.visible_width(token.text)
+		if index == 1 then
+			current_width = token_width
+		elseif current_width + 1 + token_width > budget then
+			local first_body = body:sub(1, token.start_pos - 1):gsub("%s+$", "")
+			local rest_body = body:sub(token.start_pos):gsub("^%s+", "")
+			if first_body == "" or rest_body == "" then
+				return nil
+			end
+			return {
+				first = first_prefix .. first_body,
+				rest = rest_prefix .. rest_body,
+				break_col = #first_prefix + token.start_pos - 1,
+				rest_prefix_len = #rest_prefix,
+			}
+		else
+			current_width = current_width + 1 + token_width
+		end
+	end
+
+	return nil
+end
+
 function M.format_range(opts)
 	opts = opts or {}
 	local bufnr = opts.bufnr or 0
@@ -711,6 +826,66 @@ function M.format_visual()
 	local view = vim.fn.winsaveview()
 	M.format_range({ bufnr = 0, start_lnum = start_lnum, end_lnum = end_lnum })
 	vim.fn.winrestview(view)
+end
+
+function M.track_insert_char()
+	vim.b.rawdog_markdown_last_insert_char = vim.v.char
+end
+
+function M.auto_wrap_insert(opts)
+	opts = opts or {}
+	local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+	local force = opts.force == true
+	if vim.b[bufnr].rawdog_markdown_auto_wrapping then
+		return
+	end
+	if vim.api.nvim_get_current_buf() ~= bufnr or (not force and vim.fn.mode() ~= "i") then
+		return
+	end
+	if not force and vim.fn.pumvisible() == 1 then
+		return
+	end
+
+	local char = vim.b[bufnr].rawdog_markdown_last_insert_char
+	vim.b[bufnr].rawdog_markdown_last_insert_char = nil
+	if char and char ~= "" and not char:match("%s") then
+		return
+	end
+
+	local width = vim.bo[bufnr].textwidth
+	if width == 0 then
+		width = DEFAULT_WIDTH
+	end
+
+	local cursor = vim.api.nvim_win_get_cursor(0)
+	local lnum = cursor[1]
+	local col = cursor[2]
+	local line = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, false)[1] or ""
+	if M.visible_width(line) <= width then
+		return
+	end
+	if is_frontmatter_line(bufnr, lnum) or is_fence_line(bufnr, lnum) or not is_wrappable_line(line) then
+		return
+	end
+
+	local split = split_insert_line(line, width)
+	if not split then
+		return
+	end
+
+	vim.b[bufnr].rawdog_markdown_auto_wrapping = true
+	pcall(vim.cmd, "silent! undojoin")
+	vim.api.nvim_buf_set_lines(bufnr, lnum - 1, lnum, false, { split.first, split.rest })
+
+	if col >= split.break_col then
+		vim.api.nvim_win_set_cursor(0, {
+			lnum + 1,
+			split.rest_prefix_len + (col - split.break_col),
+		})
+	else
+		vim.api.nvim_win_set_cursor(0, { lnum, math.min(col, #split.first) })
+	end
+	vim.b[bufnr].rawdog_markdown_auto_wrapping = false
 end
 
 function M.formatexpr()
