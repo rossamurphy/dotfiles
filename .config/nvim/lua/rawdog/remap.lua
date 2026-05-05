@@ -1,6 +1,7 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("i", "jj", "<Esc>", {})
+vim.keymap.set({ "i", "c" }, "<M-3>", "#", { desc = "Insert #" })
 vim.keymap.set("n", "J", "}", {})
 vim.keymap.set("n", "K", "{", {})
 vim.keymap.set("v", "J", "}", {})
@@ -25,6 +26,33 @@ vim.keymap.set("x", "<leader>p", '"_dp')
 vim.keymap.set("n", "<leader>y", '"+y')
 vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>Y", '"+Y')
+local function yank_excel(lines)
+	local items = {}
+
+	for _, line in ipairs(lines) do
+		line = line:gsub("\r", ""):gsub("\t", " ")
+		line = vim.trim(line)
+
+		if line ~= "" then
+			if line:match("^[-*+]%s+") or line:match("^%d+[.)]%s+") or #items == 0 then
+				table.insert(items, line)
+			else
+				items[#items] = items[#items] .. " " .. line
+			end
+		end
+	end
+
+	local text = table.concat(items, "\n"):gsub('"', '""')
+	text = '"' .. text .. '"'
+	vim.fn.setreg("+", text, "c")
+end
+
+vim.api.nvim_create_user_command("YankExcel", function(opts)
+	local lines = vim.api.nvim_buf_get_lines(0, opts.line1 - 1, opts.line2, false)
+	yank_excel(lines)
+end, { range = true })
+
+vim.keymap.set("x", "<leader>Y", ":YankExcel<CR>", { desc = "Yank to clipboard without line breaks" })
 
 -- delete into void register (don't yank the thing you're deleting)
 vim.keymap.set("n", "<leader>d", '"_d')
@@ -32,8 +60,6 @@ vim.keymap.set("v", "<leader>d", '"_d')
 
 -- switch projects using tmux, doesn't work
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-
-vim.keymap.set("n", "<leader>Y", '"+Y')
 
 vim.keymap.set("n", "<leader>qmr", "<cmd>CellularAutomaton make_it_rain<CR>")
 
@@ -54,7 +80,25 @@ vim.keymap.set("n", "<C-l>", ":wincmd l<CR>")
 
 vim.keymap.set("n", "<leader>4", "i# !#!#!#!#!#!#!#!#!#!#!#!<Esc>")
 vim.keymap.set("n", "<leader>3", "i#<Esc>")
-vim.keymap.set("n", "<leader>2", "i``````<Esc>hhi")
+vim.keymap.set("n", "<leader>5", "i``````<Esc>hhi")
+
+vim.keymap.set("n", "<leader>2", function()
+	local day = tonumber(os.date("%d"))
+	local suffix
+	if day % 100 >= 11 and day % 100 <= 13 then
+		suffix = "th"
+	elseif day % 10 == 1 then
+		suffix = "st"
+	elseif day % 10 == 2 then
+		suffix = "nd"
+	elseif day % 10 == 3 then
+		suffix = "rd"
+	else
+		suffix = "th"
+	end
+	local date_str = string.format("%d%s %s, %s", day, suffix, os.date("%B"), os.date("%Y"))
+	vim.api.nvim_put({ date_str }, "c", true, true)
+end, { desc = "Insert today's date (e.g. 5th May, 2026)" })
 
 vim.keymap.set("n", "<leader>1", ":so ~/.config/nvim/init.lua <CR>")
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })

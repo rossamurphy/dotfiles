@@ -152,11 +152,12 @@ table.insert(dap.configurations.python, {
 	request = "attach",
 	name = "Attach to debugpy",
 	host = "localhost",
+	justMyCode = false,
 	port = 5678,
 	pathMappings = {
 		{
 			localRoot = vim.fn.getcwd(),
-			remoteRoot = "/opt/shared", -- For your Docker setup later
+			remoteRoot = "/opt/shared", -- For Docker setup later
 		},
 	},
 })
@@ -165,6 +166,7 @@ table.insert(dap.configurations.python, {
 	type = "python",
 	request = "attach",
 	name = "Attach Local",
+	justMyCode = false,
 	host = "localhost",
 	port = 5678,
 })
@@ -173,6 +175,7 @@ table.insert(dap.configurations.python, {
 	type = "python",
 	request = "launch",
 	name = "Vanilla Venv - As Module",
+	justMyCode = false,
 	module = modulename,
 	cwd = "${workspaceFolder}",
 })
@@ -204,6 +207,7 @@ for i, ext in ipairs(exts) do
 			args = { "${file}" },
 			sourceMaps = true,
 			protocol = "inspector",
+			justMyCode = "false",
 		},
 		{
 			type = "pwa-node",
@@ -358,7 +362,6 @@ vim.keymap.set("n", "<Leader>ds", function()
 	local widgets = require("dap.ui.widgets")
 	widgets.centered_float(widgets.scopes)
 end)
-
 
 -- when you want to zoom in on a particular window in the debug ui, navigate to the window, and do:
 -- :tab split

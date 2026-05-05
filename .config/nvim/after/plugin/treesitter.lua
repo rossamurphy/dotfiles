@@ -1,23 +1,20 @@
-require 'nvim-treesitter.configs'.setup {
-	-- A list of parser names, or "all" (the five listed parsers should always be installed)
-	ensure_installed = { "javascript", "dockerfile", "elixir", "gitignore", "go", "json", "ocaml", "svelte", "typescript", "python", "rust", "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "tsx" },
+-- nvim-treesitter `main` branch: no `configs.setup`. Highlight and indent
+-- are opted in per-buffer via FileType.
 
-	indent = {
-		enable = true,
-		disable = { 'python', 'c' }
-	},
-
-	-- Install parsers synchronously (only applied to `ensure_installed`)
-	sync_install = false,
-
-	-- Automatically install missing parsers when entering buffer
-	-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-	auto_install = true,
-
-	highlight = {
-		enable = true,
-		-- requested by catpuccin
-		-- https://github.com/catppuccin/nvim?tab=readme-ov-file
-		additional_vim_regex_highlighting = false
-	},
+local enabled_filetypes = {
+	"javascript", "typescript", "tsx", "dockerfile", "elixir",
+	"gitignore", "go", "json", "ocaml", "svelte", "python", "rust",
+	"c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
 }
+
+local indent_disabled = { python = true, c = true }
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = enabled_filetypes,
+	callback = function(args)
+		pcall(vim.treesitter.start, args.buf)
+		if not indent_disabled[vim.bo[args.buf].filetype] then
+			vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+		end
+	end,
+})

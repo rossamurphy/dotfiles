@@ -1,0 +1,104 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {}
+  },
+  {
+    "context": "Search",
+    "bindings": {
+      "space f f": "file_finder::Toggle",
+      "space f w": "workspace::NewSearch",
+      "space e": "repl::Run",
+      "shift-j": [
+        "workspace::SendKeystrokes",
+        "}"
+      ],
+      "shift-k": [
+        "workspace::SendKeystrokes",
+        "{"
+      ],
+      "ctrl-s |": "pane::SplitRight",
+      "ctrl-s \"": "pane::SplitDown",
+      "alt-tab": "workspace::ActivateNextPane",
+      "alt-k": "editor::MoveLineUp",
+      "alt-j": "editor::MoveLineDown"
+    }
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "j j": [
+        "workspace::SendKeystrokes",
+        "escape"
+      ],
+      "ctrl-p": "editor::SelectAll",
+      "alt-k": "editor::MoveLineUp",
+      "alt-j": "editor::MoveLineDown"
+    }
+  },
+  {
+    "context": "Editor && vim_mode != insert",
+    "bindings": {
+      "ctrl-t": "terminal_panel::ToggleFocus",
+      "ctrl-p": "editor::SelectAll",
+      "space f f": "file_finder::Toggle",
+      "space b": "editor::GoToDefinition",
+      "space f w": "workspace::NewSearch",
+      "space e": "repl::Run",
+      "shift-j": [
+        "workspace::SendKeystrokes",
+        "}"
+      ],
+      "shift-k": [
+        "workspace::SendKeystrokes",
+        "{"
+      ],
+      "ctrl-s |": "pane::SplitRight",
+      "ctrl-s \"": "pane::SplitDown",
+      "alt-tab": "workspace::ActivateNextPane",
+      "alt-k": "editor::MoveLineUp",
+      "alt-j": "editor::MoveLineDown"
+    }
+  },
+  {
+    // If you are in visual mode and you do space c, it will quote the selection
+    "context": "Editor && vim_mode == visual",
+    "bindings": {
+      "space c": "assistant::QuoteSelection"
+    }
+  },
+  {
+    // If you are just in normal mode (and you have no selection) it will just open the chat
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      // "ctrl-h": "project_panel::ToggleFocus",
+      "space c": "assistant::ToggleFocus",
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-t": "terminal_panel::ToggleFocus",
+      "escape": "terminal_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "Project",
+    "bindings": {
+      "escape": "project_panel::ToggleFocus",
+      "ctrl-l": "project_panel::ToggleFocus",
+      "x": "project_panel::Cut",
+      "p": "project_panel::Paste",
+      "c": "project_panel::Copy",
+      "m": "project_panel::Cut",
+      "a": "project_panel::NewFile"
+    }
+  },
+  {
+    "context": "AssistantPanel",
+    "bindings": {
+      "escape": "assistant::ToggleFocus"
+    }
+  }
+]
+
