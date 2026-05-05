@@ -77,6 +77,10 @@ return {
 		"stevearc/conform.nvim",
 		config = function()
 			require("conform").setup()
+
+			vim.keymap.set({ "n", "v" }, "<Leader>fm", function()
+				require("conform").format({ async = true, lsp_format = "never" })
+			end, { desc = "Format buffer/selection" })
 		end,
 	},
 
@@ -200,10 +204,21 @@ return {
 
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
+		config = function()
+			require("nvim-treesitter").setup({
+				install_dir = vim.fn.stdpath("data") .. "/site",
+			})
+			require("nvim-treesitter").install({
+				"javascript", "typescript", "tsx", "dockerfile", "elixir",
+				"gitignore", "go", "json", "ocaml", "svelte", "python", "rust",
+				"c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+			})
+		end,
 	},
 
-	"nvim-treesitter/playground",
 	"theprimeagen/harpoon",
 	"mbbill/undotree",
 	"eandrju/cellular-automaton.nvim",

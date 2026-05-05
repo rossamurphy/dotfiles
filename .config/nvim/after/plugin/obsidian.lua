@@ -23,27 +23,6 @@ require("obsidian").setup({
 		},
 	},
 
-	note_id_func = function(title)
-		-- Generate a YYYY-MM-DD-TIME formatted timestamp
-		local timestamp = os.date("%Y-%m-%d-%H%M%S")
-
-		-- Generate 6-digit random alphanumeric string
-		local chars = "abcdefghijklmnopqrstuvwxyz0123456789"
-		local random_suffix = ""
-		math.randomseed(os.time() + os.clock() * 1000000) -- Better seed
-		for i = 1, 6 do
-			local rand_index = math.random(1, #chars)
-			random_suffix = random_suffix .. chars:sub(rand_index, rand_index)
-		end
-
-		if title ~= nil then
-			-- If title is provided (like from a template), put it first
-			return title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower() .. "-" .. timestamp .. "-" .. random_suffix
-		else
-			-- Default behavior for notes without templates
-			return timestamp .. "-" .. random_suffix
-		end
-	end,
 	-- Alternatively - and for backwards compatibility - you can set 'dir' to a single path instead of
 	-- 'workspaces'. For example:
 	-- dir = "~/vaults/work",
@@ -59,13 +38,13 @@ require("obsidian").setup({
 		-- Optional, if you keep daily notes in a separate directory.
 		folder = "notes",
 		-- Optional, if you want to change the date format for the ID of daily notes.
-		date_format = "%Y-%m-%d",
+		date_format = "daily-%Y-%m-%d",
 		-- Optional, if you want to change the date format of the default alias of daily notes.
 		alias_format = "daily %B %-d, %Y",
 		-- Optional, default tags to add to each new daily note created.
 		default_tags = { "daily" },
 		-- Optional, if you want to automatically insert a template from your template directory like 'daily.md'
-		template = nil,
+		template = "daily.md",
 	},
 
 	-- Optional, completion of wiki links, local markdown links, and tags using nvim-cmp.
@@ -122,7 +101,7 @@ require("obsidian").setup({
 				suffix = suffix .. string.char(math.random(65, 90))
 			end
 		end
-		return tostring(os.time()) .. "-" .. suffix
+		return "u" .. "-" .. tostring(os.time()) .. "-" .. suffix
 	end,
 
 	-- Optional, customize how note file names are generated given the ID, target directory, and title.
@@ -251,7 +230,70 @@ require("obsidian").setup({
 	callbacks = {
 		-- Runs at the end of `require("obsidian").setup()`.
 		---@param client obsidian.Client
-		post_setup = function(client) end,
+		post_setup = function(client)
+			local default_template = "new.md"
+
+			-- cmp `[[foo]] (create)` path — prompt for a template via the picker.
+			-- If picker unavailable or user cancels, fall back to default_template.
+			local original_write_note = client.write_note
+			client.write_note = function(self, note, opts)
+				opts = opts or {}
+				if opts.template ~= nil then
+					return original_write_note(self, note, opts)
+				end
+
+				local Path = require("obsidian.path")
+				local path = Path.new(opts.path or note.path)
+				if path:is_file() then
+					-- Existing note being updated — don't prompt.
+					return original_write_note(self, note, opts)
+				end
+
+				local picker = self:picker()
+				if not picker then
+					opts.template = default_template
+					return original_write_note(self, note, opts)
+				end
+
+				picker:find_templates({
+					callback = function(name)
+						opts.template = name or default_template
+						original_write_note(self, note, opts)
+					end,
+				})
+				return note
+			end
+
+			-- `:ObsidianNew` path — keep a quick default; use `<Leader>ont` for prompted.
+			-- Upstream `insert_template` reads the note from the empty buffer and loses
+			-- `note.title`, so `{{title}}` substitutes to the slugified id. Route through
+			-- `clone_template` instead, which threads the original note through correctly.
+			local original_write_note_to_buffer = client.write_note_to_buffer
+			client.write_note_to_buffer = function(self, note, opts)
+				opts = opts or {}
+				if opts.template == nil then
+					opts.template = default_template
+				end
+
+				local util = require("obsidian.util")
+				local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+				if opts.template and util.buffer_is_empty(bufnr) and note.path then
+					local clone_template = require("obsidian.templates").clone_template
+					note = clone_template({
+						template_name = opts.template,
+						path = note.path,
+						client = self,
+						note = note,
+					})
+					vim.api.nvim_buf_call(bufnr, function()
+						vim.cmd("silent! edit!")
+					end)
+					opts.template = nil
+				end
+
+				return original_write_note_to_buffer(self, note, opts)
+			end
+		end,
 
 		-- Runs anytime you enter the buffer for a note.
 		---@param client obsidian.Client
@@ -355,7 +397,7 @@ vim.keymap.set("n", "<Leader>onb", function()
 	vim.cmd("ObsidianNew")
 end)
 
-vim.keymap.set("n", "<Leader>od", function()
+vim.keymap.set("n", "<Leader>ond", function()
 	vim.cmd("ObsidianDailies")
 end)
 
@@ -375,4 +417,3 @@ vim.keymap.set("n", "<Leader>fo", function()
 	-- to search by alias / tag
 	vim.cmd("ObsidianSearch")
 end)
-

@@ -27,6 +27,7 @@
 require("image").setup({
 	backend = "kitty",
 	kitty_method = "normal",
+	debug = { enabled = true, level = "debug", file_path = "/tmp/image.nvim.log", format = "compact" },
 	integrations = {
 		-- Notice these are the settings for markdown files
 		markdown = {
@@ -42,6 +43,25 @@ require("image").setup({
 			only_render_image_at_cursor = false,
 			-- markdown extensions (ie. quarto) can go here
 			filetypes = { "markdown", "vimwiki" },
+			-- Obsidian writes image links relative to the vault root, not the
+			-- note's directory. Walk up looking for `.obsidian/` and resolve
+			-- from there; fall back to image.nvim's default for non-vault files.
+			resolve_image_path = function(document_path, image_path, fallback)
+				local first = image_path:sub(1, 1)
+				if first == "/" or first == "~" then
+					return fallback(document_path, image_path)
+				end
+				local dir = vim.fn.fnamemodify(document_path, ":p:h")
+				while dir and dir ~= "/" and dir ~= "" do
+					if vim.fn.isdirectory(dir .. "/.obsidian") == 1 then
+						return dir .. "/" .. image_path
+					end
+					local parent = vim.fn.fnamemodify(dir, ":h")
+					if parent == dir then break end
+					dir = parent
+				end
+				return fallback(document_path, image_path)
+			end,
 		},
 		neorg = {
 			enabled = true,
@@ -88,6 +108,27 @@ require("image").setup({
 	-- render image files as images when opened
 	hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" },
 })
+
+-- Workaround for image.nvim race: the markdown integration registers two
+-- BufWinEnter autocmds, both schedule render() in rapid succession. Each
+-- render() calls from_file() which creates a new Image, but state.images[id]
+-- isn't populated until the *backend* renders. Before that completes the
+-- second render() runs, creates a fresh Image with a new internal_id, and
+-- its render path clears the first (deleting the just-transmitted i=N from
+-- kitty) and places a different internal_id that was never transmitted —
+-- so kitty has nothing to display. Dedupe by populating state.images at
+-- creation time.
+do
+	local image_module = require("image.image")
+	local original_from_file = image_module.from_file
+	image_module.from_file = function(path, options, state)
+		local instance = original_from_file(path, options, state)
+		if instance and instance.id and not state.images[instance.id] then
+			state.images[instance.id] = instance
+		end
+		return instance
+	end
+end
 
 -- Keymap to delete image file under cursor using trash
 vim.keymap.set("n", "<leader>id", function()

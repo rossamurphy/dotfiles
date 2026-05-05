@@ -51,6 +51,7 @@ echo "------------------------------"
 npm install -g neovim
 npm install -g typescript-language-server
 npm install -g vscode-langservers-extracted  # HTML, CSS, JSON, ESLint servers
+npm install -g tree-sitter-cli  # Required by nvim-treesitter `main` branch to compile parsers
 
 echo ""
 echo "Setting up Python support..."
