@@ -1,7 +1,111 @@
--- Check if obsidian vault directory exists before setting up
-local obsidian_path = vim.fn.expand("~/obslib/research/")
-if vim.fn.isdirectory(obsidian_path) == 0 then
-	-- Directory doesn't exist, skip obsidian setup
+local function find_obsidian_vault(start_dir)
+	local start = vim.fs.normalize(vim.fn.fnamemodify(start_dir, ":p"))
+
+	local marker = vim.fs.find(".obsidian", {
+		path = start,
+		upward = true,
+		type = "directory",
+		limit = 1,
+	})[1]
+	if marker then
+		return vim.fs.dirname(marker)
+	end
+
+	local default_vault = vim.fn.expand("~/obslib/research")
+	if vim.fn.isdirectory(default_vault .. "/.obsidian") == 1 then
+		return default_vault
+	end
+end
+
+local function patch_obsidian_yaml_quotes()
+	local yaml = require("obsidian.yaml")
+	local util = require("obsidian.util")
+
+	local function should_quote(s)
+		if string.match(s, [[^["'\\[{&!-].*]]) then
+			return true
+		elseif string.match(s, "^[%d.-]+$") then
+			return true
+		elseif string.find(s, ": ", 1, true) then
+			return true
+		elseif string.match(s, ":$") then
+			return true
+		elseif s == "" or string.match(s, "^[%s]+$") then
+			return true
+		else
+			return false
+		end
+	end
+
+	local dumps
+	dumps = function(x, indent, order)
+		local indent_str = string.rep(" ", indent)
+
+		if type(x) == "string" then
+			if should_quote(x) then
+				x = string.gsub(x, '"', '\\"')
+				return { indent_str .. [["]] .. x .. [["]] }
+			else
+				return { indent_str .. x }
+			end
+		end
+
+		if type(x) == "boolean" or type(x) == "number" then
+			return { indent_str .. tostring(x) }
+		end
+
+		if type(x) == "table" then
+			local out = {}
+
+			if util.tbl_is_array(x) then
+				for _, v in ipairs(x) do
+					local item_lines = dumps(v, indent + 2)
+					table.insert(out, indent_str .. "- " .. util.lstrip_whitespace(item_lines[1]))
+					for i = 2, #item_lines do
+						table.insert(out, item_lines[i])
+					end
+				end
+			else
+				local keys = {}
+				for k, _ in pairs(x) do
+					table.insert(keys, k)
+				end
+				table.sort(keys, order)
+				for _, k in ipairs(keys) do
+					local v = x[k]
+					if type(v) == "string" or type(v) == "boolean" or type(v) == "number" then
+						table.insert(out, indent_str .. tostring(k) .. ": " .. dumps(v, 0)[1])
+					elseif type(v) == "table" and vim.tbl_isempty(v) then
+						table.insert(out, indent_str .. tostring(k) .. ": []")
+					else
+						local item_lines = dumps(v, indent + 2)
+						table.insert(out, indent_str .. tostring(k) .. ":")
+						for _, line in ipairs(item_lines) do
+							table.insert(out, line)
+						end
+					end
+				end
+			end
+
+			return out
+		end
+
+		error("Can't convert object with type " .. type(x) .. " to YAML")
+	end
+
+	yaml.dumps_lines = function(x, order)
+		return dumps(x, 0, order)
+	end
+	yaml.dumps = function(x, order)
+		return table.concat(dumps(x, 0, order), "\n")
+	end
+end
+
+patch_obsidian_yaml_quotes()
+
+local obsidian_path = find_obsidian_vault(vim.fn.getcwd(-1, -1))
+if not obsidian_path then
+	-- No Obsidian vault found under the current directory or at the default path.
 	return
 end
 
@@ -15,7 +119,7 @@ require("obsidian").setup({
 	workspaces = {
 		{
 			name = "research",
-			path = "~/obslib/research/",
+			path = obsidian_path,
 			-- Optional, override certain settings.
 			-- overrides = {
 			-- 	notes_subdir = "Excluded/notes",
@@ -135,7 +239,19 @@ require("obsidian").setup({
 
 	-- Optional, customize how markdown links are formatted.
 	markdown_link_func = function(opts)
-		return require("obsidian.util").markdown_link(opts)
+		local util = require("obsidian.util")
+		local anchor = ""
+		local header = ""
+		if opts.anchor then
+			anchor = opts.anchor.anchor
+			header = util.format_anchor_label(opts.anchor)
+		elseif opts.block then
+			anchor = "#" .. opts.block.id
+			header = "#" .. opts.block.id
+		end
+
+		local path = util.urlencode(opts.path, { keep_path_sep = true })
+		return string.format("[%s%s](%s%s)", opts.label, header, path, anchor)
 	end,
 
 	-- Either 'wiki' or 'markdown'.
@@ -377,7 +493,7 @@ require("obsidian").setup({
 		-- The default folder to place images in via `:ObsidianPasteImg`.
 		-- If this is a relative path it will be interpreted as relative to the vault root.
 		-- You can always override this per image by passing a full path to the command instead of just a filename.
-		img_folder = "assets/imgs", -- This is the default
+		img_folder = "assets/imgs", -- relative to the vault root
 
 		-- Optional, customize the default name or prefix when pasting images via `:ObsidianPasteImg`.
 		---@return string

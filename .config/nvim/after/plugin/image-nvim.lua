@@ -117,16 +117,80 @@ require("image").setup({
 -- its render path clears the first (deleting the just-transmitted i=N from
 -- kitty) and places a different internal_id that was never transmitted —
 -- so kitty has nothing to display. Dedupe by populating state.images at
--- creation time.
+-- creation time. The same hook wraps render() to skip stale images whose
+-- extmark moved beyond the current buffer line count; otherwise image.nvim can
+-- call screenpos() with an invalid line during TextChanged.
 do
 	local image_module = require("image.image")
 	local original_from_file = image_module.from_file
+
+	local function row_is_in_buffer(instance)
+		if not instance or not instance.buffer or not instance.geometry then
+			return true
+		end
+
+		local y = instance.geometry.y
+		if type(y) ~= "number" then
+			return true
+		end
+
+		local ok, is_valid = pcall(vim.api.nvim_buf_is_valid, instance.buffer)
+		if not ok or not is_valid then
+			return false
+		end
+
+		local line_count_ok, line_count = pcall(vim.api.nvim_buf_line_count, instance.buffer)
+		if not line_count_ok then
+			return false
+		end
+
+		return y >= 0 and y < line_count
+	end
+
+	local function clear_stale_image(instance)
+		pcall(function()
+			instance:clear(true)
+		end)
+	end
+
+	local function wrap_render(instance)
+		if not instance or instance._rawdog_render_guard then
+			return instance
+		end
+
+		local original_render = instance.render
+		instance.render = function(self, geometry)
+			local previous_geometry = self.geometry
+			if geometry then
+				self.geometry = vim.tbl_deep_extend("force", self.geometry or {}, geometry)
+			end
+
+			if not row_is_in_buffer(self) then
+				clear_stale_image(self)
+				return
+			end
+
+			self.geometry = previous_geometry
+			local ok, err = pcall(original_render, self, geometry)
+			if not ok then
+				if tostring(err):find("E966: Invalid line number", 1, true) then
+					clear_stale_image(self)
+					return
+				end
+				error(err)
+			end
+		end
+		instance._rawdog_render_guard = true
+
+		return instance
+	end
+
 	image_module.from_file = function(path, options, state)
 		local instance = original_from_file(path, options, state)
 		if instance and instance.id and not state.images[instance.id] then
 			state.images[instance.id] = instance
 		end
-		return instance
+		return wrap_render(instance)
 	end
 end
 
