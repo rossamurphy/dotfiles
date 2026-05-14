@@ -215,6 +215,7 @@ return {
 				"javascript", "typescript", "tsx", "dockerfile", "elixir",
 				"gitignore", "go", "json", "ocaml", "svelte", "python", "rust",
 				"c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+				"html", "css",
 			})
 		end,
 	},

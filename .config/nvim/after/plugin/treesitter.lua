@@ -5,6 +5,7 @@ local enabled_filetypes = {
 	"javascript", "typescript", "tsx", "dockerfile", "elixir",
 	"gitignore", "go", "json", "ocaml", "svelte", "python", "rust",
 	"c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
+	"html", "css",
 }
 
 local indent_disabled = { python = true, c = true }
