@@ -14,6 +14,14 @@ return {
 		end,
 	},
 	{
+		"chris-ritsen/autocorrect.nvim",
+		config = function()
+			local autocorrect = require("autocorrect")
+			autocorrect.setup()
+			vim.keymap.set("n", "<leader>d", autocorrect.autocorrect_paragraph, { desc = "Autocorrect paragraph" })
+		end,
+	},
+	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		build = "cd app && yarn install",
@@ -212,10 +220,27 @@ return {
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})
 			require("nvim-treesitter").install({
-				"javascript", "typescript", "tsx", "dockerfile", "elixir",
-				"gitignore", "go", "json", "ocaml", "svelte", "python", "rust",
-				"c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline",
-				"html", "css",
+				"javascript",
+				"typescript",
+				"tsx",
+				"dockerfile",
+				"elixir",
+				"gitignore",
+				"go",
+				"json",
+				"ocaml",
+				"svelte",
+				"python",
+				"rust",
+				"c",
+				"lua",
+				"vim",
+				"vimdoc",
+				"query",
+				"markdown",
+				"markdown_inline",
+				"html",
+				"css",
 			})
 		end,
 	},
