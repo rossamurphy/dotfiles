@@ -24,6 +24,148 @@
 -- package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
 -- package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
 
+local reported_image_errors = {}
+
+local function first_error_line(err)
+	return tostring(err):gsub("\r", ""):match("([^\n]*)") or tostring(err)
+end
+
+local function notify_image_error(path, err)
+	local message = first_error_line(err)
+	local key = tostring(path) .. "\n" .. message
+	if reported_image_errors[key] then
+		return
+	end
+	reported_image_errors[key] = true
+
+	vim.schedule(function()
+		local label = path and vim.fn.fnamemodify(tostring(path), ":t") or "image"
+		vim.notify("image.nvim skipped " .. label .. ": " .. message, vim.log.levels.WARN)
+	end)
+end
+
+local function is_image_processing_error(err)
+	local message = tostring(err)
+	return message:find("magick:", 1, true)
+		or message:find("ImageMagick", 1, true)
+		or message:find("convert timed out", 1, true)
+		or message:find("identify ", 1, true)
+		or message:find("Failed to convert", 1, true)
+		or message:find("Failed to get dimensions", 1, true)
+end
+
+do
+	local magick_cli = require("image/processors/magick_cli")
+	local original_convert_to_png = magick_cli.convert_to_png
+	local svg_font
+
+	local function readable(path)
+		return path and path ~= "" and vim.fn.filereadable(path) == 1
+	end
+
+	local function fallback_svg_font()
+		if svg_font ~= nil then
+			return svg_font
+		end
+
+		if readable(vim.env.IMAGE_NVIM_MAGICK_FONT) then
+			svg_font = vim.env.IMAGE_NVIM_MAGICK_FONT
+			return svg_font
+		end
+
+		for _, path in ipairs({
+			"/System/Library/Fonts/Supplemental/Arial.ttf",
+			"/System/Library/Fonts/Supplemental/Helvetica.ttf",
+			"/System/Library/Fonts/Helvetica.ttc",
+			"/System/Library/Fonts/SFNS.ttf",
+			"/System/Library/Fonts/SFNSMono.ttf",
+		}) do
+			if readable(path) then
+				svg_font = path
+				return svg_font
+			end
+		end
+
+		svg_font = false
+		return nil
+	end
+
+	local function close_magick_handles(handle, stderr)
+		if stderr and not stderr:is_closing() then
+			stderr:read_stop()
+			stderr:close()
+		end
+		if handle and not handle:is_closing() then
+			handle:close()
+		end
+	end
+
+	local function magick(args, timeout_ms, failure_message)
+		local done = false
+		local exit_code = nil
+		local stderr = vim.loop.new_pipe()
+		local stderr_output = ""
+		local handle
+
+		handle = vim.loop.spawn("magick", {
+			args = args,
+			stdio = { nil, nil, stderr },
+			hide = true,
+		}, function(code)
+			exit_code = code
+			done = true
+		end)
+
+		if not handle then
+			if stderr and not stderr:is_closing() then
+				stderr:close()
+			end
+			error("image.nvim: failed to start magick")
+		end
+
+		vim.loop.read_start(stderr, function(err, data)
+			assert(not err, err)
+			if data then
+				stderr_output = stderr_output .. data
+			end
+		end)
+
+		local success = vim.wait(timeout_ms, function()
+			return done
+		end, 10)
+
+		if not success then
+			if handle and not handle:is_closing() then
+				handle:kill("sigterm")
+			end
+			close_magick_handles(handle, stderr)
+			error(failure_message .. " timed out")
+		end
+
+		close_magick_handles(handle, stderr)
+
+		if exit_code ~= 0 then
+			error(stderr_output ~= "" and stderr_output or failure_message)
+		end
+	end
+
+	magick_cli.convert_to_png = function(path, output_path)
+		local actual_format = magick_cli.get_format(path)
+		if actual_format ~= "svg" and actual_format ~= "xml" then
+			return original_convert_to_png(path, output_path)
+		end
+
+		local font = fallback_svg_font()
+		if not font then
+			return original_convert_to_png(path, output_path)
+		end
+
+		local out_path = output_path or path:gsub("%.[^.]+$", ".png")
+		magick({ "-font", font, path, "png:" .. out_path }, 10000, "Failed to convert SVG to PNG")
+		return out_path
+	end
+end
+
 require("image").setup({
 	backend = "kitty",
 	kitty_method = "normal",
@@ -177,6 +319,11 @@ do
 					clear_stale_image(self)
 					return
 				end
+				if is_image_processing_error(err) then
+					notify_image_error(self.original_path or self.path, err)
+					clear_stale_image(self)
+					return
+				end
 				error(err)
 			end
 		end
@@ -186,7 +333,14 @@ do
 	end
 
 	image_module.from_file = function(path, options, state)
-		local instance = original_from_file(path, options, state)
+		local ok, instance = pcall(original_from_file, path, options, state)
+		if not ok then
+			if is_image_processing_error(instance) then
+				notify_image_error(path, instance)
+				return nil
+			end
+			error(instance)
+		end
 		if instance and instance.id and not state.images[instance.id] then
 			state.images[instance.id] = instance
 		end

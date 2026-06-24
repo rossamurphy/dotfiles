@@ -27,14 +27,14 @@ vim.opt.colorcolumn = "80"
 vim.g.mapleader = " "
 
 -- Move a line or a selection of lines down with Alt+j
-vim.keymap.set('n', '<A-j>', ":m .+1<CR>==", { silent = true })
-vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv", { silent = true })
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { silent = true })
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { silent = true })
 
 -- Move a line or a selection of lines up with Alt+k
-vim.keymap.set('n', '<A-k>', ":m .-2<CR>==", { silent = true })
-vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv", { silent = true })
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { silent = true })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { silent = true })
 
 -- for vimwiki
 vim.cmd("filetype plugin on")
 vim.cmd("syntax on")
-vim.g.vimwiki_map_prefix = '<Leader>e'
+vim.g.vimwiki_map_prefix = "<Leader>e"
