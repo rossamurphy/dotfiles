@@ -21,6 +21,14 @@ return {
 		},
 	},
 	{
+		"chris-ritsen/autocorrect.nvim",
+		config = function()
+			local autocorrect = require("autocorrect")
+			autocorrect.setup()
+			vim.keymap.set("n", "<leader>d", autocorrect.autocorrect_paragraph, { desc = "Autocorrect paragraph" })
+		end,
+	},
+	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		build = "cd app && yarn install",
